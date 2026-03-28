@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CO ROBIE — Portfolio k4rolPOLSKA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-enter">
+  <div class="matrix-bg" aria-hidden="true"></div>
+
+  <header class="site-header glass">
+    <div class="header-inner">
+      <a href="index.html" class="logo">k4rol<span class="accent">POLSKA</span></a>
+      <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" aria-label="Główna nawigacja">
+        <a href="corobie.html" aria-current="page">CO ROBIE</a>
+        <a href="wczyrobie.html">W CZYM ROBIE</a>
+        <a href="portfolio.html">PORTFOLIO</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="page-hero fade-in">
+      <p class="hero-label">&gt; section: activities</p>
+      <h1 class="page-title">CO <span class="accent">ROBIE</span></h1>
+      <p class="page-lead">Technologie i obszary, w których pracuję na co dzień.</p>
+    </section>
+
+    <div class="card-grid">
+      <article class="tech-card glass fade-in delay-1">
+        <div class="tech-icon tech-icon-fa tech-icon-cpp" aria-hidden="true">
+          <i class="fa-solid fa-code"></i><span class="cpp-plus">++</span>
+        </div>
+        <h2 class="tech-name">C++</h2>
+        <p class="tech-desc">Wydajność, algorytmy i niskopoziomowa kontrola.</p>
+      </article>
+      <article class="tech-card glass fade-in delay-2">
+        <div class="tech-icon tech-icon-fa" aria-hidden="true">
+          <i class="fa-brands fa-python"></i>
+        </div>
+        <h2 class="tech-name">Python</h2>
+        <p class="tech-desc">Automatyzacja, skrypty i prototypowanie.</p>
+      </article>
+      <article class="tech-card glass fade-in delay-3">
+        <div class="tech-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 12h32v8H8V12zm0 16h32v8H8v-8z" stroke="currentColor" stroke-width="2"/><path d="M14 16h4M14 32h4" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <h2 class="tech-name">HTML5</h2>
+        <p class="tech-desc">Semantyczna struktura i dostępność.</p>
+      </article>
+      <article class="tech-card glass fade-in delay-4">
+        <div class="tech-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 8l4 32 8 4 8-4 4-32H8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M16 16h16l-1 8h-10l1 6h8" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <h2 class="tech-name">CSS3</h2>
+        <p class="tech-desc">Layout, animacje i responsywny design.</p>
+      </article>
+      <article class="tech-card glass fade-in delay-5">
+        <div class="tech-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="10" width="36" height="28" rx="2" stroke="currentColor" stroke-width="2"/><path d="M12 18h10M12 24h16M12 30h8" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <h2 class="tech-name">JavaScript</h2>
+        <p class="tech-desc">Interakcje, logika i nowoczesne API.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer glass">
+    <div class="footer-inner">
+      <p>&copy; <span id="year"></span> k4rolPOLSKA. Wszystkie prawa zastrzeżone.</p>
+      <p class="footer-meta">Built with HTML5 · CSS3 · Vanilla JS</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

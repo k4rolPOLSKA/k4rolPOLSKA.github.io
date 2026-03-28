@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W CZYM ROBIE — Portfolio k4rolPOLSKA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-enter">
+  <div class="matrix-bg" aria-hidden="true"></div>
+
+  <header class="site-header glass">
+    <div class="header-inner">
+      <a href="index.html" class="logo">k4rol<span class="accent">POLSKA</span></a>
+      <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" aria-label="Główna nawigacja">
+        <a href="corobie.html">CO ROBIE</a>
+        <a href="wczyrobie.html" aria-current="page">W CZYM ROBIE</a>
+        <a href="portfolio.html">PORTFOLIO</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="page-hero fade-in">
+      <p class="hero-label">&gt; section: toolchain</p>
+      <h1 class="page-title">W CZYM <span class="accent">ROBIE</span></h1>
+      <p class="page-lead">Środowiska i narzędzia, których używam w projektach.</p>
+    </section>
+
+    <div class="card-grid tools-grid">
+      <article class="tool-card glass fade-in delay-1">
+        <div class="tool-icon tool-icon-fa" aria-hidden="true">
+          <i class="fa-brands fa-microsoft"></i>
+        </div>
+        <h2 class="tool-name">VS Code</h2>
+        <p class="tool-desc">Edytor z rozszerzeniami i zintegrowanym terminalem.</p>
+      </article>
+      <article class="tool-card glass fade-in delay-2">
+        <div class="tool-icon tool-icon-fa" aria-hidden="true">
+          <i class="fa-brands fa-windows"></i>
+        </div>
+        <h2 class="tool-name">Visual Studio</h2>
+        <p class="tool-desc">IDE pod C++, .NET i większe projekty desktopowe.</p>
+      </article>
+      <article class="tool-card glass fade-in delay-3">
+        <div class="tool-icon" aria-hidden="true">▣</div>
+        <h2 class="tool-name">PyCharm</h2>
+        <p class="tool-desc">Python, refaktoryzacja i debugowanie w jednym miejscu.</p>
+      </article>
+      <article class="tool-card glass fade-in delay-4">
+        <div class="tool-icon" aria-hidden="true">⬡</div>
+        <h2 class="tool-name">Web Builders</h2>
+        <p class="tool-desc">Szybkie prototypy i layouty w narzędziach no-code/low-code.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer glass">
+    <div class="footer-inner">
+      <p>&copy; <span id="year"></span> k4rolPOLSKA. Wszystkie prawa zastrzeżone.</p>
+      <p class="footer-meta">Built with HTML5 · CSS3 · Vanilla JS</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

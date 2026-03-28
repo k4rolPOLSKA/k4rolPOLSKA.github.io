@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio k4rolPOLSKA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-enter">
+  <div class="matrix-bg" aria-hidden="true"></div>
+
+  <header class="site-header glass">
+    <div class="header-inner">
+      <a href="index.html" class="logo">k4rol<span class="accent">POLSKA</span></a>
+      <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" aria-label="Główna nawigacja">
+        <a href="corobie.html">CO ROBIE</a>
+        <a href="wczyrobie.html">W CZYM ROBIE</a>
+        <a href="portfolio.html">PORTFOLIO</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="hero fade-in">
+      <p class="hero-label">&gt; init portfolio.exe</p>
+      <h1 class="hero-title">Portfolio <span class="accent">k4rolPOLSKA</span></h1>
+      <p class="hero-sub">Full-stack developer • Clean code • Matrix mode</p>
+    </section>
+
+    <section class="section about glass fade-in delay-1" aria-labelledby="about-heading">
+      <h2 id="about-heading" class="section-title">About Me</h2>
+      <p id="typewriter" class="typewriter" data-text="Jestem deweloperem skupionym na czytelności kodu, nowoczesnym UI i solidnych podstawach. Buduję strony i narzędzia z pasją do detalu — od C++ i Pythona po front-end w HTML, CSS i JavaScript."></p>
+      <span class="cursor-blink" aria-hidden="true">_</span>
+    </section>
+  </main>
+
+  <footer class="site-footer glass">
+    <div class="footer-inner">
+      <p>&copy; <span id="year"></span> k4rolPOLSKA. Wszystkie prawa zastrzeżone.</p>
+      <p class="footer-meta">Built with HTML5 · CSS3 · Vanilla JS</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
