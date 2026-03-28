@@ -1,14 +1,70 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <link rel="stylesheet" href="style.css">
-    <title>Strona z Ciekawostkami</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>document.documentElement.classList.add("js");</script>
+  <title>NOWA STRONA — K4ROL | PORTFOLIO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="dark-mode">
-    <div class="glass-card">
-        <h1 class="neon-text">STRONA Z CIEKAWOSTKAMI</h1>
-        <p>To jest sekcja poświęcona ciekawostkom o moich projektach i pasji.</p>
-        <a href="ciekawostki.html" class="neon-button">WEJDŹ DO ŚWIATA CIEKAWOSTEK</a>
+<body class="page-enter">
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+  <div class="page-vignette" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">K4ROL <span class="logo-pipe">|</span> PORTFOLIO</a>
+      <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" aria-label="Główna nawigacja">
+        <a href="index.html">HOME</a>
+        <a href="corobie.html">CO ROBIĘ</a>
+        <a href="wczyrobie.html">W CZYM ROBIĘ</a>
+        <a href="portfolio.html">PORTFOLIO</a>
+        <a href="nowastrona.html" aria-current="page">NOWA STRONA</a>
+        <a href="index.html#contact" class="btn btn-nav-contact">KONTAKT</a>
+      </nav>
     </div>
+  </header>
+
+  <main class="main-content">
+    <section class="page-hero">
+      <p class="page-hero-label">Eksploracja</p>
+      <h1 class="page-title">STRONA Z <span class="tone-dim">CIEKAWOSTKAMI</span></h1>
+      <p class="page-lead">To jest sekcja poświęcona ciekawostkom o moich projektach, pasji i cyfrowym świecie.</p>
+    </section>
+
+    <div class="feature-rows">
+      <article class="feature-wide glass reveal" style="text-align: center; justify-content: center;">
+        <div class="feature-wide-body">
+          <h2>Chcesz wiedzieć więcej?</h2>
+          <p style="margin-bottom: 2rem;">
+            Przygotowałem specjalną sekcję, w której dzielę się faktami z mojej pracy dewelopera.
+          </p>
+          <a href="ciekawostki.html" class="btn btn-primary" style="display: inline-block; padding: 1rem 2rem; background: var(--accent-primary, #00ffaa); color: #000; font-weight: 800; border-radius: 8px; text-decoration: none; box-shadow: 0 0 20px rgba(0, 255, 170, 0.4);">
+            WEJDŹ DO ŚWIATA CIEKAWOSTEK <i class="fa-solid fa-arrow-right" style="margin-left: 10px;"></i>
+          </a>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-footer glass" id="contact">
+    <div class="footer-inner">
+      <p class="contact-line">
+        GitHub:
+        <a href="https://github.com/karolabrachamczyk2015-droid" target="_blank" rel="noopener noreferrer">karolabrachamczyk2015-droid</a>
+      </p>
+      <p>&copy; <span id="year"></span> K4ROL — portfolio. Wszystkie prawa zastrzeżone.</p>
+      <p class="footer-meta">Design system · Glass · Neon</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
