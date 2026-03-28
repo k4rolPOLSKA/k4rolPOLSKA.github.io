@@ -7,11 +7,12 @@
   <title>K4ROL | PORTFOLIO</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="page-enter">
-  <div class="page-bg" aria-hidden="true"></div>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+  <div class="page-vignette" aria-hidden="true"></div>
 
   <header class="site-header">
     <div class="header-inner">
@@ -23,16 +24,41 @@
         <a href="corobie.html">CO ROBIĘ</a>
         <a href="wczyrobie.html">W CZYM ROBIĘ</a>
         <a href="portfolio.html">PORTFOLIO</a>
+        <a href="terminarz.html">TERMINARZ</a>
         <a href="#contact" class="btn btn-nav-contact">KONTAKT</a>
       </nav>
     </div>
   </header>
 
   <main class="main-content">
-    <section class="hero">
-      <h1 class="hero-title">KAROL <span class="accent">|</span> DEVELOPER</h1>
-      <p class="hero-tagline">Tworzę wydajny kod w C++, Python, HTML5, CSS3, JavaScript.</p>
-      <a href="portfolio.html" class="hero-cta">ZOBACZ PROJEKTY</a>
+    <section class="hero-split">
+      <div class="hero-copy">
+        <p class="hero-kicker">Portfolio · Dev · Stack</p>
+        <h1 class="hero-title-xl">
+          PROJEKTOWANIE CYFROWEGO <span class="tone-accent">PRZEPŁYWU</span>
+        </h1>
+        <p class="hero-tagline">
+          Architektura kodu, automatyzacja i interfejsy WWW — od C++ i Pythona po nowoczesny front-end.
+          Estetyka premium, precyzja wykonania.
+        </p>
+        <a href="portfolio.html" class="hero-cta">ZOBACZ PROJEKTY</a>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-visual-glow" aria-hidden="true"></div>
+        <div class="hero-mc-frame glass reveal">
+          <img
+            src="https://mc-heads.net/avatar/Steve/256.png"
+            width="256"
+            height="256"
+            alt="Placeholder skina Minecraft — podmień na swój nick"
+            loading="lazy"
+            decoding="async"
+            referrerpolicy="no-referrer"
+            onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22256%22 height=%22256%22 viewBox=%220 0 256 256%22%3E%3Crect fill=%22%2311141c%22 width=%22256%22 height=%22256%22 rx=%2216%22/%3E%3Ctext x=%22128%22 y=%22132%22 fill=%22%2300ffaa%22 font-family=%22system-ui,sans-serif%22 font-size=%2214%22 text-anchor=%22middle%22%3Eplaceholder%3C/text%3E%3C/svg%3E';"
+          />
+          <p class="hero-mc-caption">Minecraft skin · placeholder</p>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -43,7 +69,7 @@
         <a href="https://github.com/karolabrachamczyk2015-droid" target="_blank" rel="noopener noreferrer">karolabrachamczyk2015-droid</a>
       </p>
       <p>&copy; <span id="year"></span> K4ROL — portfolio. Wszystkie prawa zastrzeżone.</p>
-      <p class="footer-meta">HTML5 · CSS3 · JavaScript</p>
+      <p class="footer-meta">Design system · Glass · Neon</p>
     </div>
   </footer>
 

@@ -7,12 +7,13 @@
   <title>W CZYM ROBIĘ — K4ROL | PORTFOLIO</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="page-enter">
-  <div class="page-bg" aria-hidden="true"></div>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+  <div class="page-vignette" aria-hidden="true"></div>
 
   <header class="site-header">
     <div class="header-inner">
@@ -24,6 +25,7 @@
         <a href="corobie.html">CO ROBIĘ</a>
         <a href="wczyrobie.html" aria-current="page">W CZYM ROBIĘ</a>
         <a href="portfolio.html">PORTFOLIO</a>
+        <a href="terminarz.html">TERMINARZ</a>
         <a href="index.html#contact" class="btn btn-nav-contact">KONTAKT</a>
       </nav>
     </div>
@@ -31,39 +33,41 @@
 
   <main class="main-content">
     <section class="page-hero">
-      <p class="page-hero-label">Stack</p>
-      <h1 class="page-title">W CZYM <span class="accent">ROBIĘ</span></h1>
-      <p class="page-lead">Narzędzia developerskie, które wspierają mój workflow.</p>
+      <p class="page-hero-label">Stack technologiczny</p>
+      <h1 class="page-title">W CZYM <span class="tone-dim">ROBIĘ</span></h1>
+      <p class="page-lead">Narzędzia i języki, które tworzą spójny, premium workflow.</p>
     </section>
 
-    <div class="card-grid tools-grid">
-      <article class="tool-card glass reveal">
-        <div class="tool-icon tool-icon-fa" aria-hidden="true">
-          <i class="fa-solid fa-laptop-code tool-icon-mono"></i>
-        </div>
-        <h2 class="tool-name">VS Code</h2>
-        <p class="tool-desc">Edytor z rozszerzeniami i zintegrowanym terminalem.</p>
+    <div class="tools-grid-premium">
+      <article class="tool-card-premium glass reveal">
+        <div class="tool-icon-wrap" aria-hidden="true"><i class="fa-brands fa-python"></i></div>
+        <h2>Python</h2>
+        <p>Backend, skrypty, automatyzacja i prototypowanie.</p>
       </article>
-      <article class="tool-card glass reveal">
-        <div class="tool-icon tool-icon-fa" aria-hidden="true">
-          <i class="fa-brands fa-microsoft tool-icon-mono"></i>
-        </div>
-        <h2 class="tool-name">Visual Studio</h2>
-        <p class="tool-desc">IDE pod C++, .NET i większe projekty desktopowe.</p>
+      <article class="tool-card-premium glass reveal">
+        <div class="tool-icon-wrap" aria-hidden="true"><i class="fa-solid fa-code"></i></div>
+        <h2>C++</h2>
+        <p>Wydajność, algorytmy i systemy niskopoziomowe.</p>
       </article>
-      <article class="tool-card glass reveal">
-        <div class="tool-icon tool-icon-fa" aria-hidden="true">
-          <i class="fa-solid fa-cube tool-icon-mono"></i>
-        </div>
-        <h2 class="tool-name">PyCharm</h2>
-        <p class="tool-desc">Python, refaktoryzacja i debugowanie w jednym miejscu.</p>
+      <article class="tool-card-premium glass reveal">
+        <div class="tool-icon-wrap" aria-hidden="true"><i class="fa-brands fa-microsoft"></i></div>
+        <h2>Visual Studio</h2>
+        <p>IDE pod C++, .NET i większe projekty desktopowe.</p>
       </article>
-      <article class="tool-card glass reveal">
-        <div class="tool-icon tool-icon-fa" aria-hidden="true">
-          <i class="fa-solid fa-pen-ruler tool-icon-mono"></i>
-        </div>
-        <h2 class="tool-name">Creatory stron WWW</h2>
-        <p class="tool-desc">Szybkie prototypy i layouty w narzędziach wizualnych / builderach.</p>
+      <article class="tool-card-premium glass reveal">
+        <div class="tool-icon-wrap" aria-hidden="true"><i class="fa-solid fa-cube"></i></div>
+        <h2>PyCharm</h2>
+        <p>Python, debugowanie i refaktoryzacja w jednym miejscu.</p>
+      </article>
+      <article class="tool-card-premium glass reveal">
+        <div class="tool-icon-wrap" aria-hidden="true"><i class="fa-solid fa-laptop-code"></i></div>
+        <h2>VS Code</h2>
+        <p>Edytor z rozszerzeniami i zintegrowanym terminalem.</p>
+      </article>
+      <article class="tool-card-premium glass reveal">
+        <div class="tool-icon-wrap" aria-hidden="true"><i class="fa-solid fa-pen-ruler"></i></div>
+        <h2>Creatory WWW</h2>
+        <p>Prototypy layoutów i szybkie iteracje w builderach.</p>
       </article>
     </div>
   </main>
@@ -75,7 +79,7 @@
         <a href="https://github.com/karolabrachamczyk2015-droid" target="_blank" rel="noopener noreferrer">karolabrachamczyk2015-droid</a>
       </p>
       <p>&copy; <span id="year"></span> K4ROL — portfolio. Wszystkie prawa zastrzeżone.</p>
-      <p class="footer-meta">HTML5 · CSS3 · JavaScript</p>
+      <p class="footer-meta">Design system · Glass · Neon</p>
     </div>
   </footer>
 

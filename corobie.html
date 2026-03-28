@@ -7,12 +7,13 @@
   <title>CO ROBIĘ — K4ROL | PORTFOLIO</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="page-enter">
-  <div class="page-bg" aria-hidden="true"></div>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+  <div class="page-vignette" aria-hidden="true"></div>
 
   <header class="site-header">
     <div class="header-inner">
@@ -24,6 +25,7 @@
         <a href="corobie.html" aria-current="page">CO ROBIĘ</a>
         <a href="wczyrobie.html">W CZYM ROBIĘ</a>
         <a href="portfolio.html">PORTFOLIO</a>
+        <a href="terminarz.html">TERMINARZ</a>
         <a href="index.html#contact" class="btn btn-nav-contact">KONTAKT</a>
       </nav>
     </div>
@@ -31,32 +33,44 @@
 
   <main class="main-content">
     <section class="page-hero">
-      <p class="page-hero-label">Zakres prac</p>
-      <h1 class="page-title">CO <span class="accent">ROBIĘ</span></h1>
-      <p class="page-lead">Trzy filary mojej pracy: backend w C++ i Pythonie oraz front-end stron WWW.</p>
+      <p class="page-hero-label">Realizacje</p>
+      <h1 class="page-title">CO <span class="tone-dim">ROBIĘ</span></h1>
+      <p class="page-lead">Trzy obszary, w których buduję produkty cyfrowe: boty, strony i aplikacje Python.</p>
     </section>
 
-    <div class="card-grid">
-      <article class="tech-card glass reveal">
-        <div class="tech-icon tech-icon-fa tech-icon-cpp" aria-hidden="true">
-          <i class="fa-solid fa-code"></i><span class="cpp-plus">++</span>
+    <div class="feature-rows">
+      <article class="feature-wide glass reveal">
+        <div class="feature-wide-body">
+          <h2>Bot Discord</h2>
+          <p>
+            Automatyzacja serwera: komendy, role, integracje API i logika w Pythonie lub Node — stabilnie i pod obciążeniem.
+          </p>
         </div>
-        <h2 class="tech-name">PROGRAMOWANIE C++</h2>
-        <p class="tech-desc">Optymalizacja, algorytmy, systemy embedded.</p>
+        <div class="feature-wide-icon" aria-hidden="true">
+          <i class="fa-brands fa-discord"></i>
+        </div>
       </article>
-      <article class="tech-card glass reveal">
-        <div class="tech-icon tech-icon-fa" aria-hidden="true">
+      <article class="feature-wide glass reveal">
+        <div class="feature-wide-body">
+          <h2>Strony WWW</h2>
+          <p>
+            Responsywne witryny i landing page’e w HTML5, CSS3 i JavaScript — szkło, neon i perfekcyjna typografia.
+          </p>
+        </div>
+        <div class="feature-wide-icon" aria-hidden="true">
+          <i class="fa-solid fa-globe"></i>
+        </div>
+      </article>
+      <article class="feature-wide glass reveal">
+        <div class="feature-wide-body">
+          <h2>Aplikacja Python</h2>
+          <p>
+            Skrypty, narzędzia CLI i backendy: czysty kod, testy i czytelna architektura pod dalszy rozwój.
+          </p>
+        </div>
+        <div class="feature-wide-icon" aria-hidden="true">
           <i class="fa-brands fa-python"></i>
         </div>
-        <h2 class="tech-name">SKRYPTY PYTHON</h2>
-        <p class="tech-desc">Automatyzacja, analiza danych, backendowe API.</p>
-      </article>
-      <article class="tech-card glass reveal">
-        <div class="tech-icon tech-icon-fa" aria-hidden="true">
-          <i class="fa-brands fa-html5"></i>
-        </div>
-        <h2 class="tech-name">TWORZENIE STRON WWW</h2>
-        <p class="tech-desc">Interfejsy w HTML5, CSS3, JavaScript.</p>
       </article>
     </div>
   </main>
@@ -68,7 +82,7 @@
         <a href="https://github.com/karolabrachamczyk2015-droid" target="_blank" rel="noopener noreferrer">karolabrachamczyk2015-droid</a>
       </p>
       <p>&copy; <span id="year"></span> K4ROL — portfolio. Wszystkie prawa zastrzeżone.</p>
-      <p class="footer-meta">HTML5 · CSS3 · JavaScript</p>
+      <p class="footer-meta">Design system · Glass · Neon</p>
     </div>
   </footer>
 
