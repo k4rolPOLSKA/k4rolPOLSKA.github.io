@@ -2,6 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KotGG 🐱</title>
     <style>
         body {
@@ -22,7 +23,6 @@
             margin: 0;
             font-size: 36px;
         }
-<!DOCTYPE html>
 
         nav {
             background-color: #ffccdd;
@@ -31,7 +31,7 @@
         }
 
         nav a {
-            margin: 0 15px;
+            margin: 0 10px;
             text-decoration: none;
             color: #ff3399;
             font-weight: bold;
@@ -56,7 +56,8 @@
         }
 
         img {
-            width: 250px;
+            width: 100%;
+            max-width: 250px;
             border-radius: 15px;
             margin: 10px;
         }
@@ -72,6 +73,8 @@
             border-radius: 10px;
             border: 1px solid #ff99cc;
             font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         button {
@@ -89,6 +92,23 @@
             text-align: center;
             padding: 20px;
             color: #ff3399;
+        }
+
+        /* Responsywność dla telefonów */
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 28px;
+            }
+
+            nav a {
+                display: block;
+                margin: 5px 0;
+            }
+
+            section {
+                margin: 20px 10px;
+                padding: 15px;
+            }
         }
     </style>
 </head>
@@ -112,9 +132,9 @@
 
 <section id="gallery">
     <h2>Galeria kotów 📸</h2>
-    <img src="https://imgs.search.brave.com/7wLJ0Mu9zfLgo3EI27qZvyiYigzPVay4GAq9UE9-vj0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9saXR0/bGUtY2F0LW1haW5l/LWNvb24tMjQ3NzQx/ODIuanBn">
-    <img src="https://t4.ftcdn.net/jpg/04/59/65/73/360_F_459657319_M6CgAr2O9RZIxY4bWrGdzqt7e9EEoZwk.jpg">
-    <img src="https://imgs.search.brave.com/Yb9QBFaH3XMDBLm_9DYZCqlecxIIjVSOu6Lmi3RMB4U/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/YW5pbWFsaXNsYW5k/LmV1L2Nkbi9zaG9w/L2FydGljbGVzL2tv/dC1zeWphbXNraS5q/cGc_dj0xNzY0Njc1/NzAwJndpZHRoPTEx/MDA">
+    <img src="https://imgs.search.brave.com/7wLJ0Mu9zfLgo3EI27qZvyiYigzPVay4GAq9UE9-vj0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9saXR0/bGUtY2F0LW1haW5l/LWNvb24tMjQ3NzQx/ODIuanBn" alt="Kot 1">
+    <img src="https://t4.ftcdn.net/jpg/04/59/65/73/360_F_459657319_M6CgAr2O9RZIxY4bWrGdzqt7e9EEoZwk.jpg" alt="Kot 2">
+    <img src="https://imgs.search.brave.com/Yb9QBFaH3XMDBLm_9DYZCqlecxIIjVSOu6Lmi3RMB4U/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/YW5pbWFsaXNsYW5k/LmV1L2Nkbi9zaG9w/L2FydGljbGVzL2tv/dC1zeWphbXNraS5q/cGc_dj0xNzY0Njc1/NzAwJndpZHRoPTEx/MDA" alt="Kot 3">
 </section>
 
 <section id="why">
@@ -126,9 +146,6 @@
         <li>Są mega cool 😎</li>
     </ul>
 </section>
-
-
-
 
 <footer>
     © 2026 KotGG | Strona o kotach 🐾
