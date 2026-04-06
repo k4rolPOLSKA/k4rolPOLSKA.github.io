@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Kontakt - KotGG</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">KotGG 🐾</a>
+        <nav>
+            <a href="galeria.html">Galeria</a>
+            <a href="porady.html">Porady</a>
+            <a href="ciekawostki.html">Ciekawostki</a>
+            <a href="aktualizacje.html">Aktualizacje</a>
+            <a href="kontakt.html">Kontakt</a>
+        </nav>
+    </header>
+
+    <section class="content-section">
+        <h1 style="text-align: center;">Napisz do nas!</h1>
+        <p style="text-align: center;">Masz pytanie? Chcesz wysłać zdjęcie swojego kota? Użyj formularza poniżej.</p>
+        
+        <form action="https://formspree.io/f/xdapypqg" method="POST" class="contact-form">
+            <input type="text" name="name" placeholder="Twoje imię" required>
+            <input type="email" name="email" placeholder="Twój adres E-mail" required>
+            <textarea name="message" rows="6" placeholder="Twoja miau-wiadomość..." required></textarea>
+            <button type="submit" class="btn">Wyślij wiadomość</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 KotGG</p>
+    </footer>
+</body>
+</html>
