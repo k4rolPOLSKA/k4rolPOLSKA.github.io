@@ -213,3 +213,52 @@ footer {
 .btn, .logo, nav a {
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff85a2" d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm-4 4c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm8 0c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm-4 14c-2.8 0-5-2.2-5-5 0-1.7.8-3.1 2-4 .8.6 1.8 1 3 1s2.2-.4 3-1c1.2.9 2 2.3 2 4 0 2.8-2.2 5-5 5z"/></svg>'), auto;
 }
+
+/* --- RESPONSYWNOŚĆ (TELEFONY) --- */
+@media (max-width: 768px) {
+    /* Zmniejszamy nagłówki, żeby nie zajmowały całego ekranu */
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+
+    /* Menu nawigacyjne: ustawiamy linki jeden pod drugim lub zmniejszamy odstępy */
+    header {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    nav {
+        margin-top: 15px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    nav a {
+        margin-left: 0;
+        font-size: 0.9rem;
+        background: var(--soft-pink);
+        padding: 5px 12px;
+        border-radius: 15px;
+    }
+
+    /* Sekcje: mniejsze odstępy po bokach na telefonie */
+    .content-section {
+        padding: 40px 5%;
+    }
+
+    .hero {
+        padding: 60px 5% 40px;
+    }
+
+    /* Grid: na telefonie chcemy zazwyczaj 1 kolumnę kart */
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Formularz na cały ekran */
+    .contact-form {
+        padding: 20px;
+    }
+}
