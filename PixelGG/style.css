@@ -1,92 +1,96 @@
 :root {
-    --bg-color: #0a0a0a;
-    --text-color: #00ff41; /* Klasyczny zielony Matrix */
-    --neon-purple: #bc13fe;
-    --dark-surface: #151515;
+    --primary: #00ff9d; /* Jasny neonowy zielony ze screena */
+    --bg-dark: #050505;
+    --surface: #111111;
+    --text-main: #ffffff;
+    --text-dim: #a0a0a0;
 }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: 'Courier New', Courier, monospace;
-    margin: 0;
-    overflow-x: hidden;
+    background-color: var(--bg-dark);
+    background-image: 
+        linear-gradient(rgba(0, 255, 157, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 157, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px; /* Delikatna siatka/grid w tle */
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif, Arial;
+    line-height: 1.6;
 }
 
+/* Nawigacja responsywna */
 nav {
     display: flex;
     justify-content: space-between;
-    padding: 20px 50px;
-    background: rgba(0, 0, 0, 0.8);
-    border-bottom: 2px solid var(--text-color);
-    box-shadow: 0 0 15px var(--text-color);
+    align-items: center;
+    padding: 20px 5%;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    background: rgba(5, 5, 5, 0.9);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: 2px;
+.logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; }
+.logo span { color: var(--primary); }
+
+nav ul { display: flex; list-style: none; gap: 20px; }
+nav ul a { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
+nav ul a:hover, nav ul a.active { color: var(--primary); }
+
+/* Sekcja Hero - na telefonie układa się w kolumnę */
+.hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 80vh;
+    padding: 40px 10%;
 }
 
-.logo span { color: var(--neon-purple); }
+.hero-text { flex: 1; min-width: 300px; }
+.hero-image { flex: 1; min-width: 300px; text-align: center; }
+.hero-image img { max-width: 100%; height: auto; filter: drop-shadow(0 0 20px var(--primary)); }
 
-nav ul { display: flex; list-style: none; }
-nav ul li { margin-left: 20px; }
-nav ul li a {
-    color: var(--text-color);
+h1 { font-size: clamp(2rem, 8vw, 4rem); line-height: 1.1; margin-bottom: 20px; text-transform: uppercase; }
+h1 span { color: var(--primary); display: block; }
+
+.btn-main {
+    background: var(--primary);
+    color: #000;
+    padding: 15px 35px;
+    border-radius: 12px;
     text-decoration: none;
-    text-transform: uppercase;
+    font-weight: bold;
+    display: inline-block;
+    box-shadow: 0 4px 15px rgba(0, 255, 157, 0.4);
     transition: 0.3s;
 }
 
-nav ul li a:hover { text-shadow: 0 0 10px var(--text-color); }
-
-.hero {
-    height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+/* Responsywność dla Tabletów i Telefonów */
+@media (max-width: 768px) {
+    nav { flex-direction: column; gap: 15px; }
+    nav ul { gap: 10px; font-size: 0.7rem; flex-wrap: wrap; justify-content: center; }
+    .hero { text-align: center; padding: 20px 5%; }
+    .hero-text { order: 2; }
+    .hero-image { order: 1; margin-bottom: 30px; }
+    h1 { font-size: 2.5rem; }
 }
 
-/* Efekt Glitch dla nagłówka */
-.glitch {
-    font-size: 5rem;
-    position: relative;
-    text-shadow: 2px 2px var(--neon-purple);
-}
-
-.btn-neon {
-    padding: 15px 30px;
-    border: 2px solid var(--text-color);
-    color: var(--text-color);
-    text-decoration: none;
-    font-weight: bold;
-    transition: 0.4s;
-    box-shadow: 0 0 10px var(--text-color);
-}
-
-.btn-neon:hover {
-    background: var(--text-color);
-    color: black;
-    box-shadow: 0 0 30px var(--text-color);
-}
-
-/* Styl dla kart nauki */
-.category-container {
-    display: flex;
+/* Grid dla wyboru nauki */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
-    padding: 50px;
-    flex-wrap: wrap;
+    padding: 40px 10%;
 }
 
 .card {
-    background: var(--dark-surface);
-    border: 1px solid var(--neon-purple);
-    padding: 20px;
-    width: 250px;
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 30px;
+    border-radius: 20px;
     transition: 0.3s;
 }
-
-.card:hover { transform: translateY(-10px); box-shadow: 0 0 20px var(--neon-purple); }
+.card:hover { border-color: var(--primary); transform: translateY(-5px); }
