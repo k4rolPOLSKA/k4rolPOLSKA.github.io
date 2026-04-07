@@ -1,28 +1,92 @@
-<main>
-    <h2 style="text-align: center; margin-top: 50px;">WYBIERZ_MODUŁ_NAUKI</h2>
-    <div class="category-grid">
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelGG | Wybierz Naukę</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">PIXEL<span>GG</span></div>
+        <ul>
+            <li><a href="index.html">Baza</a></li>
+            <li><a href="jezykiprogramowania.html">Języki</a></li>
+            <li><a href="wybierznauke.html" class="active">Nauka</a></li>
+            <li><a href="aktualizacje.html">Logi</a></li>
+            <li><a href="dopobrania.html">Repo</a></li>
+        </ul>
+    </nav>
+
+    <header style="text-align: center; padding: 50px 5% 20px 5%;">
+        <p style="color: var(--primary); font-family: monospace;">[ MOŻLIWOŚCI_SYSTEMU ]</p>
+        <h1 style="font-size: clamp(1.5rem, 5vw, 3rem);">WYBIERZ ŚCIEŻKĘ <span>EDUKACJI</span></h1>
+    </header>
+
+    <main class="category-grid" style="padding-bottom: 80px;">
+        
         <div class="card">
-            <h3 style="color: var(--primary);">PYTHON</h3>
-            <p>Nauka najpopularniejszego języku programowania na świecie.</p>
-            <hr style="margin: 15px 0; opacity: 0.1;">
-            <a href="naukapython1.html" style="color: #fff; display: block;">Lekcja 1: Intro</a>
-            <a href="naukapython2.html" style="color: #fff; display: block;">Lekcja 2: Logika</a>
+            <div style="font-size: 0.8rem; color: var(--primary); margin-bottom: 10px;">KATEGORIA: BACKEND</div>
+            <h2 style="margin-bottom: 15px;">🐍 PYTHON_CORE</h2>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 20px;">Naucz się potęgi Pythona od zmiennych po logikę.</p>
+            <ul style="list-style: none;">
+                <li style="margin-bottom: 10px;">
+                    <a href="naukapython1.html" style="color: #fff; text-decoration: none; display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 5px;">
+                        <span>01. Podstawy Składni</span>
+                        <span style="color: var(--primary);">[START]</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="naukapython2.html" style="color: #fff; text-decoration: none; display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 5px;">
+                        <span>02. Zmienne i Logika</span>
+                        <span style="color: var(--primary);">[START]</span>
+                    </a>
+                </li>
+            </ul>
         </div>
 
         <div class="card">
-            <h3 style="color: var(--primary);">HTML</h3>
-            <p>Fundamenty sieci.</p>
-            <hr style="margin: 15px 0; opacity: 0.1;">
-            <a href="naukahtml1.html" style="color: #fff; display: block;">Lekcja 1: Tagowanie</a>
-            <a href="naukahtml2.html" style="color: #fff; display: block;">Lekcja 2: SEO</a>
+            <div style="font-size: 0.8rem; color: var(--primary); margin-bottom: 10px;">KATEGORIA: FRONTEND</div>
+            <h2 style="margin-bottom: 15px;">🌐 HTML_STRUCTURE</h2>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 20px;">Fundamenty tworzenia stron i szkieletu dokumentów.</p>
+            <ul style="list-style: none;">
+                <li style="margin-bottom: 10px;">
+                    <a href="naukahtml1.html" style="color: #fff; text-decoration: none; display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 5px;">
+                        <span>01. Szkielet Strony</span>
+                        <span style="color: var(--primary);">[START]</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="naukahtml2.html" style="color: #fff; text-decoration: none; display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 5px;">
+                        <span>02. Multimedia i Linki</span>
+                        <span style="color: var(--primary);">[START]</span>
+                    </a>
+                </li>
+            </ul>
         </div>
 
         <div class="card">
-            <h3 style="color: var(--primary);">JAVASCRIPT</h3>
-            <p>Interakcja i logika.</p>
-            <hr style="margin: 15px 0; opacity: 0.1;">
-            <a href="naukajs1.html" style="color: #fff; display: block;">Lekcja 1: Zmienne</a>
-            <a href="naukajs2.html" style="color: #fff; display: block;">Lekcja 2: Funkcje</a>
+            <div style="font-size: 0.8rem; color: var(--primary); margin-bottom: 10px;">KATEGORIA: INTERAKCJA</div>
+            <h2 style="margin-bottom: 15px;">⚡ JAVASCRIPT_LOGIC</h2>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 20px;">Ożyw swoje strony za pomocą skryptów JS.</p>
+            <ul style="list-style: none;">
+                <li style="margin-bottom: 10px;">
+                    <a href="naukajs1.html" style="color: #fff; text-decoration: none; display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 5px;">
+                        <span>01. Konsola i Zmienne</span>
+                        <span style="color: var(--primary);">[START]</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="naukajs2.html" style="color: #fff; text-decoration: none; display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 5px;">
+                        <span>02. Eventy i Kliknięcia</span>
+                        <span style="color: var(--primary);">[START]</span>
+                    </a>
+                </li>
+            </ul>
         </div>
-    </div>
-</main>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+                        </html>
