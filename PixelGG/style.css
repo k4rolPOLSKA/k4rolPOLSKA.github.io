@@ -1,0 +1,92 @@
+:root {
+    --bg-color: #0a0a0a;
+    --text-color: #00ff41; /* Klasyczny zielony Matrix */
+    --neon-purple: #bc13fe;
+    --dark-surface: #151515;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 50px;
+    background: rgba(0, 0, 0, 0.8);
+    border-bottom: 2px solid var(--text-color);
+    box-shadow: 0 0 15px var(--text-color);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo span { color: var(--neon-purple); }
+
+nav ul { display: flex; list-style: none; }
+nav ul li { margin-left: 20px; }
+nav ul li a {
+    color: var(--text-color);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+nav ul li a:hover { text-shadow: 0 0 10px var(--text-color); }
+
+.hero {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Efekt Glitch dla nagłówka */
+.glitch {
+    font-size: 5rem;
+    position: relative;
+    text-shadow: 2px 2px var(--neon-purple);
+}
+
+.btn-neon {
+    padding: 15px 30px;
+    border: 2px solid var(--text-color);
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.4s;
+    box-shadow: 0 0 10px var(--text-color);
+}
+
+.btn-neon:hover {
+    background: var(--text-color);
+    color: black;
+    box-shadow: 0 0 30px var(--text-color);
+}
+
+/* Styl dla kart nauki */
+.category-container {
+    display: flex;
+    gap: 20px;
+    padding: 50px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: var(--dark-surface);
+    border: 1px solid var(--neon-purple);
+    padding: 20px;
+    width: 250px;
+    transition: 0.3s;
+}
+
+.card:hover { transform: translateY(-10px); box-shadow: 0 0 20px var(--neon-purple); }
