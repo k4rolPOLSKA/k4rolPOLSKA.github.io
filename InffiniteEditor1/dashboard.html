@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>InfiniteEditor | Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-bg">
+    <nav class="dash-nav">
+        <div class="logo"><i class="fas fa-infinity"></i> InfiniteEditor</div>
+        <div class="user-profile">KA +</div>
+    </nav>
+
+    <main class="dash-content">
+        <section class="welcome-banner">
+            <h1>Co dziś zaprojektujesz?</h1>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Szukaj w swoich projektach lub szablonach...">
+            </div>
+        </section>
+
+        <section class="creation-grid">
+            <div class="card" onclick="startProject(1280, 720)">
+                <div class="icon-box"><i class="fab fa-youtube"></i></div>
+                <p>Miniatura YouTube</p>
+            </div>
+            <div class="card" onclick="startProject(1080, 1350)">
+                <div class="icon-box"><i class="fab fa-instagram"></i></div>
+                <p>Instagram Portrait</p>
+            </div>
+            <div class="card custom-trigger">
+                <div class="icon-box"><i class="fas fa-plus"></i></div>
+                <p>Rozmiar niestandardowy</p>
+                <div class="custom-popup">
+                    <input type="number" id="wInput" placeholder="Szerokość">
+                    <input type="number" id="hInput" placeholder="Wysokość">
+                    <button onclick="startCustom()">Utwórz nowy projekt</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function startProject(w, h) {
+            localStorage.setItem('editorW', w);
+            localStorage.setItem('editorH', h);
+            window.location.href = 'editor.html';
+        }
+        function startCustom() {
+            const w = document.getElementById('wInput').value;
+            const h = document.getElementById('hInput').value;
+            if(w > 0 && h > 0) startProject(w, h);
+        }
+    </script>
+</body>
+</html>
