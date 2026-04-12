@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Edytor | InfiniteEditor</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+</head>
+<body class="editor-layout">
+    
+    <header class="editor-header">
+        <div class="header-left">
+            <a href="dashboard.html" class="home-btn"><i class="fas fa-home"></i></a>
+            <span class="project-name">Projekt bez nazwy - InfiniteEditor</span>
+        </div>
+        <div class="header-right">
+            <button class="btn-share"><i class="fas fa-share-square"></i> Udostępnij</button>
+            <button class="btn-download" onclick="downloadImage()"><i class="fas fa-download"></i> Pobierz</button>
+        </div>
+    </header>
+
+    <div class="main-editor-area">
+        <aside class="side-nav">
+            <div class="nav-item active"><i class="fas fa-th-large"></i><span>Szablony</span></div>
+            <div class="nav-item" onclick="addShape()"><i class="fas fa-shapes"></i><span>Elementy</span></div>
+            <div class="nav-item" onclick="addText()"><i class="fas fa-font"></i><span>Tekst</span></div>
+            <div class="nav-item" onclick="document.getElementById('imgLoad').click()">
+                <i class="fas fa-cloud-upload-alt"></i><span>Przesyłanie</span>
+            </div>
+            <div class="nav-item"><i class="fas fa-pen-nib"></i><span>Narzędzia</span></div>
+            <div class="nav-item"><i class="fas fa-folder"></i><span>Projekty</span></div>
+            <div class="nav-item"><i class="fas fa-th"></i><span>Aplikacje</span></div>
+            
+            <input type="file" id="imgLoad" hidden accept="image/*">
+        </aside>
+
+        <aside class="options-panel">
+            <div id="textOptions" class="opt-group">
+                <h3>Tekst</h3>
+                <button class="add-txt-btn" onclick="addText('heading')">Dodaj nagłówek</button>
+                <button class="add-txt-btn" onclick="addText('body')">Dodaj treść</button>
+            </div>
+        </aside>
+
+        <section class="workspace">
+            <div class="canvas-holder" id="canvas-wrapper">
+                <canvas id="mainCanvas"></canvas>
+            </div>
+            
+            <div class="bottom-controls">
+                <input type="range" min="10" max="200" value="100" id="zoomRange">
+                <span>Strony: 1/1</span>
+            </div>
+        </section>
+    </div>
+
+    <script src="editor-logic.js"></script>
+</body>
+</html>
