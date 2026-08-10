@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Mini Lotto - Symulator</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">← Wróć</a></li>
+        <li><a href="lotto.html">Lotto</a></li>
+        <li><a href="minilotto.html" class="active">Mini Lotto</a></li>
+        <li><a href="multi.html">Multi Multi</a></li>
+        <li><a href="eurojackpot.html">Eurojackpot</a></li>
+        <li><a href="keno.html">Keno</a></li>
+        <li><a href="kaskada.html">Kaskada</a></li>
+      </ul>
+    </nav>
+    <div class="dashboard-bar">
+      <div class="stat-box">Stan konta: <span id="user-balance" class="stat-value">0 PLN</span></div>
+      <div class="stat-box">Wygrane: <span id="user-wins" class="stat-value">0</span></div>
+      <select id="theme-select" class="theme-select">
+        <option value="dark">Ciemny Tech</option>
+        <option value="light">Jasny</option>
+        <option value="neon">Neon</option>
+      </select>
+    </div>
+  </header>
+
+  <main>
+    <div class="game-card">
+      <h2>Mini Lotto</h2>
+      <p style="color: var(--text-secondary); margin-top: 0.5rem;">Wylosuj 5 liczb z 42. Koszt losu: 1.50 PLN</p>
+      
+      <div id="balls-container" class="balls-container">
+        <!-- Kulki pojawią się dynamicznie -->
+      </div>
+
+      <button class="btn" onclick="playMiniLotto()">Zagraj (1.50 PLN)</button>
+      <div id="result-panel" class="result-panel"></div>
+    </div>
+  </main>
+
+  <script src="js/storage.js"></script>
+  <script src="js/games.js"></script>
+</body>
+</html>
