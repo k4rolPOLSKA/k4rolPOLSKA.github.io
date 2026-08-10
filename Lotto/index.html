@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Symulator Gier LOTTO</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>LOTTO Hub</h1>
+    <div class="dashboard-bar">
+      <div class="stat-box">Stan konta: <span id="user-balance" class="stat-value">0 PLN</span></div>
+      <div class="stat-box">Wygrane: <span id="user-wins" class="stat-value">0</span></div>
+      <select id="theme-select" class="theme-select">
+        <option value="dark">Ciemny Tech</option>
+        <option value="light">Jasny</option>
+        <option value="neon">Neon</option>
+      </select>
+    </div>
+  </header>
+
+  <main>
+    <h2 style="margin-bottom: 1.5rem;">Wybierz Grę</h2>
+    <div class="grid-menu">
+      <a href="lotto.html" class="menu-card"><h3>Lotto</h3><p>Koszt: 3 PLN</p></a>
+      <a href="minilotto.html" class="menu-card"><h3>Mini Lotto</h3><p>Koszt: 1.50 PLN</p></a>
+      <a href="multi.html" class="menu-card"><h3>Multi Multi</h3><p>Koszt: 2.50 PLN</p></a>
+      <a href="eurojackpot.html" class="menu-card"><h3>Eurojackpot</h3><p>Koszt: 12 PLN</p></a>
+      <a href="keno.html" class="menu-card"><h3>Keno</h3><p>Koszt: 2 PLN</p></a>
+      <a href="kaskada.html" class="menu-card"><h3>Kaskada</h3><p>Koszt: 2 PLN</p></a>
+    </div>
+  </main>
+
+  <script src="js/storage.js"></script>
+</body>
+</html>
