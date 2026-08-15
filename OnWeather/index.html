@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>OnWeather 1.0</title>
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🌦️ On<span>Weather</span></div>
+
+    <div class="search">
+        <input
+            type="text"
+            id="cityInput"
+            placeholder="Wpisz miasto..."
+        >
+        <button onclick="searchCity()">🔎</button>
+    </div>
+</header>
+
+<div id="map"></div>
+
+<div class="weather-panel">
+
+    <h2 id="location">Kliknij mapę</h2>
+
+    <div class="temperature">
+        <span id="temperature">--</span>°C
+    </div>
+
+    <div class="weather-info">
+
+        <div class="weather-card">
+            <span>💨</span>
+            <b id="wind">--</b>
+            <small>Wiatr km/h</small>
+        </div>
+
+        <div class="weather-card">
+            <span>💧</span>
+            <b id="humidity">--</b>
+            <small>Wilgotność</small>
+        </div>
+
+        <div class="weather-card">
+            <span>🌧️</span>
+            <b id="rain">--</b>
+            <small>Opady mm</small>
+        </div>
+
+        <div class="weather-card">
+            <span>☁️</span>
+            <b id="clouds">--</b>
+            <small>Zachmurzenie</small>
+        </div>
+
+    </div>
+
+    <div class="forecast">
+
+        <h3>📅 Prognoza</h3>
+
+        <div id="forecastList"></div>
+
+    </div>
+
+</div>
+
+<div class="legend">
+
+    <button onclick="getLocation()">📍 Moja lokalizacja</button>
+
+    <button onclick="loadWeatherLayer('temperature')">
+        🌡️ Temperatura
+    </button>
+
+    <button onclick="loadWeatherLayer('wind')">
+        💨 Wiatr
+    </button>
+
+    <button onclick="loadWeatherLayer('rain')">
+        🌧️ Opady
+    </button>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="script.js"></script>
+
+</body>
+</html>
