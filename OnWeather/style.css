@@ -1,0 +1,297 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #07111f;
+    color: white;
+    overflow: hidden;
+}
+
+/* GÓRNY PANEL */
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 65px;
+
+    background: rgba(5, 15, 30, 0.95);
+
+    display: flex;
+    align-items: center;
+
+    padding: 10px 15px;
+
+    z-index: 1000;
+
+    gap: 20px;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.logo span {
+    color: #00c8ff;
+}
+
+/* WYSZUKIWARKA */
+
+.search {
+    display: flex;
+    flex: 1;
+    max-width: 500px;
+}
+
+.search input {
+    width: 100%;
+
+    padding: 12px;
+
+    border: none;
+    outline: none;
+
+    background: #17283d;
+    color: white;
+
+    border-radius: 8px 0 0 8px;
+
+    font-size: 15px;
+}
+
+.search button {
+    width: 50px;
+
+    border: none;
+
+    background: #00a8ff;
+    color: white;
+
+    font-size: 18px;
+
+    border-radius: 0 8px 8px 0;
+
+    cursor: pointer;
+}
+
+/* MAPA */
+
+#map {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100vh;
+
+    z-index: 1;
+}
+
+/* PANEL POGODY */
+
+.weather-panel {
+
+    position: fixed;
+
+    left: 15px;
+    bottom: 15px;
+
+    width: 360px;
+
+    max-height: 70vh;
+
+    overflow-y: auto;
+
+    background: rgba(7, 17, 31, 0.94);
+
+    border: 1px solid rgba(255,255,255,0.15);
+
+    border-radius: 18px;
+
+    padding: 20px;
+
+    z-index: 900;
+
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+.weather-panel h2 {
+    margin-bottom: 5px;
+}
+
+.temperature {
+
+    font-size: 60px;
+
+    font-weight: bold;
+
+    margin: 10px 0 20px;
+}
+
+/* KARTY */
+
+.weather-info {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+}
+
+.weather-card {
+
+    background: #14263b;
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.weather-card span {
+    font-size: 25px;
+}
+
+.weather-card b {
+    font-size: 18px;
+}
+
+.weather-card small {
+    color: #9eb1c5;
+}
+
+/* PROGNOZA */
+
+.forecast {
+    margin-top: 20px;
+}
+
+.forecast h3 {
+    margin-bottom: 10px;
+}
+
+.forecast-day {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    background: #14263b;
+
+    margin-bottom: 7px;
+
+    padding: 10px;
+
+    border-radius: 10px;
+}
+
+.forecast-day span {
+    color: #b8c7d9;
+}
+
+/* PRZYCISKI */
+
+.legend {
+
+    position: fixed;
+
+    right: 15px;
+    bottom: 15px;
+
+    z-index: 1000;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.legend button {
+
+    border: none;
+
+    padding: 11px 15px;
+
+    background: rgba(7,17,31,0.95);
+
+    color: white;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.legend button:hover {
+    background: #00a8ff;
+}
+
+/* TELEFON */
+
+@media (max-width: 600px) {
+
+    header {
+        height: 58px;
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .logo {
+        font-size: 17px;
+    }
+
+    .search {
+        max-width: none;
+    }
+
+    .weather-panel {
+
+        left: 8px;
+        right: 8px;
+
+        bottom: 8px;
+
+        width: auto;
+
+        max-height: 45vh;
+
+        padding: 15px;
+
+    }
+
+    .temperature {
+        font-size: 45px;
+    }
+
+    .legend {
+
+        right: 8px;
+
+        bottom: calc(45vh + 18px);
+
+    }
+
+    .legend button {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}
