@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>JavaScript — LearnCodesGG</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+    <div class="navbar">
+
+        <a href="index.html" class="logo">
+            LearnCodes<span>GG</span>
+        </a>
+
+        <nav>
+            <a href="index.html">Start</a>
+            <a href="wyborlekcji.html">Lekcje</a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<div class="lesson-box">
+
+    <div id="lessonCounter" class="lesson-number"></div>
+
+
+    <!-- 1 -->
+
+    <div class="lesson">
+
+        <h1>🟨 1. Czym jest JavaScript?</h1>
+
+        <p class="lesson-text">
+            JavaScript to język programowania używany
+            między innymi do tworzenia interaktywnych
+            stron internetowych.
+        </p>
+
+        <div class="code">console.log("Witaj w JavaScript!");</div>
+
+        <button class="btn btn-secondary"
+                onclick="copyCode(this)">
+            📋 KOPIUJ KOD
+        </button>
+
+        <div class="quiz">
+
+            <h3>🧠 Quiz</h3>
+
+            <p>
+                Do czego często używa się JavaScript?
+            </p>
+
+            <button onclick="alert('❌ Spróbuj ponownie!')">
+                Do stylowania strony
+            </button>
+
+            <button onclick="alert('✅ Dobrze! JavaScript dodaje interakcje.')">
+                Do dodawania interakcji
+            </button>
+
+            <button onclick="alert('❌ Spróbuj ponownie!')">
+                Tylko do tworzenia baz danych
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- 2 -->
+
+    <div class="lesson">
+
+        <h1>🖥️ 2. console.log()</h1>
+
+        <p class="lesson-text">
+            console.log() pozwala wyświetlać informacje
+            w konsoli przeglądarki.
+        </p>
+
+        <div class="code">console.log("Hello World!");
+console.log(123);
+console.log(10 + 20);</div>
+
+        <button class="btn btn-secondary"
+                onclick="copyCode(this)">
+            📋 KOPIUJ KOD
+        </button>
+
+    </div>
+
+
+    <!-- 3 -->
+
+    <div class="lesson">
+
+        <h1>📦 3. Zmienne</h1>
+
+        <p class="lesson-text">
+            Zmienne pozwalają przechowywać dane.
+            W JavaScript często używamy let i const.
+        </p>
+
+        <div class="code">let imie = "Karol";
+let wiek = 13;
+
+console.log(imie);
+console.log(wiek);</div>
+
+    </div>
+
+
+    <!-- 4 -->
+
+    <div class="lesson">
+
+        <h1>🔒 4. let i const</h1>
+
+        <p class="lesson-text">
+            let pozwala później zmienić wartość,
+            natomiast const służy do wartości,
+            której nie przypisujemy ponownie.
+        </p>
+
+        <div class="code">let punkty = 10;
+
+punkty = 20;
+
+const gra = "LearnCodesGG";
+
+console.log(punkty);
+console.log(gra);</div>
+
+    </div>
+
+
+    <!-- 5 -->
+
+    <div class="lesson">
+
+        <h1>🔤 5. Typy danych</h1>
+
+        <p class="lesson-text">
+            JavaScript obsługuje między innymi teksty,
+            liczby, wartości logiczne, tablice i obiekty.
+        </p>
+
+        <div class="code">let imie = "Karol";
+let wiek = 13;
+let online = true;
+
+console.log(imie);
+console.log(wiek);
+console.log(online);</div>
+
+    </div>
+
+
+    <!-- 6 -->
+
+    <div class="lesson">
+
+        <h1>➕ 6. Operatory</h1>
+
+        <p class="lesson-text">
+            Operatory umożliwiają wykonywanie działań.
+        </p>
+
+        <div class="code">let a = 10;
+let b = 5;
+
+console.log(a + b);
+console.log(a - b);
+console.log(a * b);
+console.log(a / b);</div>
+
+    </div>
+
+
+    <!-- 7 -->
+
+    <div class="lesson">
+
+        <h1>❓ 7. if</h1>
+
+        <p class="lesson-text">
+            Instrukcja if wykonuje kod,
+            kiedy warunek jest prawdziwy.
+        </p>
+
+        <div class="code">let wiek = 18;
+
+if (wiek >= 18) {
+    console.log("Jesteś pełnoletni");
+}</div>
+
+    </div>
+
+
+    <!-- 8 -->
+
+    <div class="lesson">
+
+        <h1>🔀 8. if / else</h1>
+
+        <p class="lesson-text">
+            else wykonuje kod, gdy warunek if
+            nie został spełniony.
+        </p>
+
+        <div class="code">let wiek = 15;
+
+if (wiek >= 18) {
+    console.log("Pełnoletni");
+} else {
+    console.log("Niepełnoletni");
+}</div>
+
+    </div>
+
+
+    <!-- 9 -->
+
+    <div class="lesson">
+
+        <h1>🔢 9. else if</h1>
+
+        <p class="lesson-text">
+            else if pozwala sprawdzić kolejny warunek.
+        </p>
+
+        <div class="code">let punkty = 80;
+
+if (punkty >= 90) {
+    console.log("5");
+} else if (punkty >= 70) {
+    console.log("4");
+} else {
+    console.log("3");
+}</div>
+
+    </div>
+
+
+    <!-- 10 -->
+
+    <div class="lesson">
+
+        <h1>🔁 10. Pętla for</h1>
+
+        <p class="lesson-text">
+            Pętla for pozwala wykonywać fragment kodu
+            określoną liczbę razy.
+        </p>
+
+        <div class="code">for (let i = 0; i < 5; i++) {
+    console.log(i);
+}</div>
+
+        <button class="btn btn-secondary"
+                onclick="copyCode(this)">
+            📋 KOPIUJ KOD
+        </button>
+
+    </div>
+
+
+    <!-- 11 -->
+
+    <div class="lesson">
+
+        <h1>🔄 11. Pętla while</h1>
+
+        <p class="lesson-text">
+            while wykonuje kod tak długo,
+            jak długo warunek jest prawdziwy.
+        </p>
+
+        <div class="code">let liczba = 1;
+
+while (liczba <= 5) {
+
+    console.log(liczba);
+
+    liczba++;
+}</div>
+
+    </div>
+
+
+    <!-- 12 -->
+
+    <div class="lesson">
+
+        <h1>📋 12. Tablice</h1>
+
+        <p class="lesson-text">
+            Tablica może przechowywać wiele wartości.
+        </p>
+
+        <div class="code">let jezyki = [
+    "HTML",
+    "CSS",
+    "JavaScript"
+];
+
+console.log(jezyki[0]);</div>
+
+    </div>
+
+
+    <!-- 13 -->
+
+    <div class="lesson">
+
+        <h1>📦 13. Obiekty</h1>
+
+        <p class="lesson-text">
+            Obiekt pozwala przechowywać dane
+            w postaci właściwości.
+        </p>
+
+        <div class="code">let gracz = {
+    nick: "PlayerGG",
+    punkty: 100
+};
+
+console.log(gracz.nick);
+console.log(gracz.punkty);</div>
+
+    </div>
+
+
+    <!-- 14 -->
+
+    <div class="lesson">
+
+        <h1>⚙️ 14. Funkcje</h1>
+
+        <p class="lesson-text">
+            Funkcja zawiera kod, który możemy
+            wielokrotnie uruchamiać.
+        </p>
+
+        <div class="code">function przywitaj() {
+
+    console.log("Witaj!");
+
+}
+
+przywitaj();</div>
+
+    </div>
+
+
+    <!-- 15 -->
+
+    <div class="lesson">
+
+        <h1>📥 15. Parametry funkcji</h1>
+
+        <p class="lesson-text">
+            Funkcja może otrzymywać dane
+            poprzez parametry.
+        </p>
+
+        <div class="code">function przywitaj(imie) {
+
+    console.log("Cześć " + imie);
+
+}
+
+przywitaj("Karol");</div>
+
+    </div>
+
+
+    <!-- 16 -->
+
+    <div class="lesson">
+
+        <h1>🌐 16. DOM</h1>
+
+        <p class="lesson-text">
+            DOM pozwala JavaScriptowi zmieniać
+            elementy znajdujące się na stronie.
+        </p>
+
+        <div class="code">document.querySelector("h1")
+    .textContent = "LearnCodesGG!";</div>
+
+        <button class="btn btn-secondary"
+                onclick="copyCode(this)">
+            📋 KOPIUJ KOD
+        </button>
+
+    </div>
+
+
+    <!-- 17 -->
+
+    <div class="lesson">
+
+        <h1>🖱️ 17. Kliknięcia</h1>
+
+        <p class="lesson-text">
+            JavaScript może reagować na kliknięcia
+            użytkownika.
+        </p>
+
+        <div class="code">document
+    .querySelector("button")
+    .addEventListener("click", function() {
+
+        alert("Kliknięto przycisk!");
+
+    });</div>
+
+    </div>
+
+
+    <!-- 18 -->
+
+    <div class="lesson">
+
+        <h1>💾 18. localStorage</h1>
+
+        <p class="lesson-text">
+            localStorage pozwala zapisywać dane
+            w przeglądarce użytkownika.
+        </p>
+
+        <div class="code">localStorage.setItem(
+    "nick",
+    "PlayerGG"
+);
+
+let nick = localStorage.getItem("nick");
+
+console.log(nick);</div>
+
+    </div>
+
+
+    <!-- 19 -->
+
+    <div class="lesson">
+
+        <h1>🎮 19. Mini projekt</h1>
+
+        <p class="lesson-text">
+            Stwórzmy prosty licznik punktów.
+        </p>
+
+        <div class="code">let punkty = 0;
+
+punkty++;
+
+console.log("Punkty:", punkty);
+
+punkty++;
+
+console.log("Punkty:", punkty);</div>
+
+    </div>
+
+
+    <!-- 20 -->
+
+    <div class="lesson">
+
+        <h1>🚀 20. Projekt końcowy</h1>
+
+        <p class="lesson-text">
+            Gratulacje! Ukończyłeś podstawowy kurs
+            JavaScript.
+        </p>
+
+        <div class="code">let imie = "PlayerGG";
+let punkty = 100;
+
+console.log("======================");
+console.log("   LEARNCODESGG JS");
+console.log("======================");
+
+console.log("Gracz:", imie);
+console.log("Punkty:", punkty);
+console.log("Kurs ukończony! 🚀");</div>
+
+        <div class="quiz">
+
+            <h3>🏆 Gratulacje!</h3>
+
+            <p>
+                Ukończyłeś 20 lekcji JavaScript!
+            </p>
+
+            <button onclick="alert('🎉 Świetna robota!')">
+                ODBIERZ GRATULACJE 🎉
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- NAWIGACJA -->
+
+    <div class="lesson-buttons">
+
+        <button
+            class="btn btn-secondary"
+            onclick="previousLesson()">
+
+            ← POPRZEDNIA
+
+        </button>
+
+        <button
+            class="btn btn-primary"
+            onclick="nextLesson()">
+
+            NASTĘPNA →
+
+        </button>
+
+    </div>
+
+</div>
+
+</main>
+
+
+<footer>
+
+    © 2026 LearnCodesGG • JavaScript 🟨
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+  </html>
