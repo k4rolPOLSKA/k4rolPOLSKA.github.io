@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>HTML + CSS — LearnCodesGG</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="navbar">
+
+        <a href="index.html" class="logo">
+            LearnCodes<span>GG</span>
+        </a>
+
+        <nav>
+
+            <a href="index.html">Start</a>
+
+            <a href="wyborlekcji.html">
+                Lekcje
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<div class="lesson-box">
+
+    <div
+        id="lessonCounter"
+        class="lesson-number">
+    </div>
+
+
+    <!-- LEKCJA 1 -->
+
+    <div class="lesson">
+
+        <h1>🌐 Czym jest HTML?</h1>
+
+        <p class="lesson-text">
+
+            HTML jest językiem używanym do tworzenia
+            struktury stron internetowych.
+
+            <br><br>
+
+            Dzięki HTML możemy tworzyć nagłówki,
+            teksty, obrazki, linki, przyciski
+            oraz wiele innych elementów.
+
+        </p>
+
+
+        <div class="code">
+&lt;h1&gt;Witaj w LearnCodesGG!&lt;/h1&gt;
+        </div>
+
+        <button
+            class="btn btn-secondary"
+            onclick="copyCode(this)">
+
+            📋 KOPIUJ KOD
+
+        </button>
+
+
+        <div class="quiz">
+
+            <h3>🧠 Quiz</h3>
+
+            <p>
+                Do czego służy HTML?
+            </p>
+
+            <button onclick="alert('❌ Spróbuj ponownie!')">
+                Do tworzenia muzyki
+            </button>
+
+            <button onclick="alert('✅ Dobrze! HTML tworzy strukturę strony.')">
+                Do tworzenia struktury strony
+            </button>
+
+            <button onclick="alert('❌ Spróbuj ponownie!')">
+                Do sterowania komputerem
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- LEKCJA 2 -->
+
+    <div class="lesson">
+
+        <h1>📝 Nagłówki i tekst</h1>
+
+        <p class="lesson-text">
+
+            HTML posiada sześć poziomów nagłówków:
+
+            <br><br>
+
+            <b>h1</b> jest największym nagłówkiem,
+            a <b>h6</b> najmniejszym.
+
+        </p>
+
+
+        <div class="code">
+&lt;h1&gt;Największy nagłówek&lt;/h1&gt;
+&lt;h2&gt;Mniejszy nagłówek&lt;/h2&gt;
+&lt;h3&gt;Jeszcze mniejszy&lt;/h3&gt;
+
+&lt;p&gt;To jest zwykły tekst.&lt;/p&gt;
+        </div>
+
+
+        <button
+            class="btn btn-secondary"
+            onclick="copyCode(this)">
+
+            📋 KOPIUJ KOD
+
+        </button>
+
+
+        <div class="quiz">
+
+            <h3>🧠 Quiz</h3>
+
+            <p>
+                Który nagłówek jest największy?
+            </p>
+
+            <button onclick="alert('❌ Nie tym razem!')">
+                h6
+            </button>
+
+            <button onclick="alert('✅ Dobrze!')">
+                h1
+            </button>
+
+            <button onclick="alert('❌ Nie tym razem!')">
+                h3
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- LEKCJA 3 -->
+
+    <div class="lesson">
+
+        <h1>🔗 Linki</h1>
+
+        <p class="lesson-text">
+
+            Do tworzenia linków używamy znacznika
+            <b>&lt;a&gt;</b>.
+
+        </p>
+
+
+        <div class="code">
+&lt;a href="https://example.com"&gt;
+    Otwórz stronę
+&lt;/a&gt;
+        </div>
+
+
+        <button
+            class="btn btn-secondary"
+            onclick="copyCode(this)">
+
+            📋 KOPIUJ KOD
+
+        </button>
+
+
+        <div class="quiz">
+
+            <h3>🧠 Quiz</h3>
+
+            <p>
+                Który znacznik tworzy link?
+            </p>
+
+            <button onclick="alert('❌ Nie!')">
+                &lt;p&gt;
+            </button>
+
+            <button onclick="alert('✅ Tak!')">
+                &lt;a&gt;
+            </button>
+
+            <button onclick="alert('❌ Nie!')">
+                &lt;link&gt;
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- LEKCJA 4 -->
+
+    <div class="lesson">
+
+        <h1>🖼️ Obrazki</h1>
+
+        <p class="lesson-text">
+
+            Do dodawania obrazków używamy znacznika
+            <b>&lt;img&gt;</b>.
+
+        </p>
+
+
+        <div class="code">
+&lt;img src="obrazek.jpg" alt="Mój obrazek"&gt;
+        </div>
+
+
+        <button
+            class="btn btn-secondary"
+            onclick="copyCode(this)">
+
+            📋 KOPIUJ KOD
+
+        </button>
+
+    </div>
+
+
+    <!-- LEKCJA 5 -->
+
+    <div class="lesson">
+
+        <h1>📋 Listy</h1>
+
+        <p class="lesson-text">
+
+            HTML pozwala tworzyć listy uporządkowane
+            i nieuporządkowane.
+
+        </p>
+
+
+        <div class="code">
+&lt;ul&gt;
+    &lt;li&gt;HTML&lt;/li&gt;
+    &lt;li&gt;CSS&lt;/li&gt;
+    &lt;li&gt;JavaScript&lt;/li&gt;
+&lt;/ul&gt;
+        </div>
+
+
+        <button
+            class="btn btn-secondary"
+            onclick="copyCode(this)">
+
+            📋 KOPIUJ KOD
+
+        </button>
+
+    </div>
+
+
+    <!-- LEKCJA 6 -->
+
+    <div class="lesson">
+
+        <h1>📊 Tabele</h1>
+
+        <p class="lesson-text">
+            Tabele pozwalają przedstawiać dane
+            w wierszach i kolumnach.
+        </p>
+
+
+        <div class="code">
+&lt;table&gt;
+
+    &lt;tr&gt;
+        &lt;th&gt;Język&lt;/th&gt;
+        &lt;th&gt;Poziom&lt;/th&gt;
+    &lt;/tr&gt;
+
+    &lt;tr&gt;
+        &lt;td&gt;HTML&lt;/td&gt;
+        &lt;td&gt;Podstawowy&lt;/td&gt;
+    &lt;/tr&gt;
+
+&lt;/table&gt;
+        </div>
+
+
+        <button
+            class="btn btn-secondary"
+            onclick="copyCode(this)">
+
+            📋 KOPIUJ KOD
+
+        </button>
+
+    </div>
+
+
+    <!-- LEKCJA 7 -->
+
+    <div class="lesson">
+
+        <h1>📝 Formularze</h1>
+
+        <p class="lesson-text">
+            Formularze pozwalają użytkownikowi
+            wprowadzać dane.
+        </p>
+
+
+        <div class="code">
+&lt;form&gt;
+
+    &lt;input type="text"
+           placeholder="Twoje imię"&gt;
+
+    &lt;button&gt;
+        Wyślij
+    &lt;/button&gt;
+
+&lt;/form&gt;
+        </div>
+
+
+        <button
+            class="btn btn-secondary"
+            onclick="copyCode(this)">
+
+            📋 KOPIUJ KOD
+
+        </button>
+
+    </div>
+
+
+    <!-- LEKCJA 8 -->
+
+    <div class="lesson">
+
+        <h1>📦 Div</h1>
+
+        <p class="lesson-text">
+            Element div służy do grupowania
+            elementów strony.
+        </p>
+
+
+        <div class="code">
+&lt;div&gt;
+
+    &lt;h2&gt;LearnCodesGG&lt;/h2&gt;
+
+    &lt;p&gt;Nauka programowania&lt;/p&gt;
+
+&lt;/div&gt;
+        </div>
+
+    </div>
+
+
+    <!-- LEKCJA 9 -->
+
+    <div class="lesson">
+
+        <h1>🏷️ Klasy HTML</h1>
+
+        <p class="lesson-text">
+            Klasy pozwalają później stylować
+            elementy za pomocą CSS.
+        </p>
+
+
+        <div class="code">
+&lt;p class="tekst"&gt;
+    Hello World!
+&lt;/p&gt;
+        </div>
+
+    </div>
+
+
+    <!-- LEKCJA 10 -->
+
+    <div class="lesson">
+
+        <h1>🎨 Czym jest CSS?</h1>
+
+        <p class="lesson-text">
+
+            CSS służy do nadawania wyglądu
+            stronie internetowej.
+
+            <br><br>
+
+            Możemy zmieniać kolory, rozmiary,
+            odstępy, pozycję elementów i wiele więcej.
+
+        </p>
+
+
+        <div class="code">
+body {
+    background: black;
+    color: white;
+}
+        </div>
+
+
+        <button
+            class="btn btn-secondary"
+            onclick="copyCode(this)">
+
+            📋 KOPIUJ KOD
+
+        </button>
+
+    </div>
+
+
+    <!-- NAWIGACJA -->
+
+    <div class="lesson-buttons">
+
+        <button
+            class="btn btn-secondary"
+            onclick="previousLesson()">
+
+            ← POPRZEDNIA
+
+        </button>
+
+
+        <button
+            class="btn btn-primary"
+            onclick="nextLesson()">
+
+            NASTĘPNA →
+
+        </button>
+
+    </div>
+
+</div>
+
+</main>
+
+
+<footer>
+
+    © 2026 LearnCodesGG • HTML + CSS 🚀
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
