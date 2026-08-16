@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>C# — LearnCodesGG</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+    <div class="navbar">
+
+        <a href="index.html" class="logo">
+            LearnCodes<span>GG</span>
+        </a>
+
+        <nav>
+            <a href="index.html">Start</a>
+            <a href="wyborlekcji.html">Lekcje</a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<div class="lesson-box">
+
+    <div id="lessonCounter" class="lesson-number"></div>
+
+
+    <!-- 1 -->
+
+    <div class="lesson">
+
+        <h1>🟣 1. Czym jest C#?</h1>
+
+        <p class="lesson-text">
+            C# (czyt. „C Sharp”) to język programowania
+            firmy Microsoft. Jest używany między innymi
+            do tworzenia aplikacji, gier oraz usług.
+        </p>
+
+        <div class="code">Console.WriteLine("Witaj w C#!");</div>
+
+        <button class="btn btn-secondary"
+                onclick="copyCode(this)">
+            📋 KOPIUJ KOD
+        </button>
+
+        <div class="quiz">
+
+            <h3>🧠 Quiz</h3>
+
+            <p>
+                Jak nazywa się język przedstawiony
+                w tej lekcji?
+            </p>
+
+            <button onclick="alert('❌ Spróbuj ponownie!')">
+                Python
+            </button>
+
+            <button onclick="alert('✅ Dobrze!')">
+                C#
+            </button>
+
+            <button onclick="alert('❌ Spróbuj ponownie!')">
+                HTML
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- 2 -->
+
+    <div class="lesson">
+
+        <h1>🖨️ 2. Pierwszy program</h1>
+
+        <p class="lesson-text">
+            Do wyświetlania tekstu w konsoli używamy
+            Console.WriteLine().
+        </p>
+
+        <div class="code">Console.WriteLine("Hello World!");
+Console.WriteLine("LearnCodesGG");</div>
+
+        <button class="btn btn-secondary"
+                onclick="copyCode(this)">
+            📋 KOPIUJ KOD
+        </button>
+
+    </div>
+
+
+    <!-- 3 -->
+
+    <div class="lesson">
+
+        <h1>📦 3. Zmienne</h1>
+
+        <p class="lesson-text">
+            Zmienne przechowują dane, które możemy
+            wykorzystywać w programie.
+        </p>
+
+        <div class="code">string nick = "PlayerGG";
+int punkty = 100;
+
+Console.WriteLine(nick);
+Console.WriteLine(punkty);</div>
+
+    </div>
+
+
+    <!-- 4 -->
+
+    <div class="lesson">
+
+        <h1>🔢 4. Typy danych</h1>
+
+        <p class="lesson-text">
+            C# posiada różne typy danych,
+            np. string, int, double i bool.
+        </p>
+
+        <div class="code">string imie = "Karol";
+int wiek = 13;
+double cena = 19.99;
+bool online = true;</div>
+
+    </div>
+
+
+    <!-- 5 -->
+
+    <div class="lesson">
+
+        <h1>➕ 5. Operatory</h1>
+
+        <p class="lesson-text">
+            Operatory pozwalają wykonywać działania
+            matematyczne.
+        </p>
+
+        <div class="code">int a = 10;
+int b = 5;
+
+Console.WriteLine(a + b);
+Console.WriteLine(a - b);
+Console.WriteLine(a * b);
+Console.WriteLine(a / b);</div>
+
+    </div>
+
+
+    <!-- 6 -->
+
+    <div class="lesson">
+
+        <h1>❓ 6. if</h1>
+
+        <p class="lesson-text">
+            Instrukcja if pozwala wykonać kod,
+            gdy określony warunek jest prawdziwy.
+        </p>
+
+        <div class="code">int wiek = 18;
+
+if (wiek >= 18)
+{
+    Console.WriteLine("Pełnoletni");
+}</div>
+
+    </div>
+
+
+    <!-- 7 -->
+
+    <div class="lesson">
+
+        <h1>🔀 7. if / else</h1>
+
+        <p class="lesson-text">
+            else wykonuje kod, gdy warunek if
+            nie jest spełniony.
+        </p>
+
+        <div class="code">int wiek = 15;
+
+if (wiek >= 18)
+{
+    Console.WriteLine("Pełnoletni");
+}
+else
+{
+    Console.WriteLine("Niepełnoletni");
+}</div>
+
+    </div>
+
+
+    <!-- 8 -->
+
+    <div class="lesson">
+
+        <h1>🔀 8. else if</h1>
+
+        <p class="lesson-text">
+            else if pozwala sprawdzić kolejny warunek.
+        </p>
+
+        <div class="code">int punkty = 80;
+
+if (punkty >= 90)
+{
+    Console.WriteLine("5");
+}
+else if (punkty >= 70)
+{
+    Console.WriteLine("4");
+}
+else
+{
+    Console.WriteLine("3");
+}</div>
+
+    </div>
+
+
+    <!-- 9 -->
+
+    <div class="lesson">
+
+        <h1>🔁 9. Pętla for</h1>
+
+        <p class="lesson-text">
+            Pętla for pozwala wykonywać kod
+            określoną liczbę razy.
+        </p>
+
+        <div class="code">for (int i = 0; i < 5; i++)
+{
+    Console.WriteLine(i);
+}</div>
+
+    </div>
+
+
+    <!-- 10 -->
+
+    <div class="lesson">
+
+        <h1>🔄 10. Pętla while</h1>
+
+        <p class="lesson-text">
+            while wykonuje kod dopóki warunek
+            pozostaje prawdziwy.
+        </p>
+
+        <div class="code">int liczba = 1;
+
+while (liczba <= 5)
+{
+    Console.WriteLine(liczba);
+
+    liczba++;
+}</div>
+
+    </div>
+
+
+    <!-- 11 -->
+
+    <div class="lesson">
+
+        <h1>📋 11. Tablice</h1>
+
+        <p class="lesson-text">
+            Tablica może przechowywać wiele wartości
+            tego samego typu.
+        </p>
+
+        <div class="code">string[] jezyki =
+{
+    "C#",
+    "Java",
+    "Python"
+};
+
+Console.WriteLine(jezyki[0]);</div>
+
+    </div>
+
+
+    <!-- 12 -->
+
+    <div class="lesson">
+
+        <h1>📚 12. Listy</h1>
+
+        <p class="lesson-text">
+            List<T> pozwala przechowywać kolekcję
+            elementów, którą można łatwo modyfikować.
+        </p>
+
+        <div class="code">List<string> gracze = new List<string>();
+
+gracze.Add("Player1");
+gracze.Add("Player2");
+gracze.Add("Player3");
+
+Console.WriteLine(gracze[0]);</div>
+
+    </div>
+
+
+    <!-- 13 -->
+
+    <div class="lesson">
+
+        <h1>⚙️ 13. Metody</h1>
+
+        <p class="lesson-text">
+            Metoda to fragment kodu, który możemy
+            wielokrotnie wywoływać.
+        </p>
+
+        <div class="code">static void Przywitaj()
+{
+    Console.WriteLine("Witaj!");
+}
+
+Przywitaj();</div>
+
+    </div>
+
+
+    <!-- 14 -->
+
+    <div class="lesson">
+
+        <h1>📥 14. Parametry metod</h1>
+
+        <p class="lesson-text">
+            Metoda może przyjmować dane
+            poprzez parametry.
+        </p>
+
+        <div class="code">static void Przywitaj(string imie)
+{
+    Console.WriteLine("Cześć " + imie);
+}
+
+Przywitaj("Karol");</div>
+
+    </div>
+
+
+    <!-- 15 -->
+
+    <div class="lesson">
+
+        <h1>📤 15. return</h1>
+
+        <p class="lesson-text">
+            return pozwala zwrócić wynik z metody.
+        </p>
+
+        <div class="code">static int Dodaj(int a, int b)
+{
+    return a + b;
+}
+
+int wynik = Dodaj(5, 3);
+
+Console.WriteLine(wynik);</div>
+
+    </div>
+
+
+    <!-- 16 -->
+
+    <div class="lesson">
+
+        <h1>🏗️ 16. Klasy</h1>
+
+        <p class="lesson-text">
+            Klasa jest szablonem, na podstawie którego
+            możemy tworzyć obiekty.
+        </p>
+
+        <div class="code">class Gracz
+{
+    public string Nick;
+    public int Punkty;
+}</div>
+
+    </div>
+
+
+    <!-- 17 -->
+
+    <div class="lesson">
+
+        <h1>👤 17. Obiekty</h1>
+
+        <p class="lesson-text">
+            Obiekt jest konkretną instancją klasy.
+        </p>
+
+        <div class="code">Gracz gracz = new Gracz();
+
+gracz.Nick = "PlayerGG";
+gracz.Punkty = 100;
+
+Console.WriteLine(gracz.Nick);</div>
+
+    </div>
+
+
+    <!-- 18 -->
+
+    <div class="lesson">
+
+        <h1>🧬 18. Dziedziczenie</h1>
+
+        <p class="lesson-text">
+            Dziedziczenie pozwala stworzyć klasę,
+            która korzysta z elementów innej klasy.
+        </p>
+
+        <div class="code">class Zwierze
+{
+    public void Jedz()
+    {
+        Console.WriteLine("Jem!");
+    }
+}
+
+class Pies : Zwierze
+{
+    public void Szczekaj()
+    {
+        Console.WriteLine("Hau!");
+    }
+}</div>
+
+    </div>
+
+
+    <!-- 19 -->
+
+    <div class="lesson">
+
+        <h1>🎮 19. Mini projekt</h1>
+
+        <p class="lesson-text">
+            Stwórzmy prosty system punktów gracza.
+        </p>
+
+        <div class="code">int punkty = 0;
+
+punkty += 50;
+punkty += 25;
+
+Console.WriteLine("Punkty: " + punkty);
+
+if (punkty >= 50)
+{
+    Console.WriteLine("🏆 Dobry wynik!");
+}</div>
+
+    </div>
+
+
+    <!-- 20 -->
+
+    <div class="lesson">
+
+        <h1>🚀 20. Projekt końcowy</h1>
+
+        <p class="lesson-text">
+            Gratulacje! Ukończyłeś podstawowy kurs C#.
+            Teraz możesz spróbować stworzyć własną
+            aplikację albo prostą grę.
+        </p>
+
+        <div class="code">using System;
+
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("==========================");
+        Console.WriteLine("      LEARNCODESGG C#");
+        Console.WriteLine("==========================");
+
+        Console.Write("Podaj nick: ");
+
+        string nick = Console.ReadLine();
+
+        Console.WriteLine();
+        Console.WriteLine("Witaj, " + nick + "!");
+        Console.WriteLine("Ukończyłeś kurs C#! 🚀");
+    }
+}</div>
+
+        <div class="quiz">
+
+            <h3>🏆 Gratulacje!</h3>
+
+            <p>
+                Ukończyłeś 20 lekcji C#!
+            </p>
+
+            <button onclick="alert('🎉 Świetna robota! Ukończyłeś kurs C#!')">
+                ODBIERZ GRATULACJE 🎉
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- NAWIGACJA -->
+
+    <div class="lesson-buttons">
+
+        <button
+            class="btn btn-secondary"
+            onclick="previousLesson()">
+
+            ← POPRZEDNIA
+
+        </button>
+
+        <button
+            class="btn btn-primary"
+            onclick="nextLesson()">
+
+            NASTĘPNA →
+
+        </button>
+
+    </div>
+
+</div>
+
+</main>
+
+
+<footer>
+    © 2026 LearnCodesGG • C# 🟣
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+        </html>
