@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Python — LearnCodesGG</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+    <div class="navbar">
+
+        <a href="index.html" class="logo">
+            LearnCodes<span>GG</span>
+        </a>
+
+        <nav>
+            <a href="index.html">Start</a>
+            <a href="wyborlekcji.html">Lekcje</a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<div class="lesson-box">
+
+    <div id="lessonCounter" class="lesson-number"></div>
+
+
+    <!-- 1 -->
+
+    <div class="lesson">
+
+        <h1>🐍 1. Witaj w Pythonie</h1>
+
+        <p class="lesson-text">
+            Python jest popularnym językiem programowania.
+            Jest stosunkowo prosty do nauki i używany między
+            innymi do tworzenia aplikacji, automatyzacji,
+            analizy danych oraz sztucznej inteligencji.
+        </p>
+
+        <div class="code">print("Hello World!")</div>
+
+        <button class="btn btn-secondary"
+                onclick="copyCode(this)">
+            📋 KOPIUJ KOD
+        </button>
+
+    </div>
+
+
+    <!-- 2 -->
+
+    <div class="lesson">
+
+        <h1>🖨️ 2. print()</h1>
+
+        <p class="lesson-text">
+            Funkcja print() wyświetla informacje
+            w konsoli.
+        </p>
+
+        <div class="code">print("Cześć!")
+print("Uczę się Pythona!")
+print(2026)</div>
+
+        <button class="btn btn-secondary"
+                onclick="copyCode(this)">
+            📋 KOPIUJ KOD
+        </button>
+
+    </div>
+
+
+    <!-- 3 -->
+
+    <div class="lesson">
+
+        <h1>📦 3. Zmienne</h1>
+
+        <p class="lesson-text">
+            Zmienna przechowuje wartość, którą możemy
+            później wykorzystać w programie.
+        </p>
+
+        <div class="code">imie = "Karol"
+wiek = 13
+
+print(imie)
+print(wiek)</div>
+
+        <button class="btn btn-secondary"
+                onclick="copyCode(this)">
+            📋 KOPIUJ KOD
+        </button>
+
+    </div>
+
+
+    <!-- 4 -->
+
+    <div class="lesson">
+
+        <h1>🔢 4. Typy danych</h1>
+
+        <p class="lesson-text">
+            Python posiada różne typy danych,
+            np. tekst, liczby całkowite i liczby dziesiętne.
+        </p>
+
+        <div class="code">imie = "Karol"
+wiek = 13
+cena = 19.99
+gracz_online = True</div>
+
+    </div>
+
+
+    <!-- 5 -->
+
+    <div class="lesson">
+
+        <h1>➕ 5. Operatory</h1>
+
+        <p class="lesson-text">
+            Operatory pozwalają wykonywać działania matematyczne.
+        </p>
+
+        <div class="code">a = 10
+b = 3
+
+print(a + b)
+print(a - b)
+print(a * b)
+print(a / b)</div>
+
+    </div>
+
+
+    <!-- 6 -->
+
+    <div class="lesson">
+
+        <h1>❓ 6. if</h1>
+
+        <p class="lesson-text">
+            Instrukcja if pozwala wykonać kod tylko wtedy,
+            gdy warunek jest prawdziwy.
+        </p>
+
+        <div class="code">wiek = 18
+
+if wiek >= 18:
+    print("Jesteś pełnoletni")</div>
+
+    </div>
+
+
+    <!-- 7 -->
+
+    <div class="lesson">
+
+        <h1>🔀 7. if / else</h1>
+
+        <p class="lesson-text">
+            else wykonuje kod, kiedy warunek if
+            nie jest spełniony.
+        </p>
+
+        <div class="code">wiek = 15
+
+if wiek >= 18:
+    print("Pełnoletni")
+else:
+    print("Niepełnoletni")</div>
+
+    </div>
+
+
+    <!-- 8 -->
+
+    <div class="lesson">
+
+        <h1>🔀 8. elif</h1>
+
+        <p class="lesson-text">
+            elif pozwala sprawdzić kolejny warunek.
+        </p>
+
+        <div class="code">punkty = 80
+
+if punkty >= 90:
+    print("5")
+elif punkty >= 70:
+    print("4")
+else:
+    print("3")</div>
+
+    </div>
+
+
+    <!-- 9 -->
+
+    <div class="lesson">
+
+        <h1>🔁 9. Pętla for</h1>
+
+        <p class="lesson-text">
+            Pętla for pozwala powtarzać instrukcje.
+        </p>
+
+        <div class="code">for i in range(5):
+    print(i)</div>
+
+        <button class="btn btn-secondary"
+                onclick="copyCode(this)">
+            📋 KOPIUJ KOD
+        </button>
+
+    </div>
+
+
+    <!-- 10 -->
+
+    <div class="lesson">
+
+        <h1>🔄 10. Pętla while</h1>
+
+        <p class="lesson-text">
+            while wykonuje kod tak długo,
+            jak długo warunek jest prawdziwy.
+        </p>
+
+        <div class="code">liczba = 1
+
+while liczba <= 5:
+    print(liczba)
+    liczba += 1</div>
+
+    </div>
+
+
+    <!-- 11 -->
+
+    <div class="lesson">
+
+        <h1>📋 11. Listy</h1>
+
+        <p class="lesson-text">
+            Lista pozwala przechowywać wiele wartości.
+        </p>
+
+        <div class="code">jezyki = [
+    "Python",
+    "Java",
+    "C#"
+]
+
+print(jezyki[0])</div>
+
+    </div>
+
+
+    <!-- 12 -->
+
+    <div class="lesson">
+
+        <h1>📖 12. Słowniki</h1>
+
+        <p class="lesson-text">
+            Słownik przechowuje dane w parach
+            klucz — wartość.
+        </p>
+
+        <div class="code">gracz = {
+    "nick": "PlayerGG",
+    "punkty": 100
+}
+
+print(gracz["nick"])</div>
+
+    </div>
+
+
+    <!-- 13 -->
+
+    <div class="lesson">
+
+        <h1>⚙️ 13. Funkcje</h1>
+
+        <p class="lesson-text">
+            Funkcja pozwala stworzyć fragment kodu,
+            który możemy wielokrotnie uruchamiać.
+        </p>
+
+        <div class="code">def przywitaj():
+    print("Witaj!")
+
+przywitaj()</div>
+
+    </div>
+
+
+    <!-- 14 -->
+
+    <div class="lesson">
+
+        <h1>📥 14. Argumenty funkcji</h1>
+
+        <p class="lesson-text">
+            Funkcja może przyjmować dane jako argumenty.
+        </p>
+
+        <div class="code">def przywitaj(imie):
+    print("Cześć", imie)
+
+przywitaj("Karol")</div>
+
+    </div>
+
+
+    <!-- 15 -->
+
+    <div class="lesson">
+
+        <h1>📤 15. return</h1>
+
+        <p class="lesson-text">
+            return pozwala zwrócić wynik z funkcji.
+        </p>
+
+        <div class="code">def dodaj(a, b):
+    return a + b
+
+wynik = dodaj(5, 3)
+
+print(wynik)</div>
+
+    </div>
+
+
+    <!-- 16 -->
+
+    <div class="lesson">
+
+        <h1>📦 16. Moduły</h1>
+
+        <p class="lesson-text">
+            Moduły pozwalają korzystać z gotowych
+            funkcji znajdujących się w innych plikach.
+        </p>
+
+        <div class="code">import random
+
+liczba = random.randint(1, 10)
+
+print(liczba)</div>
+
+    </div>
+
+
+    <!-- 17 -->
+
+    <div class="lesson">
+
+        <h1>⚠️ 17. Obsługa błędów</h1>
+
+        <p class="lesson-text">
+            try i except pozwalają obsługiwać błędy
+            podczas działania programu.
+        </p>
+
+        <div class="code">try:
+    liczba = int(input("Podaj liczbę: "))
+    print(liczba)
+
+except ValueError:
+    print("To nie jest liczba!")</div>
+
+    </div>
+
+
+    <!-- 18 -->
+
+    <div class="lesson">
+
+        <h1>⌨️ 18. input()</h1>
+
+        <p class="lesson-text">
+            input() pozwala pobrać tekst wpisany
+            przez użytkownika.
+        </p>
+
+        <div class="code">imie = input("Jak masz na imię? ")
+
+print("Cześć", imie)</div>
+
+    </div>
+
+
+    <!-- 19 -->
+
+    <div class="lesson">
+
+        <h1>🎮 19. Mini projekt</h1>
+
+        <p class="lesson-text">
+            Stwórzmy prosty program, który sprawdzi
+            liczbę punktów gracza.
+        </p>
+
+        <div class="code">punkty = int(input("Ile masz punktów? "))
+
+if punkty >= 100:
+    print("🏆 Gratulacje!")
+else:
+    print("💪 Graj dalej!")</div>
+
+    </div>
+
+
+    <!-- 20 -->
+
+    <div class="lesson">
+
+        <h1>🚀 20. Projekt końcowy</h1>
+
+        <p class="lesson-text">
+            Gratulacje! Zakończyłeś podstawowy kurs Pythona.
+            Teraz spróbuj stworzyć własny program.
+        </p>
+
+        <div class="code">print("================================")
+print("       LEARNCODESGG PYTHON")
+print("================================")
+
+imie = input("Podaj swoje imię: ")
+
+print("Witaj,", imie)
+print("Ukończyłeś kurs podstaw Pythona! 🚀")</div>
+
+        <div class="quiz">
+
+            <h3>🏆 Gratulacje!</h3>
+
+            <p>
+                Ukończyłeś 20 lekcji Python.
+            </p>
+
+            <button onclick="alert('🎉 Świetna robota!')">
+                ODBIERZ GRATULACJE 🎉
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- PRZYCISKI -->
+
+    <div class="lesson-buttons">
+
+        <button
+            class="btn btn-secondary"
+            onclick="previousLesson()">
+
+            ← POPRZEDNIA
+
+        </button>
+
+        <button
+            class="btn btn-primary"
+            onclick="nextLesson()">
+
+            NASTĘPNA →
+
+        </button>
+
+    </div>
+
+</div>
+
+</main>
+
+
+<footer>
+    © 2026 LearnCodesGG • Python 🐍
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
