@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Java — LearnCodesGG</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+    <div class="navbar">
+
+        <a href="index.html" class="logo">
+            LearnCodes<span>GG</span>
+        </a>
+
+        <nav>
+            <a href="index.html">Start</a>
+            <a href="wyborlekcji.html">Lekcje</a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<div class="lesson-box">
+
+    <div id="lessonCounter" class="lesson-number"></div>
+
+
+    <!-- 1 -->
+
+    <div class="lesson">
+
+        <h1>☕ 1. Czym jest Java?</h1>
+
+        <p class="lesson-text">
+            Java jest popularnym językiem programowania
+            używanym między innymi do tworzenia aplikacji,
+            programów i różnych systemów.
+        </p>
+
+        <div class="code">public class Main {
+
+    public static void main(String[] args) {
+
+        System.out.println("Witaj w Javie!");
+
+    }
+}</div>
+
+        <button class="btn btn-secondary"
+                onclick="copyCode(this)">
+            📋 KOPIUJ KOD
+        </button>
+
+        <div class="quiz">
+
+            <h3>🧠 Quiz</h3>
+
+            <p>
+                Jak nazywa się język z tego kursu?
+            </p>
+
+            <button onclick="alert('❌ Spróbuj ponownie!')">
+                Python
+            </button>
+
+            <button onclick="alert('❌ Spróbuj ponownie!')">
+                C#
+            </button>
+
+            <button onclick="alert('✅ Dobrze!')">
+                Java
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- 2 -->
+
+    <div class="lesson">
+
+        <h1>🖨️ 2. Pierwszy program</h1>
+
+        <p class="lesson-text">
+            Do wyświetlania tekstu w konsoli używamy
+            System.out.println().
+        </p>
+
+        <div class="code">System.out.println("Hello World!");
+System.out.println("LearnCodesGG");</div>
+
+        <button class="btn btn-secondary"
+                onclick="copyCode(this)">
+            📋 KOPIUJ KOD
+        </button>
+
+    </div>
+
+
+    <!-- 3 -->
+
+    <div class="lesson">
+
+        <h1>📦 3. Zmienne</h1>
+
+        <p class="lesson-text">
+            Zmienne pozwalają przechowywać dane.
+        </p>
+
+        <div class="code">String nick = "PlayerGG";
+int punkty = 100;
+
+System.out.println(nick);
+System.out.println(punkty);</div>
+
+    </div>
+
+
+    <!-- 4 -->
+
+    <div class="lesson">
+
+        <h1>🔢 4. Typy danych</h1>
+
+        <p class="lesson-text">
+            Java posiada różne typy danych,
+            np. String, int, double i boolean.
+        </p>
+
+        <div class="code">String imie = "Karol";
+int wiek = 13;
+double cena = 19.99;
+boolean online = true;</div>
+
+    </div>
+
+
+    <!-- 5 -->
+
+    <div class="lesson">
+
+        <h1>➕ 5. Operatory</h1>
+
+        <p class="lesson-text">
+            Operatory pozwalają wykonywać działania
+            matematyczne.
+        </p>
+
+        <div class="code">int a = 10;
+int b = 5;
+
+System.out.println(a + b);
+System.out.println(a - b);
+System.out.println(a * b);
+System.out.println(a / b);</div>
+
+    </div>
+
+
+    <!-- 6 -->
+
+    <div class="lesson">
+
+        <h1>❓ 6. if</h1>
+
+        <p class="lesson-text">
+            Instrukcja if pozwala wykonać kod,
+            gdy warunek jest prawdziwy.
+        </p>
+
+        <div class="code">int wiek = 18;
+
+if (wiek >= 18) {
+    System.out.println("Pełnoletni");
+}</div>
+
+    </div>
+
+
+    <!-- 7 -->
+
+    <div class="lesson">
+
+        <h1>🔀 7. if / else</h1>
+
+        <p class="lesson-text">
+            else wykonuje kod, kiedy warunek if
+            nie jest spełniony.
+        </p>
+
+        <div class="code">int wiek = 15;
+
+if (wiek >= 18) {
+
+    System.out.println("Pełnoletni");
+
+} else {
+
+    System.out.println("Niepełnoletni");
+
+}</div>
+
+    </div>
+
+
+    <!-- 8 -->
+
+    <div class="lesson">
+
+        <h1>🔀 8. else if</h1>
+
+        <p class="lesson-text">
+            else if pozwala sprawdzić kolejny warunek.
+        </p>
+
+        <div class="code">int punkty = 80;
+
+if (punkty >= 90) {
+
+    System.out.println("5");
+
+} else if (punkty >= 70) {
+
+    System.out.println("4");
+
+} else {
+
+    System.out.println("3");
+
+}</div>
+
+    </div>
+
+
+    <!-- 9 -->
+
+    <div class="lesson">
+
+        <h1>🔁 9. Pętla for</h1>
+
+        <p class="lesson-text">
+            Pętla for pozwala powtarzać kod
+            określoną liczbę razy.
+        </p>
+
+        <div class="code">for (int i = 0; i < 5; i++) {
+
+    System.out.println(i);
+
+}</div>
+
+    </div>
+
+
+    <!-- 10 -->
+
+    <div class="lesson">
+
+        <h1>🔄 10. Pętla while</h1>
+
+        <p class="lesson-text">
+            while wykonuje kod dopóki warunek
+            pozostaje prawdziwy.
+        </p>
+
+        <div class="code">int liczba = 1;
+
+while (liczba <= 5) {
+
+    System.out.println(liczba);
+
+    liczba++;
+
+}</div>
+
+    </div>
+
+
+    <!-- 11 -->
+
+    <div class="lesson">
+
+        <h1>📋 11. Tablice</h1>
+
+        <p class="lesson-text">
+            Tablica przechowuje wiele wartości
+            tego samego typu.
+        </p>
+
+        <div class="code">String[] jezyki = {
+    "Java",
+    "Python",
+    "C#"
+};
+
+System.out.println(jezyki[0]);</div>
+
+    </div>
+
+
+    <!-- 12 -->
+
+    <div class="lesson">
+
+        <h1>📚 12. ArrayList</h1>
+
+        <p class="lesson-text">
+            ArrayList pozwala przechowywać kolekcję
+            elementów, którą można modyfikować.
+        </p>
+
+        <div class="code">import java.util.ArrayList;
+
+ArrayList&lt;String&gt; gracze =
+        new ArrayList&lt;&gt;();
+
+gracze.add("Player1");
+gracze.add("Player2");
+gracze.add("Player3");
+
+System.out.println(gracze.get(0));</div>
+
+    </div>
+
+
+    <!-- 13 -->
+
+    <div class="lesson">
+
+        <h1>⚙️ 13. Metody</h1>
+
+        <p class="lesson-text">
+            Metoda zawiera kod, który możemy
+            wielokrotnie wywoływać.
+        </p>
+
+        <div class="code">static void przywitaj() {
+
+    System.out.println("Witaj!");
+
+}
+
+przywitaj();</div>
+
+    </div>
+
+
+    <!-- 14 -->
+
+    <div class="lesson">
+
+        <h1>📥 14. Parametry metod</h1>
+
+        <p class="lesson-text">
+            Metoda może otrzymywać dane
+            za pomocą parametrów.
+        </p>
+
+        <div class="code">static void przywitaj(String imie) {
+
+    System.out.println("Cześć " + imie);
+
+}
+
+przywitaj("Karol");</div>
+
+    </div>
+
+
+    <!-- 15 -->
+
+    <div class="lesson">
+
+        <h1>📤 15. return</h1>
+
+        <p class="lesson-text">
+            return pozwala zwrócić wynik
+            z metody.
+        </p>
+
+        <div class="code">static int dodaj(int a, int b) {
+
+    return a + b;
+
+}
+
+int wynik = dodaj(5, 3);
+
+System.out.println(wynik);</div>
+
+    </div>
+
+
+    <!-- 16 -->
+
+    <div class="lesson">
+
+        <h1>🏗️ 16. Klasy</h1>
+
+        <p class="lesson-text">
+            Klasa jest szablonem, na podstawie którego
+            możemy tworzyć obiekty.
+        </p>
+
+        <div class="code">class Gracz {
+
+    String nick;
+    int punkty;
+
+}</div>
+
+    </div>
+
+
+    <!-- 17 -->
+
+    <div class="lesson">
+
+        <h1>👤 17. Obiekty</h1>
+
+        <p class="lesson-text">
+            Obiekt jest konkretną instancją klasy.
+        </p>
+
+        <div class="code">Gracz gracz = new Gracz();
+
+gracz.nick = "PlayerGG";
+gracz.punkty = 100;
+
+System.out.println(gracz.nick);</div>
+
+    </div>
+
+
+    <!-- 18 -->
+
+    <div class="lesson">
+
+        <h1>🏗️ 18. Konstruktor</h1>
+
+        <p class="lesson-text">
+            Konstruktor pozwala ustawić początkowe
+            wartości obiektu podczas jego tworzenia.
+        </p>
+
+        <div class="code">class Gracz {
+
+    String nick;
+
+    Gracz(String nick) {
+
+        this.nick = nick;
+
+    }
+}
+
+Gracz gracz = new Gracz("PlayerGG");
+
+System.out.println(gracz.nick);</div>
+
+    </div>
+
+
+    <!-- 19 -->
+
+    <div class="lesson">
+
+        <h1>🎮 19. Mini projekt</h1>
+
+        <p class="lesson-text">
+            Stwórzmy prosty system punktów gracza.
+        </p>
+
+        <div class="code">int punkty = 0;
+
+punkty += 50;
+punkty += 25;
+
+System.out.println(
+    "Punkty: " + punkty
+);
+
+if (punkty >= 50) {
+
+    System.out.println(
+        "🏆 Dobry wynik!"
+    );
+
+}</div>
+
+    </div>
+
+
+    <!-- 20 -->
+
+    <div class="lesson">
+
+        <h1>🚀 20. Projekt końcowy</h1>
+
+        <p class="lesson-text">
+            Gratulacje! Ukończyłeś podstawowy kurs Javy.
+            Możesz teraz rozpocząć tworzenie własnych
+            programów.
+        </p>
+
+        <div class="code">import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner scanner =
+                new Scanner(System.in);
+
+        System.out.println(
+                "=========================="
+        );
+
+        System.out.println(
+                "      LEARNCODESGG JAVA"
+        );
+
+        System.out.println(
+                "=========================="
+        );
+
+        System.out.print(
+                "Podaj nick: "
+        );
+
+        String nick = scanner.nextLine();
+
+        System.out.println();
+
+        System.out.println(
+                "Witaj, " + nick + "!"
+        );
+
+        System.out.println(
+                "Ukończyłeś kurs Javy! 🚀"
+        );
+
+    }
+}</div>
+
+        <div class="quiz">
+
+            <h3>🏆 Gratulacje!</h3>
+
+            <p>
+                Ukończyłeś 20 lekcji Java!
+            </p>
+
+            <button onclick="alert('🎉 Świetna robota! Ukończyłeś kurs Javy!')">
+                ODBIERZ GRATULACJE 🎉
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- NAWIGACJA -->
+
+    <div class="lesson-buttons">
+
+        <button
+            class="btn btn-secondary"
+            onclick="previousLesson()">
+
+            ← POPRZEDNIA
+
+        </button>
+
+        <button
+            class="btn btn-primary"
+            onclick="nextLesson()">
+
+            NASTĘPNA →
+
+        </button>
+
+    </div>
+
+</div>
+
+</main>
+
+
+<footer>
+    © 2026 LearnCodesGG • Java ☕
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
