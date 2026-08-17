@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MapPL 3.0 PRO ULTRA PLUS</title>
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="top">
+
+    <div class="brand">
+        <div class="brandIcon">🗺️</div>
+
+        <div>
+            <strong>MapPL</strong>
+            <small>3.0 PRO ULTRA PLUS</small>
+        </div>
+    </div>
+
+    <div class="search">
+
+        <input
+            id="search"
+            type="search"
+            placeholder="Szukaj miejsc, ulic, miast..."
+        >
+
+        <button id="searchButton">
+            🔍
+        </button>
+
+    </div>
+
+    <button class="topButton" id="menuButton">
+        ☰
+    </button>
+
+</header>
+
+
+<div id="map"></div>
+
+
+<!-- LEWY PANEL -->
+
+<aside class="sidePanel" id="sidePanel">
+
+    <div class="panelTitle">
+        <h2>MapPL</h2>
+
+        <button id="closePanel">
+            ✕
+        </button>
+    </div>
+
+
+    <button class="menuItem active" data-section="home">
+        🏠 Start
+    </button>
+
+    <button class="menuItem" data-section="saved">
+        ⭐ Ulubione
+    </button>
+
+    <button class="menuItem" data-section="history">
+        🕘 Historia
+    </button>
+
+    <button class="menuItem" data-section="route">
+        🛣️ Trasa
+    </button>
+
+    <button class="menuItem" data-section="places">
+        📍 Miejsca
+    </button>
+
+    <button class="menuItem" data-section="weather">
+        🌦️ Pogoda
+    </button>
+
+    <button class="menuItem" data-section="settings">
+        ⚙️ Ustawienia
+    </button>
+
+
+    <div class="panelBottom">
+        MapPL 3.0 PRO ULTRA PLUS
+    </div>
+
+</aside>
+
+
+<!-- WYNIKI -->
+
+<div id="results"></div>
+
+
+<!-- PRAWA KONTROLKA -->
+
+<div class="mapControls">
+
+    <button id="locate" title="Moja lokalizacja">
+        📍
+    </button>
+
+    <button id="compass" title="Kompas">
+        🧭
+    </button>
+
+    <button id="plus">
+        +
+    </button>
+
+    <button id="minus">
+        −
+    </button>
+
+</div>
+
+
+<!-- DOLNY PANEL -->
+
+<div class="bottomBar">
+
+    <button id="route">
+        🛣️
+        <span>Trasa</span>
+    </button>
+
+    <button id="addMarker">
+        📌
+        <span>Marker</span>
+    </button>
+
+    <button id="layers">
+        🗺️
+        <span>Warstwy</span>
+    </button>
+
+    <button id="full">
+        ⛶
+        <span>Pełny ekran</span>
+    </button>
+
+</div>
+
+
+<!-- PANEL TRASY -->
+
+<section class="floating routePanel" id="routePanel">
+
+    <div class="floatingHeader">
+
+        <h2>🛣️ Wyznacz trasę</h2>
+
+        <button id="closeRoute">
+            ✕
+        </button>
+
+    </div>
+
+
+    <input
+        id="routeStart"
+        placeholder="📍 Początek"
+    >
+
+    <input
+        id="routeEnd"
+        placeholder="🏁 Cel"
+    >
+
+
+    <div class="travelModes">
+
+        <button class="travel active" data-mode="driving">
+            🚗
+        </button>
+
+        <button class="travel" data-mode="walking">
+            🚶
+        </button>
+
+        <button class="travel" data-mode="cycling">
+            🚲
+        </button>
+
+    </div>
+
+
+    <button class="mainAction" id="calculate">
+        🧭 Wyznacz trasę
+    </button>
+
+
+    <div id="routeInfo"></div>
+
+</section>
+
+
+<!-- WARSTWY -->
+
+<section class="floating layerPanel" id="layerPanel">
+
+    <div class="floatingHeader">
+
+        <h2>🗺️ Warstwy</h2>
+
+        <button id="closeLayers">
+            ✕
+        </button>
+
+    </div>
+
+
+    <button class="layer" data-layer="normal">
+        🗺️ Standardowa
+    </button>
+
+    <button class="layer" data-layer="dark">
+        🌙 Ciemna
+    </button>
+
+    <button class="layer" data-layer="hot">
+        🔥 Mapa HOT
+    </button>
+
+</section>
+
+
+<!-- DODAWANIE MARKERA -->
+
+<section class="floating markerPanel" id="markerPanel">
+
+    <div class="floatingHeader">
+
+        <h2>📌 Własny marker</h2>
+
+        <button id="closeMarker">
+            ✕
+        </button>
+
+    </div>
+
+
+    <input
+        id="markerName"
+        placeholder="Nazwa miejsca"
+    >
+
+
+    <button class="mainAction" id="saveMarker">
+        📌 Dodaj
+    </button>
+
+</section>
+
+
+<!-- TOAST -->
+
+<div id="toast"></div>
+
+
+<!-- LEAFLET -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+<script src="script.js"></script>
+
+</body>
+          </html>
