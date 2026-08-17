@@ -1,0 +1,740 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --blue: #087cff;
+    --blue2: #00b7ff;
+    --dark: #101217;
+    --panel: rgba(18, 20, 27, 0.96);
+    --text: #fff;
+    --muted: #a7adb8;
+}
+
+body {
+    font-family:
+        Inter,
+        Arial,
+        sans-serif;
+
+    background: #111;
+
+    color: var(--text);
+
+    overflow: hidden;
+}
+
+
+/* TOP */
+
+.top {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+
+    height: 72px;
+
+    z-index: 5000;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 10px 18px;
+
+    background: rgba(12, 14, 20, .96);
+
+    backdrop-filter: blur(15px);
+
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+
+.brand {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 230px;
+}
+
+
+.brandIcon {
+    width: 45px;
+    height: 45px;
+
+    display: grid;
+
+    place-items: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--blue2)
+        );
+
+    border-radius: 13px;
+
+    font-size: 23px;
+}
+
+
+.brand strong {
+    display: block;
+
+    font-size: 21px;
+}
+
+
+.brand small {
+    color: #8e96a5;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+}
+
+
+.search {
+    flex: 1;
+
+    max-width: 700px;
+
+    display: flex;
+
+    height: 47px;
+}
+
+
+.search input {
+    flex: 1;
+
+    border: 0;
+
+    outline: 0;
+
+    padding: 0 18px;
+
+    font-size: 15px;
+
+    border-radius: 14px 0 0 14px;
+
+    background: #fff;
+
+    color: #111;
+}
+
+
+.search button {
+    width: 58px;
+
+    border: 0;
+
+    border-radius: 0 14px 14px 0;
+
+    background: var(--blue);
+
+    color: white;
+
+    font-size: 19px;
+}
+
+
+.topButton {
+    margin-left: auto;
+
+    width: 45px;
+    height: 45px;
+
+    border: 0;
+
+    border-radius: 12px;
+
+    background: #242833;
+
+    color: white;
+
+    font-size: 20px;
+}
+
+
+/* MAP */
+
+#map {
+    position: fixed;
+
+    top: 72px;
+    left: 0;
+
+    width: 100%;
+    height: calc(100vh - 72px);
+
+    z-index: 1;
+}
+
+
+/* SIDE */
+
+.sidePanel {
+    position: fixed;
+
+    top: 72px;
+    left: 0;
+
+    width: 290px;
+
+    height: calc(100vh - 72px);
+
+    z-index: 4500;
+
+    padding: 18px;
+
+    background: var(--panel);
+
+    backdrop-filter: blur(20px);
+
+    box-shadow: 8px 0 30px rgba(0,0,0,.3);
+
+    transform: translateX(-100%);
+
+    transition: .25s;
+}
+
+
+.sidePanel.open {
+    transform: translateX(0);
+}
+
+
+.panelTitle {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+
+.panelTitle h2 {
+    font-size: 24px;
+}
+
+
+.panelTitle button {
+    background: none;
+
+    border: 0;
+
+    color: white;
+
+    font-size: 20px;
+}
+
+
+.menuItem {
+    width: 100%;
+
+    border: 0;
+
+    background: transparent;
+
+    color: #c9ced8;
+
+    text-align: left;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    margin-bottom: 5px;
+
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+
+.menuItem:hover,
+.menuItem.active {
+    background: rgba(0,132,255,.18);
+
+    color: white;
+}
+
+
+.panelBottom {
+    position: absolute;
+
+    bottom: 20px;
+
+    left: 20px;
+
+    color: #6e7583;
+
+    font-size: 11px;
+}
+
+
+/* RESULTS */
+
+#results {
+    position: fixed;
+
+    top: 82px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: min(700px, calc(100% - 30px));
+
+    max-height: 400px;
+
+    overflow-y: auto;
+
+    z-index: 6000;
+}
+
+
+.result {
+    background: white;
+
+    color: #151515;
+
+    padding: 15px;
+
+    border-bottom: 1px solid #ddd;
+
+    cursor: pointer;
+}
+
+
+.result:first-child {
+    border-radius: 13px 13px 0 0;
+}
+
+
+.result:last-child {
+    border-radius: 0 0 13px 13px;
+}
+
+
+.result:hover {
+    background: #eef5ff;
+}
+
+
+/* CONTROLS */
+
+.mapControls {
+    position: fixed;
+
+    right: 18px;
+
+    top: 90px;
+
+    z-index: 3000;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.mapControls button {
+    width: 45px;
+    height: 45px;
+
+    border: 0;
+
+    border-radius: 13px;
+
+    background: white;
+
+    color: #111;
+
+    font-size: 21px;
+
+    box-shadow: 0 4px 15px rgba(0,0,0,.3);
+
+    cursor: pointer;
+}
+
+
+/* BOTTOM */
+
+.bottomBar {
+    position: fixed;
+
+    left: 50%;
+    bottom: 18px;
+
+    transform: translateX(-50%);
+
+    z-index: 3000;
+
+    display: flex;
+
+    gap: 7px;
+
+    padding: 8px;
+
+    border-radius: 18px;
+
+    background: rgba(15,17,23,.96);
+
+    backdrop-filter: blur(15px);
+
+    box-shadow: 0 10px 35px rgba(0,0,0,.4);
+}
+
+
+.bottomBar button {
+    min-width: 90px;
+
+    border: 0;
+
+    border-radius: 12px;
+
+    padding: 12px;
+
+    background: #252a35;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+
+.bottomBar button:hover {
+    background: var(--blue);
+}
+
+
+.bottomBar span {
+    margin-left: 5px;
+}
+
+
+/* FLOATING */
+
+.floating {
+    position: fixed;
+
+    right: 20px;
+
+    bottom: 90px;
+
+    width: 350px;
+
+    max-width: calc(100% - 40px);
+
+    z-index: 5000;
+
+    padding: 18px;
+
+    background: var(--panel);
+
+    border-radius: 18px;
+
+    box-shadow: 0 15px 50px rgba(0,0,0,.5);
+
+    display: none;
+}
+
+
+.floating.open {
+    display: block;
+}
+
+
+.floatingHeader {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 16px;
+}
+
+
+.floatingHeader h2 {
+    font-size: 19px;
+}
+
+
+.floatingHeader button {
+    background: none;
+
+    border: 0;
+
+    color: white;
+
+    font-size: 19px;
+}
+
+
+.floating input {
+    width: 100%;
+
+    height: 46px;
+
+    border: 0;
+
+    outline: 0;
+
+    border-radius: 11px;
+
+    padding: 0 13px;
+
+    margin-bottom: 9px;
+
+    font-size: 14px;
+}
+
+
+.mainAction {
+    width: 100%;
+
+    padding: 13px;
+
+    border: 0;
+
+    border-radius: 11px;
+
+    background: linear-gradient(
+        135deg,
+        var(--blue),
+        var(--blue2)
+    );
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* TRAVEL */
+
+.travelModes {
+    display: flex;
+
+    gap: 8px;
+
+    margin-bottom: 10px;
+}
+
+
+.travel {
+    flex: 1;
+
+    padding: 10px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background: #292e38;
+
+    color: white;
+
+    font-size: 18px;
+}
+
+
+.travel.active {
+    background: var(--blue);
+}
+
+
+#routeInfo {
+    margin-top: 15px;
+
+    line-height: 1.7;
+
+    color: #cbd0d9;
+}
+
+
+/* LAYERS */
+
+.layer {
+    width: 100%;
+
+    border: 0;
+
+    background: #252a35;
+
+    color: white;
+
+    padding: 14px;
+
+    border-radius: 10px;
+
+    margin-bottom: 7px;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+
+.layer:hover {
+    background: var(--blue);
+}
+
+
+/* TOAST */
+
+#toast {
+    position: fixed;
+
+    left: 50%;
+    bottom: 100px;
+
+    transform: translateX(-50%);
+
+    z-index: 9000;
+
+    background: #111;
+
+    color: white;
+
+    padding: 12px 18px;
+
+    border-radius: 12px;
+
+    display: none;
+
+    box-shadow: 0 5px 30px rgba(0,0,0,.4);
+}
+
+
+/* LEAFLET */
+
+.leaflet-control-attribution {
+    font-size: 10px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .top {
+        height: 120px;
+
+        padding: 8px;
+
+        flex-wrap: wrap;
+
+        gap: 6px;
+    }
+
+
+    .brand {
+        min-width: 0;
+
+        flex: 1;
+    }
+
+
+    .brandIcon {
+        width: 38px;
+        height: 38px;
+
+        font-size: 19px;
+    }
+
+
+    .brand strong {
+        font-size: 18px;
+    }
+
+
+    .brand small {
+        font-size: 8px;
+    }
+
+
+    .search {
+        order: 3;
+
+        width: 100%;
+
+        max-width: none;
+
+        height: 43px;
+    }
+
+
+    #map {
+        top: 120px;
+
+        height: calc(100vh - 120px);
+    }
+
+
+    .mapControls {
+        top: 135px;
+
+        right: 10px;
+    }
+
+
+    .bottomBar {
+        width: calc(100% - 14px);
+
+        bottom: 7px;
+
+        gap: 4px;
+    }
+
+
+    .bottomBar button {
+        min-width: 0;
+
+        flex: 1;
+
+        padding: 11px 5px;
+
+        font-size: 12px;
+    }
+
+
+    .bottomBar span {
+        display: block;
+
+        margin: 3px 0 0;
+    }
+
+
+    .floating {
+        left: 8px;
+        right: 8px;
+
+        bottom: 92px;
+
+        width: auto;
+
+        max-width: none;
+    }
+
+  }
