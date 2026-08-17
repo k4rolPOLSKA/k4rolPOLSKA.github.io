@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stwórz quiz — OnQuiz</title>
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.create {
+    max-width:700px;
+    margin:70px auto;
+}
+
+.form {
+    background:#111119;
+    border:1px solid #252532;
+    padding:30px;
+    border-radius:22px;
+}
+
+label {
+    display:block;
+    margin:18px 0 7px;
+    font-weight:bold;
+}
+
+input,
+textarea,
+select {
+    width:100%;
+    background:#171722;
+    border:1px solid #292936;
+    color:white;
+    padding:14px;
+    border-radius:10px;
+    outline:none;
+}
+
+textarea {
+    min-height:130px;
+    resize:vertical;
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+<a href="index.html" class="logo">On<span>Quiz</span></a>
+<a href="profil.html" class="profile-btn">👤</a>
+</header>
+
+<main>
+
+<div class="create">
+
+<span class="badge">✏️ KREATOR</span>
+<h1 style="font-size:45px;margin:15px 0">
+Stwórz quiz
+</h1>
+
+<div class="form">
+
+<label>Nazwa quizu</label>
+<input id="title" placeholder="Np. Quiz o Minecraft">
+
+<label>Kategoria</label>
+<select id="category">
+<option>Wiedza ogólna</option>
+<option>Geografia</option>
+<option>Historia</option>
+<option>Sport</option>
+<option>Gry</option>
+<option>Technologia</option>
+<option>Muzyka</option>
+</select>
+
+<label>Pytanie</label>
+<textarea id="question" placeholder="Wpisz pytanie..."></textarea>
+
+<button class="btn primary" style="border:0;margin-top:20px;cursor:pointer"
+onclick="saveQuiz()">
+💾 Zapisz quiz
+</button>
+
+<p id="message" style="margin-top:20px;color:#a56cff"></p>
+
+</div>
+
+</div>
+
+</main>
+
+<script>
+function saveQuiz() {
+
+    const title = document.getElementById("title").value;
+
+    if (!title) {
+        document.getElementById("message").textContent =
+            "⚠️ Wpisz nazwę quizu.";
+        return;
+    }
+
+    localStorage.setItem("onquiz_created_quiz", title);
+
+    document.getElementById("message").textContent =
+        "✅ Quiz zapisany lokalnie!";
+}
+</script>
+
+</body>
+</html>
