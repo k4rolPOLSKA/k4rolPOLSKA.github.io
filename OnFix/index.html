@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnFix AI — Napraw swój problem</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        <span>ON</span>FIX
+    </div>
+
+    <div class="version">AI 1.2</div>
+</header>
+
+<main>
+
+    <section class="hero">
+        <div class="badge">⚡ ONFIX AI</div>
+
+        <h1>Co chcesz <span>naprawić?</span></h1>
+
+        <p>
+            Opisz problem ze swoim komputerem, telefonem,
+            internetem albo grą. OnFix AI spróbuje znaleźć
+            przyczynę i pokaże rozwiązanie krok po kroku.
+        </p>
+
+        <div class="search-box">
+
+            <textarea
+                id="problem"
+                placeholder="Np. Mój komputer uruchamia się, ale mam czarny ekran..."
+            ></textarea>
+
+            <div class="search-bottom">
+
+                <select id="category">
+                    <option value="ogólne">🔧 Ogólne</option>
+                    <option value="komputer">💻 Komputer</option>
+                    <option value="telefon">📱 Telefon</option>
+                    <option value="internet">🌐 Internet</option>
+                    <option value="gry">🎮 Gry</option>
+                    <option value="windows">🪟 Windows</option>
+                </select>
+
+                <button id="fixButton">
+                    🔧 NAPRAW
+                </button>
+
+            </div>
+        </div>
+    </section>
+
+
+    <section id="loading" class="loading hidden">
+
+        <div class="loader"></div>
+
+        <h2>OnFix AI analizuje...</h2>
+
+        <p>Sprawdzamy możliwe przyczyny problemu 🧠</p>
+
+    </section>
+
+
+    <section id="result" class="result hidden">
+
+        <div class="result-header">
+            <div>
+                <span class="small-title">DIAGNOZA AI</span>
+                <h2 id="diagnosis">Problem</h2>
+            </div>
+
+            <div class="ai-icon">🤖</div>
+        </div>
+
+
+        <div class="card">
+
+            <h3>🧠 Możliwe przyczyny</h3>
+
+            <div id="causes"></div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>🛠️ Jak to naprawić?</h3>
+
+            <div id="steps"></div>
+
+        </div>
+
+
+        <div class="card warning">
+
+            <h3>⚠️ Ważne</h3>
+
+            <p id="warning">
+                Postępuj ostrożnie i nie wykonuj czynności,
+                których nie rozumiesz.
+            </p>
+
+        </div>
+
+
+        <div class="question">
+
+            <h3>Czy problem został rozwiązany?</h3>
+
+            <div class="buttons">
+
+                <button class="success" onclick="problemSolved()">
+                    ✅ Tak, działa
+                </button>
+
+                <button class="danger" onclick="tryAgain()">
+                    ❌ Nadal nie działa
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section id="success" class="success-screen hidden">
+
+        <div class="big-icon">🎉</div>
+
+        <h2>Świetnie!</h2>
+
+        <p>
+            OnFix AI cieszy się, że udało się rozwiązać problem.
+        </p>
+
+        <button onclick="resetOnFix()">
+            🔄 Nowy problem
+        </button>
+
+    </section>
+
+</main>
+
+
+<footer>
+    <strong>OnFix</strong> © 2026
+    <span>•</span>
+    AI Assistant
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
