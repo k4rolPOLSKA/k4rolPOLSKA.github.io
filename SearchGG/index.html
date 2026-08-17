@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description" content="SearchGG — szybka wyszukiwarka internetowa.">
+
+  <title>SearchGG</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+
+  <a href="index.html" class="mini-logo">
+    Search<span>GG</span>
+  </a>
+
+  <button id="themeBtn" class="theme-btn">
+    🌙
+  </button>
+
+</header>
+
+
+<main>
+
+<section class="hero" id="hero">
+
+  <div class="logo">
+    Search<span>GG</span>
+  </div>
+
+  <p class="subtitle">
+    Szukaj szybciej. Znajduj więcej. 🚀
+  </p>
+
+
+  <form id="searchForm" class="search-box">
+
+    <span class="search-icon">🔎</span>
+
+    <input
+      id="query"
+      type="search"
+      placeholder="Czego szukasz?"
+      autocomplete="off"
+    >
+
+    <button
+      type="button"
+      id="clearBtn"
+      class="clear-btn"
+    >
+      ×
+    </button>
+
+    <button
+      type="submit"
+      class="search-button"
+    >
+      Szukaj
+    </button>
+
+  </form>
+
+
+  <div id="suggestions" class="suggestions"></div>
+
+
+  <div class="quick-buttons">
+
+    <button data-query="pogoda w Polsce">
+      🌤️ Pogoda
+    </button>
+
+    <button data-query="wiadomości Polska">
+      📰 Wiadomości
+    </button>
+
+    <button data-query="Wikipedia">
+      📚 Wikipedia
+    </button>
+
+    <button data-query="YouTube">
+      ▶️ YouTube
+    </button>
+
+  </div>
+
+</section>
+
+
+<section
+  id="resultsSection"
+  class="results-section hidden"
+>
+
+  <div class="results-header">
+
+    <button id="backBtn" class="back-button">
+      ← SearchGG
+    </button>
+
+    <div class="tabs">
+
+      <button class="tab active">
+        Wszystko
+      </button>
+
+      <button class="tab">
+        Odpowiedź
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div id="status" class="status">
+    Szukam...
+  </div>
+
+
+  <div
+    id="answer"
+    class="answer hidden"
+  ></div>
+
+
+  <div
+    id="results"
+    class="results"
+  ></div>
+
+
+  <div
+    id="fallback"
+    class="fallback hidden"
+  >
+
+    <h2>
+      🌐 Chcesz pełne wyniki Internetu?
+    </h2>
+
+    <p>
+      SearchGG w wersji GitHub Pages korzysta
+      z publicznego API. Pełne wyniki wymagają
+      dedykowanego Search API lub własnego backendu.
+    </p>
+
+    <a
+      id="externalSearch"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Otwórz pełne wyniki ↗
+    </a>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+  <span>
+    © 2026 SearchGG
+  </span>
+
+  <a href="about.html">
+    O SearchGG
+  </a>
+
+  <a href="privacy.html">
+    Prywatność
+  </a>
+
+  <a
+    href="https://github.com/"
+    target="_blank"
+    rel="noopener"
+  >
+    GitHub
+  </a>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
