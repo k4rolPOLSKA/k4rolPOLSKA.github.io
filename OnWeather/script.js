@@ -1,66 +1,52 @@
-const GEO_API =
-    "https://geocoding-api.open-meteo.com/v1/search";
-
 const WEATHER_API =
     "https://api.open-meteo.com/v1/forecast";
 
+const GEO_API =
+    "https://geocoding-api.open-meteo.com/v1/search";
 
-const weatherCodes = {
 
+const codes = {
     0: ["Bezchmurnie", "☀️"],
     1: ["Przeważnie bezchmurnie", "🌤️"],
     2: ["Częściowe zachmurzenie", "⛅"],
     3: ["Pochmurno", "☁️"],
-
     45: ["Mgła", "🌫️"],
-    48: ["Osadzająca się mgła", "🌫️"],
-
+    48: ["Mgła", "🌫️"],
     51: ["Lekka mżawka", "🌦️"],
     53: ["Mżawka", "🌦️"],
     55: ["Silna mżawka", "🌧️"],
-
-    56: ["Lekka marznąca mżawka", "🌧️"],
+    56: ["Marznąca mżawka", "🌧️"],
     57: ["Silna marznąca mżawka", "🌧️"],
-
     61: ["Lekki deszcz", "🌦️"],
     63: ["Deszcz", "🌧️"],
     65: ["Silny deszcz", "🌧️"],
-
-    66: ["Lekki marznący deszcz", "🌧️"],
+    66: ["Marznący deszcz", "🌧️"],
     67: ["Silny marznący deszcz", "🌧️"],
-
     71: ["Lekki śnieg", "🌨️"],
     73: ["Śnieg", "❄️"],
     75: ["Silny śnieg", "❄️"],
-
     77: ["Śnieg ziarnisty", "🌨️"],
-
     80: ["Przelotne opady", "🌦️"],
     81: ["Przelotny deszcz", "🌧️"],
     82: ["Silne opady", "⛈️"],
-
     85: ["Przelotny śnieg", "🌨️"],
-    86: ["Silny przelotny śnieg", "❄️"],
-
+    86: ["Silny śnieg", "❄️"],
     95: ["Burza", "⛈️"],
     96: ["Burza z gradem", "⛈️"],
     99: ["Silna burza z gradem", "⛈️"]
 };
 
 
-let weatherData = null;
-let currentPlace = null;
+let place = null;
+let weather = null;
 
 
-function info(code) {
-
-    return weatherCodes[code] ||
-        ["Nieznana pogoda", "🌡️"];
-
+function weatherInfo(code) {
+    return codes[code] || ["Nieznana pogoda", "🌡️"];
 }
 
 
-function formatTime(value) {
+function time(value) {
 
     return new Date(value).toLocaleTimeString(
         "pl-PL",
@@ -73,7 +59,7 @@ function formatTime(value) {
 }
 
 
-function formatDate(value) {
+function date(value) {
 
     return new Date(value).toLocaleDateString(
         "pl-PL",
@@ -100,237 +86,131 @@ function shortDate(value) {
 }
 
 
-function getCurrentHourIndex(times) {
+function windDirection(deg) {
 
-    const now = new Date();
+    const dirs = [
+        "N",
+        "NE",
+        "E",
+        "SE",
+        "S",
+        "SW",
+        "W",
+        "NW"
+    ];
 
-    let best = 0;
-
-    let difference =
-        Infinity;
-
-    times.forEach((time, index) => {
-
-        const d =
-            Math.abs(
-                new Date(time) - now
-            );
-
-        if (d < difference) {
-
-            difference = d;
-
-            best = index;
-
-        }
-
-    });
-
-    return best;
+    return dirs[
+        Math.round(deg / 45) % 8
+    ];
 
 }
 
 
-/* WYSZUKIWANIE */
+function currentIndex() {
 
-const cityInput =
-    document.getElementById("cityInput");
+    const now = Date.now();
 
-const searchBtn =
-    document.getElementById("searchBtn");
+    let index = 0;
+    let best = Infinity;
 
-const searchResults =
-    document.getElementById("searchResults");
+    weather.hourly.time.forEach(
+        (t, i) => {
 
-
-cityInput.addEventListener(
-    "input",
-    async () => {
-
-        const query =
-            cityInput.value.trim();
-
-        if (query.length < 2) {
-
-            searchResults.innerHTML = "";
-
-            return;
-
-        }
-
-        try {
-
-            const response =
-                await fetch(
-                    `${GEO_API}?name=${encodeURIComponent(query)}&count=5&language=pl&format=json`
+            const diff =
+                Math.abs(
+                    new Date(t).getTime() - now
                 );
 
-            const data =
-                await response.json();
+            if (diff < best) {
 
-            searchResults.innerHTML = "";
+                best = diff;
+                index = i;
 
-            if (!data.results)
-                return;
-
-            data.results.forEach(place => {
-
-                const item =
-                    document.createElement("div");
-
-                item.className =
-                    "search-result";
-
-                item.innerHTML = `
-                    📍 <b>${place.name}</b>
-                    <span style="color:#94a3b8">
-                        ${place.admin1 || ""}
-                        ${place.country || ""}
-                    </span>
-                `;
-
-                item.onclick = () => {
-
-                    searchResults.innerHTML = "";
-
-                    cityInput.value =
-                        place.name;
-
-                    loadWeather(
-                        place.latitude,
-                        place.longitude,
-                        place.name,
-                        place.country
-                    );
-
-                };
-
-                searchResults.appendChild(item);
-
-            });
-
-        } catch(error) {
-
-            console.error(error);
+            }
 
         }
+    );
 
-    }
-);
-
-
-searchBtn.onclick = () => {
-
-    const query =
-        cityInput.value.trim();
-
-    if (!query)
-        return;
-
-    searchCity(query);
-
-};
-
-
-cityInput.addEventListener(
-    "keydown",
-    event => {
-
-        if (event.key === "Enter") {
-
-            searchBtn.click();
-
-        }
-
-    }
-);
-
-
-async function searchCity(query) {
-
-    document.getElementById("loading")
-        .classList.remove("hidden");
-
-    document.getElementById("weatherApp")
-        .classList.add("hidden");
-
-    try {
-
-        const response =
-            await fetch(
-                `${GEO_API}?name=${encodeURIComponent(query)}&count=1&language=pl&format=json`
-            );
-
-        const data =
-            await response.json();
-
-        if (!data.results)
-            throw new Error(
-                "Nie znaleziono miejscowości."
-            );
-
-        const place =
-            data.results[0];
-
-        loadWeather(
-            place.latitude,
-            place.longitude,
-            place.name,
-            place.country
-        );
-
-    } catch(error) {
-
-        alert(error.message);
-
-        document.getElementById("loading")
-            .classList.add("hidden");
-
-    }
+    return index;
 
 }
 
 
-/* POGODA */
+/* API */
 
 async function loadWeather(
-    latitude,
-    longitude,
-    city,
-    country
+    lat,
+    lon,
+    name,
+    country,
+    metadata = {}
 ) {
-
-    document.getElementById("loading")
-        .classList.remove("hidden");
-
-    document.getElementById("weatherApp")
-        .classList.add("hidden");
-
-    currentPlace = {
-        latitude,
-        longitude,
-        city,
-        country
-    };
-
 
     const params = new URLSearchParams({
 
-        latitude,
-        longitude,
+        latitude: lat,
+        longitude: lon,
 
-        current:
-            "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,cloud_cover,surface_pressure,wind_speed_10m,wind_gusts_10m,visibility,uv_index",
+        current: [
+            "temperature_2m",
+            "relative_humidity_2m",
+            "dew_point_2m",
+            "apparent_temperature",
+            "precipitation",
+            "weather_code",
+            "cloud_cover",
+            "surface_pressure",
+            "visibility",
+            "wind_speed_10m",
+            "wind_direction_10m",
+            "wind_gusts_10m",
+            "uv_index"
+        ].join(","),
 
-        hourly:
-            "temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,precipitation,weather_code,cloud_cover,surface_pressure,wind_speed_10m,wind_gusts_10m,visibility,uv_index",
+        hourly: [
+            "temperature_2m",
+            "relative_humidity_2m",
+            "dew_point_2m",
+            "apparent_temperature",
+            "precipitation_probability",
+            "precipitation",
+            "rain",
+            "showers",
+            "snowfall",
+            "snow_depth",
+            "weather_code",
+            "cloud_cover",
+            "visibility",
+            "surface_pressure",
+            "wind_speed_10m",
+            "wind_direction_10m",
+            "wind_gusts_10m",
+            "uv_index"
+        ].join(","),
 
-        daily:
-            "weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,uv_index_max,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max",
+        daily: [
+            "weather_code",
+            "temperature_2m_max",
+            "temperature_2m_min",
+            "apparent_temperature_max",
+            "apparent_temperature_min",
+            "precipitation_sum",
+            "precipitation_probability_max",
+            "rain_sum",
+            "showers_sum",
+            "snowfall_sum",
+            "wind_speed_10m_max",
+            "wind_gusts_10m_max",
+            "wind_direction_10m_dominant",
+            "uv_index_max",
+            "sunrise",
+            "sunset",
+            "daylight_duration"
+        ].join(","),
 
         timezone: "auto",
 
-        forecast_days: "10"
+        forecast_days: "14"
 
     });
 
@@ -343,33 +223,25 @@ async function loadWeather(
             );
 
         if (!response.ok)
-            throw new Error(
-                "Błąd serwera pogodowego."
-            );
+            throw new Error("Błąd API");
 
-        weatherData =
+        weather =
             await response.json();
 
 
-        renderCurrent();
-
-        renderHourly();
-
-        renderDaily();
-
-        renderDetailedHourly();
-
-        renderSun();
+        place = {
+            lat,
+            lon,
+            name,
+            country,
+            ...metadata
+        };
 
 
-        document.getElementById("loading")
-            .classList.add("hidden");
-
-        document.getElementById("weatherApp")
-            .classList.remove("hidden");
+        render();
 
 
-    } catch(error) {
+    } catch (error) {
 
         console.error(error);
 
@@ -377,64 +249,80 @@ async function loadWeather(
             "Nie udało się pobrać danych pogodowych."
         );
 
-        document.getElementById("loading")
-            .classList.add("hidden");
-
     }
 
 }
 
 
-/* AKTUALNA POGODA */
+/* RENDER */
+
+function render() {
+
+    renderCurrent();
+
+    renderHourly();
+
+    renderDaily();
+
+    renderDetails();
+
+    renderSun();
+
+    renderLocation();
+
+}
+
+
+/* CURRENT */
 
 function renderCurrent() {
 
     const c =
-        weatherData.current;
+        weather.current;
 
-    const [description, icon] =
-        info(c.weather_code);
+    const [desc, icon] =
+        weatherInfo(c.weather_code);
 
 
     document.getElementById(
-        "locationName"
+        "city"
     ).textContent =
-        currentPlace.city;
+        place.name;
 
 
     document.getElementById(
-        "locationCountry"
+        "country"
     ).textContent =
-        currentPlace.country;
+        place.country || "";
 
 
     document.getElementById(
-        "currentDate"
+        "date"
     ).textContent =
-        formatDate(c.time);
+        date(c.time);
 
 
     document.getElementById(
-        "currentTemp"
+        "temp"
     ).textContent =
         Math.round(c.temperature_2m);
 
 
     document.getElementById(
-        "feelsTemp"
+        "feels"
     ).textContent =
         Math.round(c.apparent_temperature)
         + "°C";
 
 
     document.getElementById(
-        "currentDescription"
+        "description"
     ).textContent =
-        description;
+        desc;
 
 
     document.getElementById(
-        "currentIcon"
+        "bigIcon"
     ).textContent =
         icon;
 
@@ -453,16 +341,23 @@ function renderCurrent() {
 
 
     document.getElementById(
-        "gusts"
+        "gust"
     ).textContent =
         Math.round(c.wind_gusts_10m)
         + " km/h";
 
 
     document.getElementById(
-        "clouds"
+        "windDir"
     ).textContent =
-        c.cloud_cover + "%";
+        windDirection(
+            c.wind_direction_10m
+        ) +
+        " " +
+        Math.round(
+            c.wind_direction_10m
+        ) +
+        "°";
 
 
     document.getElementById(
@@ -473,9 +368,9 @@ function renderCurrent() {
 
 
     document.getElementById(
-        "uv"
+        "clouds"
     ).textContent =
-        c.uv_index.toFixed(1);
+        c.cloud_cover + "%";
 
 
     document.getElementById(
@@ -486,38 +381,51 @@ function renderCurrent() {
 
 
     document.getElementById(
-        "precipitation"
+        "uv"
     ).textContent =
-        c.precipitation + " mm";
+        c.uv_index.toFixed(1);
 
 
     document.getElementById(
-        "lastUpdate"
+        "dew"
+    ).textContent =
+        c.dew_point_2m.toFixed(1)
+        + "°C";
+
+
+    document.getElementById(
+        "precip"
+    ).textContent =
+        c.precipitation
+        + " mm";
+
+
+    document.getElementById(
+        "updated"
     ).textContent =
         "Aktualizacja " +
-        formatTime(c.time);
+        time(c.time);
 
 }
 
 
-/* GODZINOWA */
+/* HOURLY */
 
 function renderHourly() {
 
-    const container =
+    const box =
         document.getElementById(
-            "hourlyForecast"
+            "hourly"
         );
 
-    container.innerHTML = "";
+    box.innerHTML = "";
 
 
     const h =
-        weatherData.hourly;
-
+        weather.hourly;
 
     const start =
-        getCurrentHourIndex(h.time);
+        currentIndex();
 
 
     for (
@@ -526,40 +434,42 @@ function renderHourly() {
         i++
     ) {
 
-        const [description, icon] =
-            info(h.weather_code[i]);
+        const [desc, icon] =
+            weatherInfo(
+                h.weather_code[i]
+            );
 
 
-        const card =
+        const div =
             document.createElement("div");
 
-        card.className =
-            "hour-card";
-
+        div.className = "hour";
 
         if (i === start)
-            card.classList.add("now");
+            div.classList.add("now");
 
 
-        card.innerHTML = `
+        div.innerHTML = `
 
             <div class="hour-time">
                 ${
                     i === start
                     ? "TERAZ"
-                    : formatTime(h.time[i])
+                    : time(h.time[i])
                 }
             </div>
 
             <div
                 class="hour-icon"
-                title="${description}"
+                title="${desc}"
             >
                 ${icon}
             </div>
 
             <div class="hour-temp">
-                ${Math.round(h.temperature_2m[i])}°C
+                ${Math.round(
+                    h.temperature_2m[i]
+                )}°C
             </div>
 
             <div class="hour-rain">
@@ -570,61 +480,62 @@ function renderHourly() {
         `;
 
 
-        container.appendChild(card);
+        box.appendChild(div);
 
     }
 
 }
 
 
-/* 10 DNI */
+/* 14 DNI */
 
 function renderDaily() {
 
-    const container =
+    const box =
         document.getElementById(
-            "dailyForecast"
+            "daily"
         );
 
-    container.innerHTML = "";
+    box.innerHTML = "";
 
 
     const d =
-        weatherData.daily;
+        weather.daily;
 
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 14; i++) {
 
-        const [description, icon] =
-            info(d.weather_code[i]);
+        const [desc, icon] =
+            weatherInfo(
+                d.weather_code[i]
+            );
 
 
-        const card =
+        const dayName =
+            i === 0
+            ? "Dzisiaj"
+            : new Date(
+                d.time[i]
+            ).toLocaleDateString(
+                "pl-PL",
+                {
+                    weekday: "long"
+                }
+            );
+
+
+        const div =
             document.createElement("div");
 
-        card.className =
-            "day-card";
+        div.className = "day";
 
 
-        card.innerHTML = `
+        div.innerHTML = `
 
             <div>
 
                 <div class="day-name">
-
-                    ${
-                        i === 0
-                        ? "Dzisiaj"
-                        : new Date(
-                            d.time[i]
-                        ).toLocaleDateString(
-                            "pl-PL",
-                            {
-                                weekday: "long"
-                            }
-                        )
-                    }
-
+                    ${dayName}
                 </div>
 
                 <div class="day-date">
@@ -633,81 +544,69 @@ function renderDaily() {
 
             </div>
 
-
             <div class="day-icon">
                 ${icon}
             </div>
 
-
-            <div class="day-condition">
-                ${description}
+            <div class="day-desc">
+                ${desc}
             </div>
-
 
             <div class="day-temp">
 
-                ${
-                    Math.round(
-                        d.temperature_2m_max[i]
-                    )
-                }°
+                ${Math.round(
+                    d.temperature_2m_max[i]
+                )}°
 
                 /
 
-                ${
-                    Math.round(
-                        d.temperature_2m_min[i]
-                    )
-                }°C
+                ${Math.round(
+                    d.temperature_2m_min[i]
+                )}°C
 
             </div>
-
 
             <div class="day-rain">
 
                 🌧️
-                ${
-                    d.precipitation_probability_max[i] ?? 0
-                }%
+                ${d.precipitation_probability_max[i] ?? 0}%
 
                 <br>
 
-                <span style="color:#64748b">
-                    ${
-                        d.precipitation_sum[i]
-                    } mm
-                </span>
+                <small>
+                    ${d.precipitation_sum[i]} mm
+                </small>
 
             </div>
 
         `;
 
 
-        container.appendChild(card);
+        box.appendChild(div);
 
     }
 
 }
 
 
-/* SZCZEGÓŁOWA GODZINOWA */
+/* SZCZEGÓŁY */
 
-function renderDetailedHourly() {
+function renderDetails() {
 
-    const container =
+    const box =
         document.getElementById(
-            "detailHourly"
+            "details"
         );
 
-    container.innerHTML = "";
+    box.innerHTML = "";
 
 
     const h =
-        weatherData.hourly;
+        weather.hourly;
 
 
     const start =
-        getCurrentHourIndex(h.time);
+        currentIndex();
 
 
     for (
@@ -716,21 +615,22 @@ function renderDetailedHourly() {
         i++
     ) {
 
-        const [description, icon] =
-            info(h.weather_code[i]);
+        const [desc, icon] =
+            weatherInfo(
+                h.weather_code[i]
+            );
 
 
         const row =
             document.createElement("div");
 
-        row.className =
-            "detail-row";
+        row.className = "detail";
 
 
         row.innerHTML = `
 
             <span>
-                ${formatTime(h.time[i])}
+                ${time(h.time[i])}
             </span>
 
             <span>
@@ -743,21 +643,19 @@ function renderDetailedHourly() {
                 )}°C
             </strong>
 
-            <span class="detail-rain">
+            <span class="blue">
                 🌧️
-                ${
-                    h.precipitation_probability[i] ?? 0
-                }%
+                ${h.precipitation_probability[i] ?? 0}%
             </span>
 
-            <span class="hide-mobile">
+            <span class="optional">
                 💨
                 ${Math.round(
                     h.wind_speed_10m[i]
                 )} km/h
             </span>
 
-            <span class="hide-mobile">
+            <span class="optional">
                 💧
                 ${h.relative_humidity_2m[i]}%
             </span>
@@ -765,7 +663,7 @@ function renderDetailedHourly() {
         `;
 
 
-        container.appendChild(row);
+        box.appendChild(row);
 
     }
 
@@ -777,14 +675,14 @@ function renderDetailedHourly() {
 function renderSun() {
 
     const d =
-        weatherData.daily;
+        weather.daily;
 
 
     const sunrise =
-        formatTime(d.sunrise[0]);
+        time(d.sunrise[0]);
 
     const sunset =
-        formatTime(d.sunset[0]);
+        time(d.sunset[0]);
 
 
     document.getElementById(
@@ -815,14 +713,187 @@ function renderSun() {
 
 /* LOKALIZACJA */
 
+function renderLocation() {
+
+    document.getElementById(
+        "infoCity"
+    ).textContent =
+        place.name;
+
+
+    document.getElementById(
+        "infoCountry"
+    ).textContent =
+        place.country || "-";
+
+
+    document.getElementById(
+        "coordinates"
+    ).textContent =
+        `${place.lat.toFixed(4)},
+         ${place.lon.toFixed(4)}`;
+
+
+    document.getElementById(
+        "timezone"
+    ).textContent =
+        weather.timezone;
+
+
+    document.getElementById(
+        "elevation"
+    ).textContent =
+        weather.elevation
+        ? Math.round(weather.elevation) + " m"
+        : "-";
+
+}
+
+
+/* SZUKANIE */
+
+const input =
+    document.getElementById(
+        "cityInput"
+    );
+
+
+input.addEventListener(
+    "input",
+    async () => {
+
+        const query =
+            input.value.trim();
+
+
+        if (query.length < 3) {
+
+            document.getElementById(
+                "results"
+            ).innerHTML = "";
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `${GEO_API}?name=${encodeURIComponent(query)}&count=6&language=pl&format=json`
+                );
+
+
+            const data =
+                await response.json();
+
+
+            const box =
+                document.getElementById(
+                    "results"
+                );
+
+            box.innerHTML = "";
+
+
+            if (!data.results)
+                return;
+
+
+            data.results.forEach(
+                result => {
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+                    div.className =
+                        "result";
+
+
+                    div.innerHTML = `
+                        📍 <b>
+                            ${result.name}
+                        </b>
+                        <span style="
+                            color:#94a3b8;
+                            margin-left:8px
+                        ">
+                            ${result.admin1 || ""}
+                            ${result.country || ""}
+                        </span>
+                    `;
+
+
+                    div.onclick = () => {
+
+                        box.innerHTML = "";
+
+                        input.value =
+                            result.name;
+
+
+                        loadWeather(
+                            result.latitude,
+                            result.longitude,
+                            result.name,
+                            result.country,
+                            result
+                        );
+
+                    };
+
+
+                    box.appendChild(div);
+
+                }
+            );
+
+
+        } catch(error) {
+
+            console.error(error);
+
+        }
+
+    }
+);
+
+
+/* ENTER */
+
+input.addEventListener(
+    "keydown",
+    e => {
+
+        if (e.key === "Enter") {
+
+            const first =
+                document.querySelector(
+                    ".result"
+                );
+
+            if (first)
+                first.click();
+
+        }
+
+    }
+);
+
+
+/* GPS */
+
 document.getElementById(
-    "locationBtn"
+    "gpsBtn"
 ).onclick = () => {
 
     if (!navigator.geolocation) {
 
         alert(
-            "Twoja przeglądarka nie obsługuje lokalizacji."
+            "Ta przeglądarka nie obsługuje GPS."
         );
 
         return;
@@ -835,15 +906,11 @@ document.getElementById(
         position => {
 
             loadWeather(
-
                 position.coords.latitude,
-
                 position.coords.longitude,
-
                 "Moja lokalizacja",
-
-                ""
-
+                "",
+                {}
             );
 
         },
@@ -851,9 +918,14 @@ document.getElementById(
         () => {
 
             alert(
-                "Nie udało się uzyskać lokalizacji."
+                "Nie udało się pobrać lokalizacji."
             );
 
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 10000
         }
 
     );
@@ -867,41 +939,51 @@ document.getElementById(
     "refreshBtn"
 ).onclick = () => {
 
-    if (!currentPlace)
+    if (!place)
         return;
 
+
     loadWeather(
-        currentPlace.latitude,
-        currentPlace.longitude,
-        currentPlace.city,
-        currentPlace.country
+        place.lat,
+        place.lon,
+        place.name,
+        place.country,
+        place
     );
 
 };
 
 
-/* START */
+/* START - WARSZAWA */
 
 loadWeather(
     52.2297,
     21.0122,
     "Warszawa",
-    "Polska"
+    "Polska",
+    {
+        admin1: "Mazowieckie"
+    }
 );
 
 
 /* AUTOMATYCZNE ODŚWIEŻANIE */
 
-setInterval(() => {
+setInterval(
+    () => {
 
-    if (!currentPlace)
-        return;
+        if (!place)
+            return;
 
-    loadWeather(
-        currentPlace.latitude,
-        currentPlace.longitude,
-        currentPlace.city,
-        currentPlace.country
-    );
 
-}, 15 * 60 * 1000);
+        loadWeather(
+            place.lat,
+            place.lon,
+            place.name,
+            place.country,
+            place
+        );
+
+    },
+    15 * 60 * 1000
+);
