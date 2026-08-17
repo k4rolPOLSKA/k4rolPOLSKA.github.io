@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gra — OnQuiz</title>
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.game {
+    max-width: 800px;
+    margin: 80px auto;
+}
+
+.game-top {
+    display:flex;
+    justify-content:space-between;
+    color:#9999aa;
+    margin-bottom:20px;
+}
+
+.question-box {
+    background:#111119;
+    border:1px solid #252532;
+    border-radius:22px;
+    padding:35px;
+}
+
+.question-box h1 {
+    font-size:32px;
+    margin:20px 0 30px;
+}
+
+.answers {
+    display:grid;
+    gap:12px;
+}
+
+.answer {
+    border:1px solid #292936;
+    background:#171722;
+    color:white;
+    padding:18px;
+    border-radius:13px;
+    text-align:left;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.answer:hover {
+    border-color:#7c3cff;
+}
+
+.answer.correct {
+    border-color:#25d366;
+    background:#12351f;
+}
+
+.answer.wrong {
+    border-color:#ff4545;
+    background:#351414;
+}
+
+.next {
+    margin-top:20px;
+    width:100%;
+    border:0;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+<a href="index.html" class="logo">On<span>Quiz</span></a>
+<a href="profil.html" class="profile-btn">👤</a>
+</header>
+
+<main>
+
+<div class="game">
+
+<div class="game-top">
+<span id="counter">Pytanie 1</span>
+<span id="score">⭐ 0 pkt</span>
+</div>
+
+<div class="question-box">
+
+<div id="icon" style="font-size:50px">🧠</div>
+
+<h1 id="question">Ładowanie...</h1>
+
+<div class="answers" id="answers"></div>
+
+<button class="btn primary next" id="next" style="display:none">
+Następne pytanie →
+</button>
+
+</div>
+
+</div>
+
+</main>
+
+<script src="js/quizy.js"></script>
+
+<script>
+const params = new URLSearchParams(location.search);
+const id = params.get("id") || "geografia";
+const quiz = quizy[id];
+
+let current = 0;
+let score = 0;
+
+const question = document.getElementById("question");
+const answers = document.getElementById("answers");
+const next = document.getElementById("next");
+const counter = document.getElementById("counter");
+const scoreEl = document.getElementById("score");
+const icon = document.getElementById("icon");
+
+function loadQuestion() {
+
+    if (current >= quiz.questions.length) {
+        finish();
+        return;
+    }
+
+    const q = quiz.questions[current];
+
+    question.textContent = q.question;
+    icon.textContent = quiz.icon;
+
+    counter.textContent =
+        `Pytanie ${current + 1} / ${quiz.questions.length}`;
+
+    answers.innerHTML = "";
+    next.style.display = "none";
+
+    q.answers.forEach((answer, index) => {
+
+        const button = document.createElement("button");
+
+        button.className = "answer";
+        button.textContent = answer;
+
+        button.onclick = () => checkAnswer(button, index);
+
+        answers.appendChild(button);
+    });
+}
+
+function checkAnswer(button, index) {
+
+    const q = quiz.questions[current];
+
+    document.querySelectorAll(".answer").forEach(btn => {
+        btn.disabled = true;
+    });
+
+    if (index === q.correct) {
+        button.classList.add("correct");
+        score += 500;
+        scoreEl.textContent = `⭐ ${score} pkt`;
+    } else {
+        button.classList.add("wrong");
+        document.querySelectorAll(".answer")[q.correct]
+            .classList.add("correct");
+    }
+
+    next.style.display = "block";
+}
+
+next.onclick = () => {
+    current++;
+    loadQuestion();
+};
+
+function finish() {
+
+    localStorage.setItem("onquiz_last_score", score);
+
+    document.querySelector(".game").innerHTML = `
+        <div class="question-box" style="text-align:center">
+            <div style="font-size:80px">🏆</div>
+            <h1>Quiz ukończony!</h1>
+            <p style="color:#9999aa;margin:15px">
+                Twój wynik:
+            </p>
+            <h2 style="font-size:40px;color:#a56cff">
+                ⭐ ${score} pkt
+            </h2>
+            <br>
+            <a href="quizy.html" class="btn primary">
+                Zagraj ponownie
+            </a>
+            <a href="profil.html" class="btn secondary">
+                Profil
+            </a>
+        </div>
+    `;
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
