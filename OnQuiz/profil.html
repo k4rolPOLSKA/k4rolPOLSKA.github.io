@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil — OnQuiz</title>
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+.profile {
+    max-width:850px;
+    margin:70px auto;
+}
+
+.profile-header {
+    padding:40px;
+    background:#111119;
+    border:1px solid #252532;
+    border-radius:22px;
+    text-align:center;
+}
+
+.avatar {
+    width:100px;
+    height:100px;
+    margin:auto;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:#7c3cff;
+    font-size:50px;
+}
+
+.profile-header h1 {
+    margin:20px 0 5px;
+}
+
+.profile-header p {
+    color:#9999aa;
+}
+
+.profile-stats {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-top:20px;
+}
+
+.profile-stat {
+    padding:25px;
+    text-align:center;
+    background:#111119;
+    border:1px solid #252532;
+    border-radius:18px;
+}
+
+.profile-stat strong {
+    display:block;
+    font-size:28px;
+    color:#a56cff;
+}
+
+.profile-stat span {
+    color:#9999aa;
+    font-size:13px;
+}
+
+@media(max-width:600px) {
+    .profile-stats {
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+<a href="index.html" class="logo">On<span>Quiz</span></a>
+<nav>
+<a href="index.html">Start</a>
+<a href="quizy.html">Quizy</a>
+<a href="ranking.html">Ranking</a>
+<a href="profil.html">Profil</a>
+</nav>
+</header>
+
+<main>
+
+<div class="profile">
+
+<div class="profile-header">
+
+<div class="avatar">😎</div>
+
+<h1>Gracz OnQuiz</h1>
+<p>Nowy użytkownik</p>
+
+<br>
+
+<a href="quizy.html" class="btn primary">
+🎮 Zagraj w quiz
+</a>
+
+</div>
+
+<div class="profile-stats">
+
+<div class="profile-stat">
+<strong id="points">0</strong>
+<span>Punkty</span>
+</div>
+
+<div class="profile-stat">
+<strong>0</strong>
+<span>Quizy ukończone</span>
+</div>
+
+<div class="profile-stat">
+<strong>0</strong>
+<span>Osiągnięcia</span>
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+<script>
+const points = localStorage.getItem("onquiz_last_score") || 0;
+document.getElementById("points").textContent = points;
+</script>
+
+</body>
+</html>
