@@ -1,640 +1,316 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OnWeather — Pogoda</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+    <meta name="theme-color" content="#07111f">
+    <meta name="description" content="OnWeather - profesjonalna prognoza pogody">
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background:
-        radial-gradient(circle at top right, #164e63 0, transparent 35%),
-        radial-gradient(circle at bottom left, #172554 0, transparent 35%),
-        #07111f;
-    color: white;
-    min-height: 100vh;
-}
+    <title>OnWeather — Pogoda</title>
 
-header {
-    width: 100%;
-    padding: 22px 6%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255,255,255,.08);
-    backdrop-filter: blur(15px);
-}
-
-.logo {
-    font-size: 27px;
-    font-weight: 800;
-    letter-spacing: -1px;
-}
-
-.logo span {
-    color: #38bdf8;
-}
-
-.version {
-    font-size: 12px;
-    background: rgba(56,189,248,.12);
-    border: 1px solid rgba(56,189,248,.25);
-    padding: 7px 12px;
-    border-radius: 20px;
-    color: #7dd3fc;
-}
-
-.container {
-    width: min(1200px, 92%);
-    margin: 35px auto;
-}
-
-.search {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 25px;
-}
-
-.search input {
-    flex: 1;
-    padding: 16px 18px;
-    border: 1px solid rgba(255,255,255,.1);
-    border-radius: 15px;
-    background: rgba(255,255,255,.07);
-    color: white;
-    outline: none;
-    font-size: 16px;
-}
-
-.search input::placeholder {
-    color: #94a3b8;
-}
-
-.search button {
-    padding: 0 22px;
-    border: none;
-    border-radius: 15px;
-    background: #38bdf8;
-    color: #03111c;
-    font-weight: 800;
-    cursor: pointer;
-    transition: .2s;
-}
-
-.search button:hover {
-    transform: translateY(-2px);
-    background: #7dd3fc;
-}
-
-.status {
-    color: #94a3b8;
-    margin-bottom: 18px;
-    min-height: 20px;
-}
-
-.hero {
-    background: linear-gradient(135deg, rgba(14,165,233,.2), rgba(30,41,59,.5));
-    border: 1px solid rgba(255,255,255,.1);
-    border-radius: 28px;
-    padding: 30px;
-    box-shadow: 0 25px 80px rgba(0,0,0,.25);
-}
-
-.location {
-    color: #bae6fd;
-    font-size: 18px;
-    margin-bottom: 8px;
-}
-
-.date {
-    color: #94a3b8;
-    font-size: 14px;
-}
-
-.current {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    margin-top: 30px;
-}
-
-.temperature {
-    font-size: clamp(65px, 12vw, 110px);
-    font-weight: 800;
-    letter-spacing: -7px;
-}
-
-.condition {
-    color: #cbd5e1;
-    font-size: 18px;
-}
-
-.weather-icon {
-    font-size: 85px;
-}
-
-.details {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-top: 30px;
-}
-
-.detail {
-    background: rgba(255,255,255,.055);
-    border: 1px solid rgba(255,255,255,.07);
-    padding: 18px;
-    border-radius: 18px;
-}
-
-.detail small {
-    color: #94a3b8;
-    display: block;
-    margin-bottom: 8px;
-}
-
-.detail strong {
-    font-size: 19px;
-}
-
-.section-title {
-    margin: 35px 0 15px;
-    font-size: 22px;
-}
-
-.hourly {
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    padding-bottom: 10px;
-}
-
-.hour {
-    min-width: 105px;
-    background: rgba(255,255,255,.055);
-    border: 1px solid rgba(255,255,255,.07);
-    border-radius: 18px;
-    padding: 16px;
-    text-align: center;
-}
-
-.hour-time {
-    color: #94a3b8;
-    font-size: 13px;
-}
-
-.hour-icon {
-    font-size: 32px;
-    margin: 10px 0;
-}
-
-.hour-temp {
-    font-size: 19px;
-    font-weight: bold;
-}
-
-.daily {
-    display: grid;
-    gap: 10px;
-}
-
-.day {
-    display: grid;
-    grid-template-columns: 1.3fr .6fr 1fr .7fr;
-    align-items: center;
-    background: rgba(255,255,255,.055);
-    border: 1px solid rgba(255,255,255,.07);
-    padding: 16px 20px;
-    border-radius: 17px;
-}
-
-.day-name {
-    font-weight: bold;
-}
-
-.day-condition {
-    color: #cbd5e1;
-}
-
-.day-temp {
-    font-weight: bold;
-}
-
-.rain {
-    color: #7dd3fc;
-    text-align: right;
-}
-
-footer {
-    text-align: center;
-    color: #64748b;
-    padding: 40px 20px;
-    font-size: 13px;
-}
-
-.loading {
-    opacity: .7;
-}
-
-@media(max-width: 700px) {
-    header {
-        padding: 18px 4%;
-    }
-
-    .container {
-        width: 94%;
-        margin: 20px auto;
-    }
-
-    .hero {
-        padding: 22px;
-    }
-
-    .current {
-        align-items: flex-start;
-    }
-
-    .weather-icon {
-        font-size: 65px;
-    }
-
-    .details {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .day {
-        grid-template-columns: 1fr auto;
-        gap: 8px;
-    }
-
-    .day-condition {
-        display: none;
-    }
-
-    .rain {
-        text-align: right;
-    }
-}
-</style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header>
-    <div class="logo">On<span>Weather</span></div>
-    <div class="version">v1.0</div>
+<header class="topbar">
+
+    <div class="logo">
+        <span>On</span>Weather
+    </div>
+
+    <div class="top-actions">
+        <button id="locationBtn" title="Moja lokalizacja">📍</button>
+        <button id="refreshBtn" title="Odśwież">🔄</button>
+    </div>
+
 </header>
+
 
 <main class="container">
 
-    <div class="search">
-        <input id="cityInput"
-               type="text"
-               placeholder="Wpisz miejscowość, np. Warszawa..."
-               value="Warszawa">
+    <section class="search-section">
 
-        <button onclick="searchCity()">Szukaj</button>
-    </div>
+        <div class="search-box">
 
-    <div id="status" class="status"></div>
+            <input
+                id="cityInput"
+                type="text"
+                placeholder="Wyszukaj miejscowość..."
+                autocomplete="off"
+            >
 
-    <section class="hero">
-
-        <div class="location" id="location">
-            Ładowanie...
-        </div>
-
-        <div class="date" id="date"></div>
-
-        <div class="current">
-
-            <div>
-                <div class="temperature" id="temperature">--°</div>
-                <div class="condition" id="condition">Ładowanie pogody...</div>
-            </div>
-
-            <div class="weather-icon" id="weatherIcon">🌤️</div>
+            <button id="searchBtn">
+                🔍
+            </button>
 
         </div>
 
-        <div class="details">
-
-            <div class="detail">
-                <small>💧 Wilgotność</small>
-                <strong id="humidity">--%</strong>
-            </div>
-
-            <div class="detail">
-                <small>💨 Wiatr</small>
-                <strong id="wind">-- km/h</strong>
-            </div>
-
-            <div class="detail">
-                <small>🌧️ Opady</small>
-                <strong id="rain">-- mm</strong>
-            </div>
-
-            <div class="detail">
-                <small>🌡️ Odczuwalna</small>
-                <strong id="feels">--°C</strong>
-            </div>
-
-        </div>
+        <div id="searchResults"></div>
 
     </section>
 
-    <h2 class="section-title">Prognoza godzinowa</h2>
 
-    <div class="hourly" id="hourly"></div>
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <span>Pobieranie danych pogodowych...</span>
+    </div>
 
-    <h2 class="section-title">Prognoza na 7 dni</h2>
 
-    <div class="daily" id="daily"></div>
+    <div id="weatherApp" class="hidden">
+
+
+        <!-- GŁÓWNA POGODA -->
+
+        <section class="current-weather">
+
+            <div class="current-left">
+
+                <div class="location-name" id="locationName">
+                    Warszawa
+                </div>
+
+                <div class="location-country" id="locationCountry">
+                    Polska
+                </div>
+
+                <div class="current-date" id="currentDate"></div>
+
+                <div class="temperature">
+                    <span id="currentTemp">--</span>
+                    <sup>°C</sup>
+                </div>
+
+                <div class="weather-description" id="currentDescription">
+                    Ładowanie...
+                </div>
+
+                <div class="feels">
+                    Odczuwalna <b id="feelsTemp">--°C</b>
+                </div>
+
+            </div>
+
+
+            <div class="current-right">
+
+                <div class="weather-big-icon" id="currentIcon">
+                    🌤️
+                </div>
+
+                <div class="sun-info">
+
+                    <div>
+                        🌅
+                        <span>Wschód</span>
+                        <b id="sunrise">--:--</b>
+                    </div>
+
+                    <div>
+                        🌇
+                        <span>Zachód</span>
+                        <b id="sunset">--:--</b>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SZCZEGÓŁY -->
+
+        <section class="section">
+
+            <div class="section-title">
+                <h2>Aktualne warunki</h2>
+                <span id="lastUpdate">--:--</span>
+            </div>
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon">💧</div>
+                    <div>
+                        <small>Wilgotność</small>
+                        <strong id="humidity">--%</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">💨</div>
+                    <div>
+                        <small>Wiatr</small>
+                        <strong id="wind">-- km/h</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🌬️</div>
+                    <div>
+                        <small>Porywy</small>
+                        <strong id="gusts">-- km/h</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">☁️</div>
+                    <div>
+                        <small>Zachmurzenie</small>
+                        <strong id="clouds">--%</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🔽</div>
+                    <div>
+                        <small>Ciśnienie</small>
+                        <strong id="pressure">-- hPa</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">☀️</div>
+                    <div>
+                        <small>Indeks UV</small>
+                        <strong id="uv">--</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">👁️</div>
+                    <div>
+                        <small>Widoczność</small>
+                        <strong id="visibility">-- km</strong>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🌧️</div>
+                    <div>
+                        <small>Opady</small>
+                        <strong id="precipitation">-- mm</strong>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- GODZINOWA -->
+
+        <section class="section">
+
+            <div class="section-title">
+                <h2>Prognoza godzinowa</h2>
+                <span>24 godziny</span>
+            </div>
+
+            <div id="hourlyForecast" class="hourly"></div>
+
+        </section>
+
+
+        <!-- 10 DNI -->
+
+        <section class="section">
+
+            <div class="section-title">
+                <h2>Prognoza na 10 dni</h2>
+                <span>OnWeather</span>
+            </div>
+
+            <div id="dailyForecast" class="daily"></div>
+
+        </section>
+
+
+        <!-- SZCZEGÓŁOWA PROGNOZA -->
+
+        <section class="section">
+
+            <div class="section-title">
+                <h2>Szczegóły godzinowe</h2>
+                <span>Opady • Wiatr • Temperatura</span>
+            </div>
+
+            <div id="detailHourly" class="detail-hourly"></div>
+
+        </section>
+
+
+        <!-- SŁOŃCE -->
+
+        <section class="section">
+
+            <div class="section-title">
+                <h2>☀️ Słońce</h2>
+            </div>
+
+            <div class="sun-card">
+
+                <div>
+                    <span>🌅 Wschód</span>
+                    <b id="sunrise2">--:--</b>
+                </div>
+
+                <div class="sun-line">
+                    <div class="sun"></div>
+                </div>
+
+                <div>
+                    <span>🌇 Zachód</span>
+                    <b id="sunset2">--:--</b>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- INFORMACJA -->
+
+        <section class="info-box">
+
+            <div class="info-icon">🌦️</div>
+
+            <div>
+                <strong>OnWeather</strong>
+
+                <p>
+                    Dane pogodowe są pobierane na żywo z Open-Meteo.
+                    Prognoza może się zmieniać wraz z aktualizacją modeli pogodowych.
+                </p>
+            </div>
+
+        </section>
+
+    </div>
 
 </main>
 
+
 <footer>
-    OnWeather • Dane pogodowe: Open-Meteo
+
+    <div class="footer-logo">
+        On<span>Weather</span>
+    </div>
+
+    <p>
+        Profesjonalna pogoda • OnWeather 2.0
+    </p>
+
+    <p class="copyright">
+        Dane pogodowe: Open-Meteo
+    </p>
+
 </footer>
 
-<script>
 
-const API = "https://api.open-meteo.com/v1/forecast";
-const GEO = "https://geocoding-api.open-meteo.com/v1/search";
-
-const weatherCodes = {
-    0: ["Bezchmurnie", "☀️"],
-    1: ["Głównie bezchmurnie", "🌤️"],
-    2: ["Częściowe zachmurzenie", "⛅"],
-    3: ["Pochmurno", "☁️"],
-    45: ["Mgła", "🌫️"],
-    48: ["Mgła", "🌫️"],
-    51: ["Lekka mżawka", "🌦️"],
-    53: ["Mżawka", "🌦️"],
-    55: ["Silna mżawka", "🌧️"],
-    61: ["Lekki deszcz", "🌦️"],
-    63: ["Deszcz", "🌧️"],
-    65: ["Silny deszcz", "🌧️"],
-    71: ["Lekki śnieg", "🌨️"],
-    73: ["Śnieg", "❄️"],
-    75: ["Silny śnieg", "❄️"],
-    80: ["Przelotne opady", "🌦️"],
-    81: ["Przelotny deszcz", "🌧️"],
-    82: ["Silne przelotne opady", "⛈️"],
-    95: ["Burza", "⛈️"],
-    96: ["Burza z gradem", "⛈️"],
-    99: ["Silna burza z gradem", "⛈️"]
-};
-
-function weatherInfo(code) {
-    return weatherCodes[code] || ["Nieznana pogoda", "🌡️"];
-}
-
-function formatDate(dateString) {
-    const date = new Date(dateString);
-
-    return date.toLocaleDateString("pl-PL", {
-        weekday: "long",
-        day: "numeric",
-        month: "long"
-    });
-}
-
-function dayName(dateString) {
-    const date = new Date(dateString);
-
-    return date.toLocaleDateString("pl-PL", {
-        weekday: "long"
-    });
-}
-
-async function searchCity() {
-
-    const input = document.getElementById("cityInput");
-    const city = input.value.trim();
-
-    if (!city) return;
-
-    document.getElementById("status").textContent =
-        "🔎 Szukam miejscowości...";
-
-    try {
-
-        const geoResponse = await fetch(
-            `${GEO}?name=${encodeURIComponent(city)}&count=1&language=pl&format=json`
-        );
-
-        const geo = await geoResponse.json();
-
-        if (!geo.results || geo.results.length === 0) {
-            throw new Error("Nie znaleziono miejscowości.");
-        }
-
-        const place = geo.results[0];
-
-        await loadWeather(
-            place.latitude,
-            place.longitude,
-            place.name,
-            place.country
-        );
-
-    } catch(error) {
-
-        document.getElementById("status").textContent =
-            "❌ " + error.message;
-    }
-}
-
-async function loadWeather(lat, lon, city, country) {
-
-    document.getElementById("status").textContent =
-        "⏳ Pobieram aktualną pogodę...";
-
-    const url =
-        `${API}?latitude=${lat}` +
-        `&longitude=${lon}` +
-        `&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m` +
-        `&hourly=temperature_2m,weather_code,precipitation_probability` +
-        `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max` +
-        `&timezone=auto` +
-        `&forecast_days=7`;
-
-    try {
-
-        const response = await fetch(url);
-
-        if (!response.ok) {
-            throw new Error("Błąd API pogodowego.");
-        }
-
-        const data = await response.json();
-
-        renderCurrent(data, city, country);
-        renderHourly(data);
-        renderDaily(data);
-
-        document.getElementById("status").textContent =
-            "● Dane aktualne";
-
-    } catch(error) {
-
-        document.getElementById("status").textContent =
-            "❌ Nie udało się pobrać pogody.";
-    }
-}
-
-function renderCurrent(data, city, country) {
-
-    const current = data.current;
-
-    const [description, icon] =
-        weatherInfo(current.weather_code);
-
-    document.getElementById("location").textContent =
-        `📍 ${city}, ${country}`;
-
-    document.getElementById("date").textContent =
-        formatDate(current.time);
-
-    document.getElementById("temperature").textContent =
-        Math.round(current.temperature_2m) + "°";
-
-    document.getElementById("condition").textContent =
-        description;
-
-    document.getElementById("weatherIcon").textContent =
-        icon;
-
-    document.getElementById("humidity").textContent =
-        current.relative_humidity_2m + "%";
-
-    document.getElementById("wind").textContent =
-        Math.round(current.wind_speed_10m) + " km/h";
-
-    document.getElementById("rain").textContent =
-        current.precipitation + " mm";
-
-    document.getElementById("feels").textContent =
-        Math.round(current.apparent_temperature) + "°C";
-}
-
-function renderHourly(data) {
-
-    const container =
-        document.getElementById("hourly");
-
-    container.innerHTML = "";
-
-    const currentHour =
-        new Date().getHours();
-
-    let start = data.hourly.time.findIndex(time =>
-        new Date(time).getHours() === currentHour
-    );
-
-    if (start < 0) start = 0;
-
-    for (let i = start; i < start + 12; i++) {
-
-        const time =
-            new Date(data.hourly.time[i]);
-
-        const [desc, icon] =
-            weatherInfo(data.hourly.weather_code[i]);
-
-        const card =
-            document.createElement("div");
-
-        card.className = "hour";
-
-        card.innerHTML = `
-            <div class="hour-time">
-                ${time.toLocaleTimeString("pl-PL", {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                })}
-            </div>
-
-            <div class="hour-icon">${icon}</div>
-
-            <div class="hour-temp">
-                ${Math.round(data.hourly.temperature_2m[i])}°C
-            </div>
-
-            <div style="color:#7dd3fc;margin-top:7px;font-size:12px">
-                💧 ${data.hourly.precipitation_probability[i]}%
-            </div>
-        `;
-
-        container.appendChild(card);
-    }
-}
-
-function renderDaily(data) {
-
-    const container =
-        document.getElementById("daily");
-
-    container.innerHTML = "";
-
-    for (let i = 0; i < 7; i++) {
-
-        const [desc, icon] =
-            weatherInfo(data.daily.weather_code[i]);
-
-        const card =
-            document.createElement("div");
-
-        card.className = "day";
-
-        card.innerHTML = `
-            <div class="day-name">
-                ${dayName(data.daily.time[i])}
-            </div>
-
-            <div style="font-size:30px">
-                ${icon}
-            </div>
-
-            <div class="day-condition">
-                ${desc}
-            </div>
-
-            <div class="day-temp">
-                ${Math.round(data.daily.temperature_2m_max[i])}° /
-                ${Math.round(data.daily.temperature_2m_min[i])}°C
-            </div>
-
-            <div class="rain">
-                🌧️ ${data.daily.precipitation_sum[i]} mm
-            </div>
-        `;
-
-        container.appendChild(card);
-    }
-}
-
-document.getElementById("cityInput")
-    .addEventListener("keydown", function(event) {
-
-        if (event.key === "Enter") {
-            searchCity();
-        }
-
-    });
-
-searchCity();
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
