@@ -1,139 +1,144 @@
-const API =
-    "https://api.open-meteo.com/v1/forecast";
-
-const GEO =
-    "https://geocoding-api.open-meteo.com/v1/search";
-
+const API = "https://api.open-meteo.com/v1/forecast";
+const GEO = "https://geocoding-api.open-meteo.com/v1/search";
 
 let weather = null;
-let locationData = null;
+let selectedLocation = null;
+let selectedDay = 0;
 
-let temperatureChart = null;
-let rainChart = null;
+const $ = id => document.getElementById(id);
 
-let settings = {
+const el = {
+    status: $("status"),
+    cityInput: $("cityInput"),
+    searchBtn: $("searchBtn"),
+    searchResults: $("searchResults"),
+    locationBtn: $("locationBtn"),
+    refreshBtn: $("refreshBtn"),
 
-    temperature: "c",
-    wind: "kmh",
-    theme: "dark"
+    locationName: $("locationName"),
+    updatedAt: $("updatedAt"),
 
+    currentIcon: $("currentIcon"),
+    currentTemp: $("currentTemp"),
+    currentCondition: $("currentCondition"),
+    feelsLike: $("feelsLike"),
+
+    sunrise: $("sunrise"),
+    sunset: $("sunset"),
+
+    rainNow: $("rainNow"),
+
+    statsGrid: $("statsGrid"),
+    hourly: $("hourly"),
+    daily: $("daily"),
+    dayDetails: $("dayDetails"),
+    selectedDayLabel: $("selectedDayLabel")
 };
 
 
-/* =========================
-   WEATHER CODES
-========================= */
+// ==============================
+// POGODA
+// ==============================
 
 const WEATHER = {
 
-    0: ["Bezchmurnie", "☀️", "none"],
+    0: ["☀️", "Bezchmurnie"],
+    1: ["🌤️", "Przeważnie bezchmurnie"],
+    2: ["⛅", "Częściowe zachmurzenie"],
+    3: ["☁️", "Pochmurnie"],
 
-    1: ["Przeważnie bezchmurnie", "🌤️", "none"],
+    45: ["🌫️", "Mgła"],
+    48: ["🌫️", "Mgła"],
 
-    2: ["Częściowe zachmurzenie", "⛅", "none"],
+    51: ["🌦️", "Lekka mżawka"],
+    53: ["🌦️", "Mżawka"],
+    55: ["🌧️", "Silna mżawka"],
 
-    3: ["Pochmurno", "☁️", "none"],
+    56: ["🌧️", "Marznąca mżawka"],
+    57: ["🌧️", "Silna marznąca mżawka"],
 
-    45: ["Mgła", "🌫️", "none"],
-    48: ["Mgła", "🌫️", "none"],
+    61: ["🌧️", "Lekki deszcz"],
+    63: ["🌧️", "Deszcz"],
+    65: ["🌧️", "Silny deszcz"],
 
-    51: ["Lekka mżawka", "🌦️", "rain"],
-    53: ["Mżawka", "🌦️", "rain"],
-    55: ["Silna mżawka", "🌧️", "rain"],
+    66: ["🌧️", "Marznący deszcz"],
+    67: ["🌧️", "Silny marznący deszcz"],
 
-    56: ["Marznąca mżawka", "🌧️", "rain"],
-    57: ["Silna marznąca mżawka", "🌧️", "rain"],
+    71: ["🌨️", "Lekki śnieg"],
+    73: ["🌨️", "Śnieg"],
+    75: ["❄️", "Silny śnieg"],
+    77: ["🌨️", "Ziarna śnieżne"],
 
-    61: ["Lekki deszcz", "🌦️", "rain"],
-    63: ["Deszcz", "🌧️", "rain"],
-    65: ["Silny deszcz", "🌧️", "rain"],
+    80: ["🌦️", "Przelotne opady"],
+    81: ["🌧️", "Przelotne opady"],
+    82: ["⛈️", "Silne przelotne opady"],
 
-    66: ["Marznący deszcz", "🌧️", "rain"],
-    67: ["Silny marznący deszcz", "🌧️", "rain"],
+    85: ["🌨️", "Przelotny śnieg"],
+    86: ["❄️", "Silny śnieg"],
 
-    71: ["Lekki śnieg", "🌨️", "snow"],
-    73: ["Śnieg", "❄️", "snow"],
-    75: ["Silny śnieg", "❄️", "snow"],
-    77: ["Śnieg ziarnisty", "🌨️", "snow"],
-
-    80: ["Przelotne opady", "🌦️", "rain"],
-    81: ["Przelotny deszcz", "🌧️", "rain"],
-    82: ["Silne opady", "⛈️", "rain"],
-
-    85: ["Przelotny śnieg", "🌨️", "snow"],
-    86: ["Silny śnieg", "❄️", "snow"],
-
-    95: ["Burza", "⛈️", "storm"],
-    96: ["Burza z gradem", "⛈️", "storm"],
-    99: ["Silna burza z gradem", "⛈️", "storm"]
-
+    95: ["⛈️", "Burza"],
+    96: ["⛈️", "Burza z gradem"],
+    99: ["⛈️", "Silna burza z gradem"]
 };
 
 
-/* =========================
-   ELEMENTY
-========================= */
-
-const $ = id =>
-    document.getElementById(id);
+function weatherIcon(code) {
+    return WEATHER[code]?.[0] || "🌤️";
+}
 
 
-/* =========================
-   FORMAT
-========================= */
+function weatherDescription(code) {
+    return WEATHER[code]?.[1] || "Warunki pogodowe";
+}
 
-function getWeather(code) {
 
-    return WEATHER[code] ||
-        ["Nieznana pogoda", "🌡️", "none"];
+function number(value, decimals = 0) {
 
+    if (
+        value === null ||
+        value === undefined ||
+        Number.isNaN(Number(value))
+    ) {
+        return "--";
+    }
+
+    return Number(value).toFixed(decimals);
 }
 
 
 function formatTime(value) {
 
-    return new Date(value)
-        .toLocaleTimeString(
-            "pl-PL",
-            {
-                hour: "2-digit",
-                minute: "2-digit"
-            }
-        );
+    if (!value) return "--:--";
 
+    return new Date(value).toLocaleTimeString(
+        "pl-PL",
+        {
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
 }
 
 
-function formatDate(value) {
+function formatDate(value, options) {
 
-    return new Date(value)
-        .toLocaleDateString(
-            "pl-PL",
-            {
-                weekday: "long",
-                day: "numeric",
-                month: "long"
-            }
-        );
-
-}
-
-
-function shortDate(value) {
-
-    return new Date(value)
-        .toLocaleDateString(
-            "pl-PL",
-            {
-                day: "numeric",
-                month: "short"
-            }
-        );
-
+    return new Date(
+        value + "T12:00:00"
+    ).toLocaleDateString(
+        "pl-PL",
+        options
+    );
 }
 
 
 function windDirection(degrees) {
+
+    if (
+        degrees === null ||
+        degrees === undefined
+    ) {
+        return "--";
+    }
 
     const directions = [
         "N",
@@ -147,1146 +152,848 @@ function windDirection(degrees) {
     ];
 
     return directions[
-        Math.round(degrees / 45) % 8
+        Math.round((Number(degrees) % 360) / 45) % 8
     ];
-
 }
 
 
-/* =========================
-   UNITS
-========================= */
+// ==============================
+// STATUS
+// ==============================
 
-function temp(value) {
+function setStatus(text, error = false) {
 
-    if (settings.temperature === "f") {
+    if (!el.status) return;
 
-        return Math.round(
-            value * 9 / 5 + 32
+    el.status.textContent = text;
+
+    el.status.className =
+        error
+            ? "status error"
+            : "status";
+}
+
+
+// ==============================
+// SZUKANIE MIASTA
+// ==============================
+
+async function searchCity() {
+
+    const city = el.cityInput.value.trim();
+
+    if (!city) return;
+
+    setStatus("🔎 Szukam miasta...");
+
+    try {
+
+        const response = await fetch(
+            GEO +
+            "?name=" +
+            encodeURIComponent(city) +
+            "&count=8" +
+            "&language=pl" +
+            "&format=json"
         );
 
+        if (!response.ok) {
+            throw new Error("Geocoding error");
+        }
+
+        const data = await response.json();
+
+        el.searchResults.innerHTML = "";
+
+        if (!data.results || data.results.length === 0) {
+
+            setStatus(
+                "❌ Nie znaleziono miasta.",
+                true
+            );
+
+            return;
+        }
+
+        data.results.forEach(place => {
+
+            const item =
+                document.createElement("div");
+
+            item.className = "result";
+
+            item.innerHTML = `
+                <b>${place.name}</b>
+                <br>
+                <small>
+                    ${place.admin1 || ""}
+                    ${place.country ? ", " + place.country : ""}
+                </small>
+            `;
+
+            item.onclick = () => {
+
+                el.searchResults.innerHTML = "";
+
+                el.cityInput.value =
+                    place.name;
+
+                loadWeather(
+                    place.latitude,
+                    place.longitude,
+                    place.name,
+                    place.country_code || ""
+                );
+            };
+
+            el.searchResults.appendChild(item);
+        });
+
+        setStatus(
+            "Wybierz lokalizację z listy."
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        setStatus(
+            "❌ Nie można wyszukać miasta.",
+            true
+        );
     }
-
-    return Math.round(value);
-
 }
 
 
-function tempDecimal(value) {
-
-    if (settings.temperature === "f") {
-
-        return (
-            value * 9 / 5 + 32
-        ).toFixed(1);
-
-    }
-
-    return value.toFixed(1);
-
-}
-
-
-function wind(value) {
-
-    if (settings.wind === "mph") {
-
-        return (
-            value * 0.621371
-        ).toFixed(0);
-
-    }
-
-    return Math.round(value);
-
-}
-
-
-function temperatureUnit() {
-
-    return settings.temperature === "f"
-        ? "°F"
-        : "°C";
-
-}
-
-
-function windUnit() {
-
-    return settings.wind === "mph"
-        ? "mph"
-        : "km/h";
-
-}
-
-
-/* =========================
-   OPADY - POPRAWIONA LOGIKA
-========================= */
-
-function hasPrecipitation(
-    code,
-    precipitation,
-    probability
-) {
-
-    const type =
-        getWeather(code)[2];
-
-
-    return (
-
-        type === "rain" ||
-        type === "snow" ||
-        type === "storm" ||
-
-        precipitation > 0.05 ||
-
-        probability >= 20
-
-    );
-
-}
-
-
-function rainHTML(
-    code,
-    precipitation,
-    probability
-) {
-
-    if (
-        !hasPrecipitation(
-            code,
-            precipitation,
-            probability
-        )
-    ) {
-
-        return "";
-
-    }
-
-
-    const type =
-        getWeather(code)[2];
-
-
-    let icon = "🌧️";
-
-
-    if (type === "snow")
-        icon = "❄️";
-
-    if (type === "storm")
-        icon = "⛈️";
-
-
-    return `
-        <div class="hour-rain">
-            ${icon} ${Math.round(probability)}%
-            ${
-                precipitation > 0
-                ? `<br>${precipitation.toFixed(1)} mm`
-                : ""
-            }
-        </div>
-    `;
-
-}
-
-
-/* =========================
-   LOAD WEATHER
-========================= */
+// ==============================
+// POBIERANIE POGODY
+// ==============================
 
 async function loadWeather(
     latitude,
     longitude,
-    name,
-    country,
-    region = ""
+    cityName,
+    country
 ) {
 
-    showLoading(true);
-    hideError();
+    setStatus(
+        "🌦️ Pobieram aktualną pogodę..."
+    );
 
+    selectedLocation = {
+        latitude,
+        longitude,
+        cityName,
+        country
+    };
 
-    const params =
-        new URLSearchParams({
+    localStorage.setItem(
+        "onweather-location",
+        JSON.stringify(selectedLocation)
+    );
 
-            latitude,
-            longitude,
+    /*
+       WAŻNE:
 
-            timezone: "auto",
+       visibility NIE znajduje się tutaj.
 
-            forecast_days: "14",
+       visibility pobieramy niżej
+       w hourly.
+    */
 
-            current: [
+    const params = new URLSearchParams({
 
-                "temperature_2m",
-                "relative_humidity_2m",
-                "apparent_temperature",
-                "dew_point_2m",
-                "precipitation",
-                "weather_code",
-                "cloud_cover",
-                "surface_pressure",
-                "visibility",
-                "wind_speed_10m",
-                "wind_direction_10m",
-                "wind_gusts_10m",
-                "uv_index",
-                "is_day"
+        latitude: latitude,
+        longitude: longitude,
 
-            ].join(","),
+        timezone: "auto",
 
+        forecast_days: "14",
 
-            hourly: [
+        current:
+            "temperature_2m," +
+            "relative_humidity_2m," +
+            "apparent_temperature," +
+            "precipitation," +
+            "rain," +
+            "showers," +
+            "snowfall," +
+            "weather_code," +
+            "cloud_cover," +
+            "pressure_msl," +
+            "wind_speed_10m," +
+            "wind_direction_10m," +
+            "wind_gusts_10m," +
+            "dew_point_2m",
 
-                "temperature_2m",
-                "relative_humidity_2m",
-                "dew_point_2m",
-                "apparent_temperature",
+        hourly:
+            "temperature_2m," +
+            "apparent_temperature," +
+            "precipitation_probability," +
+            "precipitation," +
+            "rain," +
+            "showers," +
+            "snowfall," +
+            "weather_code," +
+            "cloud_cover," +
+            "relative_humidity_2m," +
+            "wind_speed_10m," +
+            "wind_direction_10m," +
+            "wind_gusts_10m," +
+            "visibility," +
+            "uv_index," +
+            "pressure_msl," +
+            "dew_point_2m",
 
-                "precipitation_probability",
-                "precipitation",
-
-                "rain",
-                "showers",
-                "snowfall",
-
-                "weather_code",
-
-                "cloud_cover",
-                "visibility",
-
-                "surface_pressure",
-
-                "wind_speed_10m",
-                "wind_direction_10m",
-                "wind_gusts_10m",
-
-                "uv_index",
-                "is_day"
-
-            ].join(","),
-
-
-            daily: [
-
-                "weather_code",
-
-                "temperature_2m_max",
-                "temperature_2m_min",
-
-                "apparent_temperature_max",
-                "apparent_temperature_min",
-
-                "precipitation_sum",
-                "precipitation_hours",
-
-                "precipitation_probability_max",
-
-                "rain_sum",
-                "showers_sum",
-                "snowfall_sum",
-
-                "wind_speed_10m_max",
-                "wind_gusts_10m_max",
-
-                "wind_direction_10m_dominant",
-
-                "uv_index_max",
-
-                "sunrise",
-                "sunset",
-
-                "daylight_duration",
-                "sunshine_duration"
-
-            ].join(",")
-
-        });
+        daily:
+            "weather_code," +
+            "temperature_2m_max," +
+            "temperature_2m_min," +
+            "apparent_temperature_max," +
+            "apparent_temperature_min," +
+            "sunrise," +
+            "sunset," +
+            "daylight_duration," +
+            "sunshine_duration," +
+            "uv_index_max," +
+            "precipitation_sum," +
+            "rain_sum," +
+            "showers_sum," +
+            "snowfall_sum," +
+            "precipitation_probability_max," +
+            "wind_speed_10m_max," +
+            "wind_gusts_10m_max," +
+            "wind_direction_10m_dominant"
+    });
 
 
     try {
 
         const response =
             await fetch(
-                `${API}?${params}`
+                API + "?" + params.toString()
             );
 
+        if (!response.ok) {
 
-        if (!response.ok)
+            const errorText =
+                await response.text();
+
+            console.error(
+                "Open-Meteo:",
+                errorText
+            );
+
             throw new Error(
-                "API error"
+                "API HTTP " +
+                response.status
             );
+        }
 
-
-        weather =
+        const data =
             await response.json();
 
 
-        locationData = {
+        /*
+           SPRAWDZAMY CZY API
+           NAPRAWDĘ ZWRÓCIŁO DANE
+        */
 
-            latitude:
-                Number(latitude),
+        if (
+            !data.current ||
+            !data.hourly ||
+            !data.daily
+        ) {
 
-            longitude:
-                Number(longitude),
-
-            name,
-
-            country,
-
-            region
-
-        };
+            throw new Error(
+                "Brak danych current/hourly/daily"
+            );
+        }
 
 
-        saveLocation();
+        weather = data;
 
-        render();
+        weather.cityName =
+            cityName;
+
+        weather.country =
+            country;
+
+
+        selectedDay = 0;
+
+
+        renderWeather();
+
+
+        setStatus(
+            "✅ Pogoda zaktualizowana • " +
+            formatTime(data.current.time)
+        );
 
 
     } catch (error) {
 
-        console.error(error);
-
-        showError(
-            "Nie udało się pobrać danych pogodowych. Sprawdź połączenie z internetem."
+        console.error(
+            "ONWEATHER ERROR:",
+            error
         );
 
-    }
-
-
-    showLoading(false);
-
-}
-
-
-/* =========================
-   RENDER
-========================= */
-
-function render() {
-
-    renderCurrent();
-
-    renderHourly();
-
-    renderDaily();
-
-    renderDetails();
-
-    renderSun();
-
-    renderLocation();
-
-    renderCharts();
-
-    checkAlerts();
-
-}
-
-
-/* =========================
-   CURRENT
-========================= */
-
-function renderCurrent() {
-
-    const c =
-        weather.current;
-
-
-    const [
-        description,
-        icon,
-        type
-    ] =
-        getWeather(
-            c.weather_code
+        setStatus(
+            "❌ Nie udało się pobrać danych pogodowych.",
+            true
         );
 
-
-    $("cityName").textContent =
-        locationData.name;
-
-
-    $("countryName").textContent =
-        locationData.country || "";
-
-
-    $("currentDate").textContent =
-        formatDate(c.time);
-
-
-    $("currentTemp").textContent =
-        temp(c.temperature_2m);
-
-
-    document.querySelector(
-        ".current-temperature sup"
-    ).textContent =
-        temperatureUnit();
-
-
-    $("weatherDescription").textContent =
-        description;
-
-
-    $("feelsLike").textContent =
-        `${temp(c.apparent_temperature)}${temperatureUnit()}`;
-
-
-    $("weatherIcon").textContent =
-        icon;
-
-
-    $("humidity").textContent =
-        `${c.relative_humidity_2m}%`;
-
-
-    $("wind").textContent =
-        `${wind(c.wind_speed_10m)} ${windUnit()}`;
-
-
-    $("gust").textContent =
-        `${wind(c.wind_gusts_10m)} ${windUnit()}`;
-
-
-    $("windDirection").textContent =
-        `${windDirection(
-            c.wind_direction_10m
-        )} ${Math.round(
-            c.wind_direction_10m
-        )}°`;
-
-
-    $("dewPoint").textContent =
-        `${tempDecimal(
-            c.dew_point_2m
-        )}${temperatureUnit()}`;
-
-
-    $("clouds").textContent =
-        `${c.cloud_cover}%`;
-
-
-    $("pressure").textContent =
-        `${Math.round(
-            c.surface_pressure
-        )} hPa`;
-
-
-    $("visibility").textContent =
-        `${(
-            c.visibility / 1000
-        ).toFixed(1)} km`;
-
-
-    $("uv").textContent =
-        Number(c.uv_index)
-        .toFixed(1);
-
-
-    $("precipitation").textContent =
-        c.precipitation > 0
-        ? `${c.precipitation.toFixed(1)} mm`
-        : "Brak opadu";
-
-
-    $("lastUpdate").textContent =
-        `Aktualizacja ${formatTime(c.time)}`;
-
-
-    renderBadges();
-
-}
-
-
-/* =========================
-   BADGES
-========================= */
-
-function renderBadges() {
-
-    const c =
-        weather.current;
-
-
-    const box =
-        $("weatherBadges");
-
-
-    box.innerHTML = "";
-
-
-    if (c.is_day === 0) {
-
-        addBadge(
-            "🌙 Noc"
-        );
-
-    } else {
-
-        addBadge(
-            "☀️ Dzień"
-        );
-
-    }
-
-
-    if (c.uv_index >= 6) {
-
-        addBadge(
-            "⚠️ Wysokie UV"
-        );
-
-    }
-
-
-    if (c.wind_gusts_10m >= 50) {
-
-        addBadge(
-            "💨 Silne porywy"
-        );
-
-    }
-
-
-    if (
-        hasPrecipitation(
-            c.weather_code,
-            c.precipitation,
-            100
-        )
-    ) {
-
-        addBadge(
-            "🌧️ Opady"
-        );
-
-    }
-
-
-    if (
-        c.weather_code >= 95
-    ) {
-
-        addBadge(
-            "⛈️ Burza"
-        );
-
-    }
-
-}
-
-
-function addBadge(text) {
-
-    const div =
-        document.createElement(
-            "span"
-        );
-
-    div.className =
-        "badge";
-
-    div.textContent =
-        text;
-
-    $("weatherBadges")
-        .appendChild(div);
-
-}
-
-
-/* =========================
-   HOURLY
-========================= */
-
-function currentIndex() {
-
-    const now =
-        Date.now();
-
-
-    let best = 0;
-
-    let distance =
-        Infinity;
-
-
-    weather.hourly.time
-        .forEach(
-            (timeValue, index) => {
-
-                const d =
-                    Math.abs(
-                        new Date(
-                            timeValue
-                        ).getTime()
-                        - now
+        /*
+           Próba prostego API awaryjnego
+        */
+
+        try {
+
+            const fallback =
+                await fetch(
+                    `${API}?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&timezone=auto`
+                );
+
+            if (fallback.ok) {
+
+                const basic =
+                    await fallback.json();
+
+                if (
+                    basic.current &&
+                    basic.current.temperature_2m !== undefined
+                ) {
+
+                    el.currentTemp.textContent =
+                        number(
+                            basic.current.temperature_2m
+                        );
+
+                    el.currentIcon.textContent =
+                        weatherIcon(
+                            basic.current.weather_code
+                        );
+
+                    el.currentCondition.textContent =
+                        weatherDescription(
+                            basic.current.weather_code
+                        );
+
+                    setStatus(
+                        "⚠️ Działa tryb awaryjny. Odśwież stronę, aby pobrać pełne dane."
                     );
-
-
-                if (d < distance) {
-
-                    distance = d;
-
-                    best = index;
-
                 }
-
             }
-        );
 
+        } catch (fallbackError) {
 
-    return best;
-
+            console.error(
+                fallbackError
+            );
+        }
+    }
 }
 
 
-function renderHourly() {
+// ==============================
+// AKTUALNA GODZINA
+// ==============================
 
-    const box =
-        $("hourlyForecast");
+function currentHourIndex() {
 
-
-    box.innerHTML = "";
-
-
-    const h =
-        weather.hourly;
-
-
-    const start =
-        currentIndex();
-
-
-    for (
-        let i = start;
-        i < start + 24;
-        i++
+    if (
+        !weather ||
+        !weather.hourly
     ) {
-
-        if (!h.time[i])
-            break;
-
-
-        const [
-            description,
-            icon
-        ] =
-            getWeather(
-                h.weather_code[i]
-            );
-
-
-        const card =
-            document.createElement(
-                "article"
-            );
-
-
-        card.className =
-            "hour-card";
-
-
-        if (i === start)
-            card.classList.add("now");
-
-
-        const rain =
-            rainHTML(
-                h.weather_code[i],
-                h.precipitation[i] || 0,
-                h.precipitation_probability[i] || 0
-            );
-
-
-        card.innerHTML = `
-
-            <div class="hour-time">
-
-                ${
-                    i === start
-                    ? "TERAZ"
-                    : formatTime(
-                        h.time[i]
-                    )
-                }
-
-            </div>
-
-            <div
-                class="hour-icon"
-                title="${description}"
-            >
-                ${icon}
-            </div>
-
-            <div class="hour-temp">
-
-                ${temp(
-                    h.temperature_2m[i]
-                )}${temperatureUnit()}
-
-            </div>
-
-            <div class="hour-feels">
-
-                Odcz.
-                ${temp(
-                    h.apparent_temperature[i]
-                )}${temperatureUnit()}
-
-            </div>
-
-            ${rain}
-
-            <div class="hour-wind">
-
-                💨
-                ${wind(
-                    h.wind_speed_10m[i]
-                )}
-                ${windUnit()}
-
-            </div>
-
-        `;
-
-
-        box.appendChild(card);
-
+        return 0;
     }
 
-}
-
-
-/* =========================
-   DAILY
-========================= */
-
-function renderDaily() {
-
-    const box =
-        $("dailyForecast");
-
-
-    box.innerHTML = "";
-
-
-    const d =
-        weather.daily;
-
-
-    for (
-        let i = 0;
-        i < 14;
-        i++
-    ) {
-
-        if (!d.time[i])
-            break;
-
-
-        const [
-            description,
-            icon
-        ] =
-            getWeather(
-                d.weather_code[i]
-            );
-
-
-        const probability =
-            d.precipitation_probability_max[i] || 0;
-
-
-        const precipitation =
-            d.precipitation_sum[i] || 0;
-
-
-        const showRain =
-            hasPrecipitation(
-                d.weather_code[i],
-                precipitation,
-                probability
-            );
-
-
-        const card =
-            document.createElement(
-                "article"
-            );
-
-
-        card.className =
-            "day-card";
-
-
-        card.innerHTML = `
-
-            <div>
-
-                <div class="day-name">
-
-                    ${
-                        i === 0
-                        ? "Dzisiaj"
-                        : new Date(
-                            d.time[i]
-                        ).toLocaleDateString(
-                            "pl-PL",
-                            {
-                                weekday: "long"
-                            }
-                        )
-                    }
-
-                </div>
-
-                <div class="day-date">
-
-                    ${shortDate(
-                        d.time[i]
-                    )}
-
-                </div>
-
-            </div>
-
-
-            <div class="day-icon">
-
-                ${icon}
-
-            </div>
-
-
-            <div class="day-description">
-
-                ${description}
-
-            </div>
-
-
-            <div class="day-temp">
-
-                ${temp(
-                    d.temperature_2m_max[i]
-                )}${temperatureUnit()}
-
-                /
-
-                ${temp(
-                    d.temperature_2m_min[i]
-                )}${temperatureUnit()}
-
-            </div>
-
-
-            <div
-                class="
-                    day-rain
-                    ${
-                        showRain
-                        ? ""
-                        : "hidden-rain"
-                    }
-                "
-            >
-
-                🌧️ ${Math.round(
-                    probability
-                )}%
-
-                <br>
-
-                <small>
-
-                    ${precipitation.toFixed(1)}
-                    mm
-
-                </small>
-
-            </div>
-
-        `;
-
-
-        box.appendChild(card);
-
-    }
-
-}
-
-
-/* =========================
-   DETAILS
-========================= */
-
-function renderDetails() {
-
-    const box =
-        $("detailedHourly");
-
-
-    box.innerHTML = "";
-
-
-    const h =
-        weather.hourly;
-
-
-    const start =
-        currentIndex();
-
-
-    for (
-        let i = start;
-        i < start + 24;
-        i++
-    ) {
-
-        if (!h.time[i])
-            break;
-
-
-        const [
-            description,
-            icon
-        ] =
-            getWeather(
-                h.weather_code[i]
-            );
-
-
-        const probability =
-            h.precipitation_probability[i] || 0;
-
-
-        const precipitation =
-            h.precipitation[i] || 0;
-
-
-        const showRain =
-            hasPrecipitation(
-                h.weather_code[i],
-                precipitation,
-                probability
-            );
-
-
-        const row =
-            document.createElement(
-                "div"
-            );
-
-
-        row.className =
-            "detail-row";
-
-
-        row.innerHTML = `
-
-            <span>
-
-                ${formatTime(
-                    h.time[i]
-                )}
-
-            </span>
-
-
-            <span>
-
-                ${icon}
-
-            </span>
-
-
-            <strong>
-
-                ${temp(
-                    h.temperature_2m[i]
-                )}${temperatureUnit()}
-
-            </strong>
-
-
-            <span>
-
-                ${description}
-
-            </span>
-
-
-            <span class="
-                optional
-                detail-rain
-            ">
-
-                ${
-                    showRain
-                    ? `🌧️ ${Math.round(
-                        probability
-                    )}%`
-                    : ""
-                }
-
-            </span>
-
-
-            <span class="optional">
-
-                💨 ${wind(
-                    h.wind_speed_10m[i]
-                )} ${windUnit()}
-
-            </span>
-
-
-            <span class="optional">
-
-                💧 ${
-                    h.relative_humidity_2m[i]
-                }%
-
-            </span>
-
-        `;
-
-
-        box.appendChild(row);
-
-    }
-
-}
-
-
-/* =========================
-   SUN
-========================= */
-
-function renderSun() {
-
-    const d =
-        weather.daily;
-
-
-    const sunrise =
-        formatTime(
-            d.sunrise[0]
+    const times =
+        weather.hourly.time;
+
+    const currentTime =
+        new Date(
+            weather.current.time
+        ).getTime();
+
+    let index =
+        times.findIndex(
+            time =>
+                new Date(time).getTime()
+                >= currentTime
         );
 
+    if (index < 0) {
+        index = 0;
+    }
 
-    const sunset =
-        formatTime(
-            d.sunset[0]
-        );
-
-
-    $("sunrise").textContent =
-        sunrise;
+    return index;
+}
 
 
-    $("sunset").textContent =
-        sunset;
+function currentVisibility() {
 
+    const index =
+        currentHourIndex();
 
-    $("sunrise2").textContent =
-        sunrise;
-
-
-    $("sunset2").textContent =
-        sunset;
-
-
-    updateSunPosition(
-        d.sunrise[0],
-        d.sunset[0]
+    return (
+        weather.hourly.visibility?.[index]
+        ?? null
     );
-
 }
 
 
-function updateSunPosition(
-    sunrise,
-    sunset
-) {
+// ==============================
+// RENDER
+// ==============================
 
-    const now =
-        Date.now();
+function renderWeather() {
 
+    const current =
+        weather.current;
 
-    const start =
-        new Date(sunrise)
-            .getTime();
-
-
-    const end =
-        new Date(sunset)
-            .getTime();
+    const daily =
+        weather.daily;
 
 
-    let percent =
-        ((now - start) /
-            (end - start))
-        * 100;
-
-
-    percent =
-        Math.max(
-            0,
-            Math.min(
-                100,
-                percent
-            )
+    el.locationName.textContent =
+        weather.cityName +
+        (
+            weather.country
+                ? " • " + weather.country
+                : ""
         );
 
 
-    document.querySelector(
-        ".sun-ball"
-    ).style.left =
-        `${percent}%`;
-
-}
-
-
-/* =========================
-   LOCATION
-========================= */
-
-function renderLocation() {
-
-    $("infoCity").textContent =
-        locationData.name;
-
-
-    $("infoCountry").textContent =
-        locationData.country ||
-        "-";
-
-
-    $("infoRegion").textContent =
-        locationData.region ||
-        "-";
-
-
-    $("coordinates").textContent =
-        `${locationData.latitude.toFixed(4)},
-         ${locationData.longitude.toFixed(4)}`;
-
-
-    $("timezone").textContent =
+    el.updatedAt.textContent =
+        "Dane: " +
+        formatTime(current.time) +
+        " • " +
         weather.timezone;
 
 
-    $("elevation").textContent =
-        weather.ele
+    // TEMPERATURA
+    el.currentTemp.textContent =
+        number(
+            current.temperature_2m
+        );
+
+
+    // IKONA
+    el.currentIcon.textContent =
+        weatherIcon(
+            current.weather_code
+        );
+
+
+    // OPIS
+    el.currentCondition.textContent =
+        weatherDescription(
+            current.weather_code
+        );
+
+
+    // ODCZUWALNA
+    el.feelsLike.textContent =
+        number(
+            current.apparent_temperature
+        );
+
+
+    // WSCHÓD
+    el.sunrise.textContent =
+        formatTime(
+            daily.sunrise[0]
+        );
+
+
+    // ZACHÓD
+    el.sunset.textContent =
+        formatTime(
+            daily.sunset[0]
+        );
+
+
+    // DESZCZ
+    const precipitation =
+        Number(
+            current.precipitation || 0
+        );
+
+    const code =
+        Number(
+            current.weather_code
+        );
+
+    const rainCodes = [
+        51,53,55,
+        56,57,
+        61,63,65,
+        66,67,
+        80,81,82,
+        95,96,99
+    ];
+
+    const raining =
+        precipitation > 0 ||
+        rainCodes.includes(code);
+
+
+    if (raining) {
+
+        el.rainNow.classList.remove(
+            "hidden"
+        );
+
+        el.rainNow.textContent =
+            "🌧️ Opady teraz: " +
+            number(
+                precipitation,
+                1
+            ) +
+            " mm";
+
+    } else {
+
+        el.rainNow.classList.add(
+            "hidden"
+        );
+    }
+
+
+    // KARTY
+    const visibility =
+        currentVisibility();
+
+
+    const cards = [
+
+        [
+            "💧",
+            "Wilgotność",
+            number(
+                current.relative_humidity_2m
+            ) + "%",
+            "Aktualna"
+        ],
+
+        [
+            "💨",
+            "Wiatr",
+            number(
+                current.wind_speed_10m
+            ) + " km/h",
+            windDirection(
+                current.wind_direction_10m
+            )
+        ],
+
+        [
+            "🌬️",
+            "Porywy",
+            number(
+                current.wind_gusts_10m
+            ) + " km/h",
+            "Maksymalny poryw"
+        ],
+
+        [
+            "🧭",
+            "Kierunek wiatru",
+            windDirection(
+                current.wind_direction_10m
+            ),
+            number(
+                current.wind_direction_10m
+            ) + "°"
+        ],
+
+        [
+            "🌡️",
+            "Punkt rosy",
+            number(
+                current.dew_point_2m
+            ) + "°C",
+            ""
+        ],
+
+        [
+            "☁️",
+            "Zachmurzenie",
+            number(
+                current.cloud_cover
+            ) + "%",
+            ""
+        ],
+
+        [
+            "📊",
+            "Ciśnienie",
+            number(
+                current.pressure_msl
+            ) + " hPa",
+            ""
+        ],
+
+        [
+            "👁️",
+            "Widoczność",
+            visibility === null
+                ? "--"
+                : number(
+                    visibility / 1000,
+                    1
+                ) + " km",
+            "Aktualna"
+        ],
+
+        [
+            "🌧️",
+            "Opad",
+            number(
+                current.precipitation,
+                1
+            ) + " mm",
+            "Teraz"
+        ],
+
+        [
+            "☀️",
+            "UV",
+            number(
+                daily.uv_index_max[0],
+                1
+            ),
+            "Maksymalny dzisiaj"
+        ],
+
+        [
+            "❄️",
+            "Śnieg",
+            number(
+                current.snowfall,
+                1
+            ) + " cm",
+            "Teraz"
+        ],
+
+        [
+            "🌡️",
+            "Odczuwalna",
+            number(
+                current.apparent_temperature
+            ) + "°C",
+            ""
+        ]
+    ];
+
+
+    el.statsGrid.innerHTML =
+        cards
+            .map(card => `
+
+                <div class="stat">
+
+                    <div class="stat-icon">
+                        ${card[0]}
+                    </div>
+
+                    <div class="stat-label">
+                        ${card[1]}
+                    </div>
+
+                    <div class="stat-value">
+                        ${card[2]}
+                    </div>
+
+                    <div class="stat-sub">
+                        ${card[3]}
+                    </div>
+
+                </div>
+
+            `)
+            .join("");
+
+
+    renderHourly();
+    renderDaily();
+    renderDayDetails(0);
+}
+
+
+// ==============================
+// GODZINY
+// ==============================
+
+function renderHourly() {
+
+    const h =
+        weather.hourly;
+
+    const start =
+        currentHourIndex();
+
+    const end =
+        Math.min(
+            start + 48,
+            h.time.length
+        );
+
+
+    let html = "";
+
+
+    for (
+        let i = start;
+        i < end;
+        i++
+    ) {
+
+        const probability =
+            Number(
+                h.precipitation_probability?.[i]
+                ?? 0
+            );
+
+
+        html += `
+
+            <div class="hour">
+
+                <div class="hour-time">
+                    ${
+                        i === start
+                            ? "Teraz"
+                            : formatTime(h.time[i])
+                    }
+                </div>
+
+                <div class="hour-icon">
+                    ${weatherIcon(
+                        h.weather_code[i]
+                    )}
+                </div>
+
+                <div class="hour-temp">
+                    ${number(
+                        h.temperature_2m[i]
+                    )}°
+                </div>
+
+                ${
+                    probability > 0
+                    ?
+                    `<div class="hour-rain">
+                        💧 ${probability}%
+                    </div>`
+                    :
+                    `<div class="hour-rain">
+                    </div>`
+                }
+
+                <div class="hour-wind">
+                    💨 ${number(
+                        h.wind_speed_10m[i]
+                    )} km/h
+                </div>
+
+            </div>
+
+        `;
+    }
+
+
+    el.hourly.innerHTML =
+        html;
+}
+
+
+// ==============================
+// 14 DNI
+// ==============================
+
+function renderDaily() {
+
+    const d =
+        weather.daily;
+
+
+    el.daily.innerHTML =
+        d.time
+            .map((day, i) => {
+
+                const probability =
+                    Number(
+                        d.precipitation_probability_max[i]
+                        ?? 0
+                    );
+
+
+                const hasRain =
+                    probability > 0 ||
+                    Number(
+                        d.precipitation_sum[i]
+                        ?? 0
+                    ) > 0;
+
+
+                return `
+
+                    <div
+                        class="day ${
+                            i === selectedDay
+                                ? "selected"
+                                : ""
+                        }"
+                        data-day="${i}"
+                    >
+
+                        <div class="day-date">
+
+                            ${
+                                i === 0
+                                    ? "Dzisiaj"
+                                    : formatDate(
+                                        day,
+                                        {
+                                            weekday:"short"
+                                        }
+                                    )
+                            }
+
+                            <small>
+                                ${formatDate(
+                                    day,
+                                    {
+                                        day:"numeric",
+                                        month:"short"
+                                    }
+                                )}
+                            </small>
+
+                        </div>
+
+
+                        <div class="day-icon">
+
+                            ${weatherIcon(
+                                d.weather_code[i]
+                            )}
+
+                        </div>
+
+
+                        <div class="day-temp">
+
+                            ${number(
+                                d.temperature_2m_min[i]
+                            )}°
+
+                            /
+
+                            <b>
+                                ${number(
+                                    d.temperature_2m_max[i]
+      
