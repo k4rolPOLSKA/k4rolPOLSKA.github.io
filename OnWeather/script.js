@@ -1,98 +1,150 @@
-const API = "https://api.open-meteo.com/v1/forecast";
-const GEO = "https://geocoding-api.open-meteo.com/v1/search";
+const API =
+    "https://api.open-meteo.com/v1/forecast";
+
+const GEO =
+    "https://geocoding-api.open-meteo.com/v1/search";
+
 
 let weather = null;
-let selectedLocation = null;
+
+let locationData = null;
+
 let selectedDay = 0;
 
-const $ = id => document.getElementById(id);
 
-const el = {
+const $ = id =>
+    document.getElementById(id);
+
+
+const ui = {
+
     status: $("status"),
+
     cityInput: $("cityInput"),
+
     searchBtn: $("searchBtn"),
+
     searchResults: $("searchResults"),
+
     locationBtn: $("locationBtn"),
+
     refreshBtn: $("refreshBtn"),
 
     locationName: $("locationName"),
+
     updatedAt: $("updatedAt"),
 
     currentIcon: $("currentIcon"),
+
     currentTemp: $("currentTemp"),
+
     currentCondition: $("currentCondition"),
+
     feelsLike: $("feelsLike"),
 
     sunrise: $("sunrise"),
+
     sunset: $("sunset"),
 
     rainNow: $("rainNow"),
 
     statsGrid: $("statsGrid"),
+
     hourly: $("hourly"),
+
     daily: $("daily"),
-    dayDetails: $("dayDetails"),
-    selectedDayLabel: $("selectedDayLabel")
+
+    selectedDayLabel:
+        $("selectedDayLabel"),
+
+    dayDetails:
+        $("dayDetails")
 };
 
 
-// ==============================
-// POGODA
-// ==============================
+/* =========================
+   KODY POGODOWE
+========================= */
 
-const WEATHER = {
+const weatherCodes = {
 
     0: ["☀️", "Bezchmurnie"],
+
     1: ["🌤️", "Przeważnie bezchmurnie"],
+
     2: ["⛅", "Częściowe zachmurzenie"],
+
     3: ["☁️", "Pochmurnie"],
 
     45: ["🌫️", "Mgła"],
+
     48: ["🌫️", "Mgła"],
 
     51: ["🌦️", "Lekka mżawka"],
+
     53: ["🌦️", "Mżawka"],
+
     55: ["🌧️", "Silna mżawka"],
 
     56: ["🌧️", "Marznąca mżawka"],
+
     57: ["🌧️", "Silna marznąca mżawka"],
 
     61: ["🌧️", "Lekki deszcz"],
+
     63: ["🌧️", "Deszcz"],
+
     65: ["🌧️", "Silny deszcz"],
 
     66: ["🌧️", "Marznący deszcz"],
+
     67: ["🌧️", "Silny marznący deszcz"],
 
     71: ["🌨️", "Lekki śnieg"],
+
     73: ["🌨️", "Śnieg"],
+
     75: ["❄️", "Silny śnieg"],
+
     77: ["🌨️", "Ziarna śnieżne"],
 
     80: ["🌦️", "Przelotne opady"],
+
     81: ["🌧️", "Przelotne opady"],
+
     82: ["⛈️", "Silne przelotne opady"],
 
     85: ["🌨️", "Przelotny śnieg"],
+
     86: ["❄️", "Silny śnieg"],
 
     95: ["⛈️", "Burza"],
+
     96: ["⛈️", "Burza z gradem"],
+
     99: ["⛈️", "Silna burza z gradem"]
 };
 
 
-function weatherIcon(code) {
-    return WEATHER[code]?.[0] || "🌤️";
+function icon(code) {
+
+    return weatherCodes[code]?.[0]
+        || "🌤️";
 }
 
 
-function weatherDescription(code) {
-    return WEATHER[code]?.[1] || "Warunki pogodowe";
+function description(code) {
+
+    return weatherCodes[code]?.[1]
+        || "Warunki pogodowe";
 }
 
 
-function number(value, decimals = 0) {
+/* =========================
+   FUNKCJE
+========================= */
+
+function num(value, decimals = 0) {
 
     if (
         value === null ||
@@ -102,25 +154,30 @@ function number(value, decimals = 0) {
         return "--";
     }
 
-    return Number(value).toFixed(decimals);
-}
-
-
-function formatTime(value) {
-
-    if (!value) return "--:--";
-
-    return new Date(value).toLocaleTimeString(
-        "pl-PL",
-        {
-            hour: "2-digit",
-            minute: "2-digit"
-        }
+    return Number(value).toFixed(
+        decimals
     );
 }
 
 
-function formatDate(value, options) {
+function time(value) {
+
+    if (!value) {
+        return "--:--";
+    }
+
+    return new Date(value)
+        .toLocaleTimeString(
+            "pl-PL",
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+}
+
+
+function date(value, options) {
 
     return new Date(
         value + "T12:00:00"
@@ -140,7 +197,7 @@ function windDirection(degrees) {
         return "--";
     }
 
-    const directions = [
+    const dirs = [
         "N",
         "NE",
         "E",
@@ -151,160 +208,46 @@ function windDirection(degrees) {
         "NW"
     ];
 
-    return directions[
-        Math.round((Number(degrees) % 360) / 45) % 8
+    return dirs[
+        Math.round(
+            Number(degrees) / 45
+        ) % 8
     ];
 }
 
 
-// ==============================
-// STATUS
-// ==============================
+function status(text, error = false) {
 
-function setStatus(text, error = false) {
+    ui.status.textContent = text;
 
-    if (!el.status) return;
-
-    el.status.textContent = text;
-
-    el.status.className =
+    ui.status.className =
         error
             ? "status error"
             : "status";
 }
 
 
-// ==============================
-// SZUKANIE MIASTA
-// ==============================
+/* =========================
+   API
+========================= */
 
-async function searchCity() {
-
-    const city = el.cityInput.value.trim();
-
-    if (!city) return;
-
-    setStatus("🔎 Szukam miasta...");
-
-    try {
-
-        const response = await fetch(
-            GEO +
-            "?name=" +
-            encodeURIComponent(city) +
-            "&count=8" +
-            "&language=pl" +
-            "&format=json"
-        );
-
-        if (!response.ok) {
-            throw new Error("Geocoding error");
-        }
-
-        const data = await response.json();
-
-        el.searchResults.innerHTML = "";
-
-        if (!data.results || data.results.length === 0) {
-
-            setStatus(
-                "❌ Nie znaleziono miasta.",
-                true
-            );
-
-            return;
-        }
-
-        data.results.forEach(place => {
-
-            const item =
-                document.createElement("div");
-
-            item.className = "result";
-
-            item.innerHTML = `
-                <b>${place.name}</b>
-                <br>
-                <small>
-                    ${place.admin1 || ""}
-                    ${place.country ? ", " + place.country : ""}
-                </small>
-            `;
-
-            item.onclick = () => {
-
-                el.searchResults.innerHTML = "";
-
-                el.cityInput.value =
-                    place.name;
-
-                loadWeather(
-                    place.latitude,
-                    place.longitude,
-                    place.name,
-                    place.country_code || ""
-                );
-            };
-
-            el.searchResults.appendChild(item);
-        });
-
-        setStatus(
-            "Wybierz lokalizację z listy."
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        setStatus(
-            "❌ Nie można wyszukać miasta.",
-            true
-        );
-    }
-}
-
-
-// ==============================
-// POBIERANIE POGODY
-// ==============================
-
-async function loadWeather(
-    latitude,
-    longitude,
-    cityName,
-    country
+async function getWeather(
+    lat,
+    lon,
+    name,
+    country = ""
 ) {
 
-    setStatus(
-        "🌦️ Pobieram aktualną pogodę..."
+    status(
+        "🌦️ Pobieram dane pogodowe..."
     );
 
-    selectedLocation = {
-        latitude,
-        longitude,
-        cityName,
-        country
-    };
-
-    localStorage.setItem(
-        "onweather-location",
-        JSON.stringify(selectedLocation)
-    );
-
-    /*
-       WAŻNE:
-
-       visibility NIE znajduje się tutaj.
-
-       visibility pobieramy niżej
-       w hourly.
-    */
 
     const params = new URLSearchParams({
 
-        latitude: latitude,
-        longitude: longitude,
+        latitude: lat,
+
+        longitude: lon,
 
         timezone: "auto",
 
@@ -371,18 +314,13 @@ async function loadWeather(
 
         const response =
             await fetch(
-                API + "?" + params.toString()
+                API +
+                "?" +
+                params.toString()
             );
+
 
         if (!response.ok) {
-
-            const errorText =
-                await response.text();
-
-            console.error(
-                "Open-Meteo:",
-                errorText
-            );
 
             throw new Error(
                 "API HTTP " +
@@ -390,14 +328,10 @@ async function loadWeather(
             );
         }
 
+
         const data =
             await response.json();
 
-
-        /*
-           SPRAWDZAMY CZY API
-           NAPRAWDĘ ZWRÓCIŁO DANE
-        */
 
         if (
             !data.current ||
@@ -406,294 +340,260 @@ async function loadWeather(
         ) {
 
             throw new Error(
-                "Brak danych current/hourly/daily"
+                "API nie zwróciło kompletnych danych."
             );
         }
 
 
         weather = data;
 
-        weather.cityName =
-            cityName;
 
-        weather.country =
-            country;
+        locationData = {
+
+            lat,
+
+            lon,
+
+            name,
+
+            country
+        };
+
+
+        localStorage.setItem(
+            "onweather-location",
+            JSON.stringify(
+                locationData
+            )
+        );
 
 
         selectedDay = 0;
 
 
-        renderWeather();
+        render();
 
 
-        setStatus(
-            "✅ Pogoda zaktualizowana • " +
-            formatTime(data.current.time)
+        status(
+            "✅ Dane pogodowe zaktualizowane • " +
+            time(data.current.time)
         );
 
 
     } catch (error) {
 
         console.error(
-            "ONWEATHER ERROR:",
+            "OnWeather:",
             error
         );
 
-        setStatus(
-            "❌ Nie udało się pobrać danych pogodowych.",
+
+        status(
+            "❌ Błąd pobierania pogody. Sprawdź internet.",
             true
         );
-
-        /*
-           Próba prostego API awaryjnego
-        */
-
-        try {
-
-            const fallback =
-                await fetch(
-                    `${API}?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&timezone=auto`
-                );
-
-            if (fallback.ok) {
-
-                const basic =
-                    await fallback.json();
-
-                if (
-                    basic.current &&
-                    basic.current.temperature_2m !== undefined
-                ) {
-
-                    el.currentTemp.textContent =
-                        number(
-                            basic.current.temperature_2m
-                        );
-
-                    el.currentIcon.textContent =
-                        weatherIcon(
-                            basic.current.weather_code
-                        );
-
-                    el.currentCondition.textContent =
-                        weatherDescription(
-                            basic.current.weather_code
-                        );
-
-                    setStatus(
-                        "⚠️ Działa tryb awaryjny. Odśwież stronę, aby pobrać pełne dane."
-                    );
-                }
-            }
-
-        } catch (fallbackError) {
-
-            console.error(
-                fallbackError
-            );
-        }
     }
 }
 
 
-// ==============================
-// AKTUALNA GODZINA
-// ==============================
+/* =========================
+   AKTUALNA GODZINA
+========================= */
 
-function currentHourIndex() {
+function hourIndex() {
 
-    if (
-        !weather ||
-        !weather.hourly
-    ) {
+    if (!weather) {
         return 0;
     }
 
-    const times =
-        weather.hourly.time;
 
-    const currentTime =
+    const current =
         new Date(
             weather.current.time
         ).getTime();
 
+
     let index =
-        times.findIndex(
-            time =>
-                new Date(time).getTime()
-                >= currentTime
+        weather.hourly.time.findIndex(
+            t =>
+                new Date(t).getTime()
+                >= current
         );
+
 
     if (index < 0) {
         index = 0;
     }
 
+
     return index;
 }
 
 
-function currentVisibility() {
+/* =========================
+   RENDER GŁÓWNY
+========================= */
 
-    const index =
-        currentHourIndex();
+function render() {
 
-    return (
-        weather.hourly.visibility?.[index]
-        ?? null
-    );
-}
-
-
-// ==============================
-// RENDER
-// ==============================
-
-function renderWeather() {
-
-    const current =
+    const c =
         weather.current;
 
-    const daily =
+    const d =
         weather.daily;
 
 
-    el.locationName.textContent =
-        weather.cityName +
+    ui.locationName.textContent =
+        locationData.name +
         (
-            weather.country
-                ? " • " + weather.country
+            locationData.country
+                ? " • " +
+                  locationData.country
                 : ""
         );
 
 
-    el.updatedAt.textContent =
-        "Dane: " +
-        formatTime(current.time) +
+    ui.updatedAt.textContent =
+        "Aktualizacja: " +
+        time(c.time) +
         " • " +
         weather.timezone;
 
 
-    // TEMPERATURA
-    el.currentTemp.textContent =
-        number(
-            current.temperature_2m
+    ui.currentTemp.textContent =
+        num(
+            c.temperature_2m
         );
 
 
-    // IKONA
-    el.currentIcon.textContent =
-        weatherIcon(
-            current.weather_code
+    ui.currentIcon.textContent =
+        icon(
+            c.weather_code
         );
 
 
-    // OPIS
-    el.currentCondition.textContent =
-        weatherDescription(
-            current.weather_code
+    ui.currentCondition.textContent =
+        description(
+            c.weather_code
         );
 
 
-    // ODCZUWALNA
-    el.feelsLike.textContent =
-        number(
-            current.apparent_temperature
+    ui.feelsLike.textContent =
+        num(
+            c.apparent_temperature
         );
 
 
-    // WSCHÓD
-    el.sunrise.textContent =
-        formatTime(
-            daily.sunrise[0]
+    ui.sunrise.textContent =
+        time(
+            d.sunrise[0]
         );
 
 
-    // ZACHÓD
-    el.sunset.textContent =
-        formatTime(
-            daily.sunset[0]
+    ui.sunset.textContent =
+        time(
+            d.sunset[0]
         );
 
 
-    // DESZCZ
-    const precipitation =
-        Number(
-            current.precipitation || 0
+    const isRain =
+        Number(c.precipitation || 0) > 0 ||
+        [
+            51,53,55,
+            56,57,
+            61,63,65,
+            66,67,
+            80,81,82,
+            95,96,99
+        ].includes(
+            Number(c.weather_code)
         );
 
-    const code =
-        Number(
-            current.weather_code
-        );
 
-    const rainCodes = [
-        51,53,55,
-        56,57,
-        61,63,65,
-        66,67,
-        80,81,82,
-        95,96,99
-    ];
+    if (isRain) {
 
-    const raining =
-        precipitation > 0 ||
-        rainCodes.includes(code);
-
-
-    if (raining) {
-
-        el.rainNow.classList.remove(
+        ui.rainNow.classList.remove(
             "hidden"
         );
 
-        el.rainNow.textContent =
+
+        ui.rainNow.textContent =
             "🌧️ Opady teraz: " +
-            number(
-                precipitation,
+            num(
+                c.precipitation,
                 1
             ) +
             " mm";
 
     } else {
 
-        el.rainNow.classList.add(
+        ui.rainNow.classList.add(
             "hidden"
         );
     }
 
 
-    // KARTY
+    renderStats();
+
+    renderHourly();
+
+    renderDaily();
+
+    renderDetails(
+        selectedDay
+    );
+}
+
+
+/* =========================
+   STATYSTYKI
+========================= */
+
+function renderStats() {
+
+    const c =
+        weather.current;
+
+    const h =
+        weather.hourly;
+
+    const d =
+        weather.daily;
+
+
+    const index =
+        hourIndex();
+
+
     const visibility =
-        currentVisibility();
+        h.visibility?.[index];
 
 
-    const cards = [
+    const stats = [
 
         [
             "💧",
             "Wilgotność",
-            number(
-                current.relative_humidity_2m
+            num(
+                c.relative_humidity_2m
             ) + "%",
-            "Aktualna"
+            "Aktualnie"
         ],
 
         [
             "💨",
             "Wiatr",
-            number(
-                current.wind_speed_10m
+            num(
+                c.wind_speed_10m
             ) + " km/h",
-            windDirection(
-                current.wind_direction_10m
-            )
+            "Prędkość"
         ],
 
         [
             "🌬️",
             "Porywy",
-            number(
-                current.wind_gusts_10m
+            num(
+                c.wind_gusts_10m
             ) + " km/h",
             "Maksymalny poryw"
         ],
@@ -702,18 +602,18 @@ function renderWeather() {
             "🧭",
             "Kierunek wiatru",
             windDirection(
-                current.wind_direction_10m
+                c.wind_direction_10m
             ),
-            number(
-                current.wind_direction_10m
+            num(
+                c.wind_direction_10m
             ) + "°"
         ],
 
         [
             "🌡️",
             "Punkt rosy",
-            number(
-                current.dew_point_2m
+            num(
+                c.dew_point_2m
             ) + "°C",
             ""
         ],
@@ -721,8 +621,8 @@ function renderWeather() {
         [
             "☁️",
             "Zachmurzenie",
-            number(
-                current.cloud_cover
+            num(
+                c.cloud_cover
             ) + "%",
             ""
         ],
@@ -730,8 +630,8 @@ function renderWeather() {
         [
             "📊",
             "Ciśnienie",
-            number(
-                current.pressure_msl
+            num(
+                c.pressure_msl
             ) + " hPa",
             ""
         ],
@@ -739,20 +639,20 @@ function renderWeather() {
         [
             "👁️",
             "Widoczność",
-            visibility === null
+            visibility == null
                 ? "--"
-                : number(
+                : num(
                     visibility / 1000,
                     1
                 ) + " km",
-            "Aktualna"
+            "Aktualnie"
         ],
 
         [
             "🌧️",
             "Opad",
-            number(
-                current.precipitation,
+            num(
+                c.precipitation,
                 1
             ) + " mm",
             "Teraz"
@@ -761,18 +661,18 @@ function renderWeather() {
         [
             "☀️",
             "UV",
-            number(
-                daily.uv_index_max[0],
+            num(
+                d.uv_index_max[0],
                 1
             ),
-            "Maksymalny dzisiaj"
+            "Maks. dzisiaj"
         ],
 
         [
             "❄️",
             "Śnieg",
-            number(
-                current.snowfall,
+            num(
+                c.snowfall,
                 1
             ) + " cm",
             "Teraz"
@@ -781,65 +681,55 @@ function renderWeather() {
         [
             "🌡️",
             "Odczuwalna",
-            number(
-                current.apparent_temperature
+            num(
+                c.apparent_temperature
             ) + "°C",
             ""
         ]
     ];
 
 
-    el.statsGrid.innerHTML =
-        cards
-            .map(card => `
+    ui.statsGrid.innerHTML =
+        stats.map(
+            s => `
 
                 <div class="stat">
 
                     <div class="stat-icon">
-                        ${card[0]}
+                        ${s[0]}
                     </div>
 
                     <div class="stat-label">
-                        ${card[1]}
+                        ${s[1]}
                     </div>
 
                     <div class="stat-value">
-                        ${card[2]}
+                        ${s[2]}
                     </div>
 
                     <div class="stat-sub">
-                        ${card[3]}
+                        ${s[3]}
                     </div>
 
                 </div>
 
-            `)
-            .join("");
-
-
-    renderHourly();
-    renderDaily();
-    renderDayDetails(0);
+            `
+        ).join("");
 }
 
 
-// ==============================
-// GODZINY
-// ==============================
+/* =========================
+   GODZINOWA
+========================= */
 
 function renderHourly() {
 
     const h =
         weather.hourly;
 
-    const start =
-        currentHourIndex();
 
-    const end =
-        Math.min(
-            start + 48,
-            h.time.length
-        );
+    const start =
+        hourIndex();
 
 
     let html = "";
@@ -847,11 +737,12 @@ function renderHourly() {
 
     for (
         let i = start;
-        i < end;
+        i < start + 48 &&
+        i < h.time.length;
         i++
     ) {
 
-        const probability =
+        const rain =
             Number(
                 h.precipitation_probability?.[i]
                 ?? 0
@@ -866,37 +757,36 @@ function renderHourly() {
                     ${
                         i === start
                             ? "Teraz"
-                            : formatTime(h.time[i])
+                            : time(h.time[i])
                     }
                 </div>
 
                 <div class="hour-icon">
-                    ${weatherIcon(
+                    ${icon(
                         h.weather_code[i]
                     )}
                 </div>
 
                 <div class="hour-temp">
-                    ${number(
+                    ${num(
                         h.temperature_2m[i]
                     )}°
                 </div>
 
-                ${
-                    probability > 0
-                    ?
-                    `<div class="hour-rain">
-                        💧 ${probability}%
-                    </div>`
-                    :
-                    `<div class="hour-rain">
-                    </div>`
-                }
+                <div class="hour-rain">
+                    ${
+                        rain > 0
+                            ? "💧 " + rain + "%"
+                            : ""
+                    }
+                </div>
 
                 <div class="hour-wind">
-                    💨 ${number(
+                    💨
+                    ${num(
                         h.wind_speed_10m[i]
-                    )} km/h
+                    )}
+                    km/h
                 </div>
 
             </div>
@@ -905,14 +795,14 @@ function renderHourly() {
     }
 
 
-    el.hourly.innerHTML =
+    ui.hourly.innerHTML =
         html;
 }
 
 
-// ==============================
-// 14 DNI
-// ==============================
+/* =========================
+   14 DNI
+========================= */
 
 function renderDaily() {
 
@@ -920,23 +810,27 @@ function renderDaily() {
         weather.daily;
 
 
-    el.daily.innerHTML =
-        d.time
-            .map((day, i) => {
+    ui.daily.innerHTML =
+        d.time.map(
+            (day, i) => {
 
-                const probability =
+                const rain =
                     Number(
                         d.precipitation_probability_max[i]
                         ?? 0
                     );
 
 
-                const hasRain =
-                    probability > 0 ||
+                const precipitation =
                     Number(
                         d.precipitation_sum[i]
                         ?? 0
-                    ) > 0;
+                    );
+
+
+                const hasRain =
+                    rain > 0 ||
+                    precipitation > 0;
 
 
                 return `
@@ -955,20 +849,23 @@ function renderDaily() {
                             ${
                                 i === 0
                                     ? "Dzisiaj"
-                                    : formatDate(
+                                    : date(
                                         day,
                                         {
-                                            weekday:"short"
+                                            weekday:
+                                                "short"
                                         }
                                     )
                             }
 
                             <small>
-                                ${formatDate(
+                                ${date(
                                     day,
                                     {
-                                        day:"numeric",
-                                        month:"short"
+                                        day:
+                                            "numeric",
+                                        month:
+                                            "short"
                                     }
                                 )}
                             </small>
@@ -978,7 +875,7 @@ function renderDaily() {
 
                         <div class="day-icon">
 
-                            ${weatherIcon(
+                            ${icon(
                                 d.weather_code[i]
                             )}
 
@@ -987,13 +884,217 @@ function renderDaily() {
 
                         <div class="day-temp">
 
-                            ${number(
+                            ${num(
                                 d.temperature_2m_min[i]
                             )}°
 
                             /
 
                             <b>
-                                ${number(
+                                ${num(
                                     d.temperature_2m_max[i]
-      
+                                )}°
+                            </b>
+
+                        </div>
+
+
+                        <div class="day-rain">
+
+                            ${
+                                hasRain
+                                    ? "💧 " +
+                                      rain +
+                                      "%"
+                                    : "☀️ Brak opadów"
+                            }
+
+                        </div>
+
+
+                        <div class="day-wind">
+
+                            💨
+                            ${num(
+                                d.wind_speed_10m_max[i]
+                            )}
+                            km/h
+
+                            <br>
+
+                            🧭
+                            ${windDirection(
+                                d.wind_direction_10m_dominant[i]
+                            )}
+
+                        </div>
+
+                    </div>
+
+                `;
+            }
+        ).join("");
+
+
+    document
+        .querySelectorAll(".day")
+        .forEach(day => {
+
+            day.addEventListener(
+                "click",
+                () => {
+
+                    selectedDay =
+                        Number(
+                            day.dataset.day
+                        );
+
+
+                    renderDaily();
+
+                    renderDetails(
+                        selectedDay
+                    );
+                }
+            );
+
+        });
+}
+
+
+/* =========================
+   SZCZEGÓŁY DNIA
+========================= */
+
+function renderDetails(index) {
+
+    const d =
+        weather.daily;
+
+
+    ui.selectedDayLabel.textContent =
+        date(
+            d.time[index],
+            {
+                weekday: "long",
+                day: "numeric",
+                month: "long"
+            }
+        );
+
+
+    const items = [
+
+        [
+            "🌡️",
+            "Temperatura",
+            `${num(
+                d.temperature_2m_min[index]
+            )}°C — ${num(
+                d.temperature_2m_max[index]
+            )}°C`
+        ],
+
+        [
+            "🌡️",
+            "Odczuwalna",
+            `${num(
+                d.apparent_temperature_min[index]
+            )}°C — ${num(
+                d.apparent_temperature_max[index]
+            )}°C`
+        ],
+
+        [
+            "🌧️",
+            "Szansa opadów",
+            num(
+                d.precipitation_probability_max[index]
+            ) + "%"
+        ],
+
+        [
+            "💧",
+            "Suma opadów",
+            num(
+                d.precipitation_sum[index],
+                1
+            ) + " mm"
+        ],
+
+        [
+            "☀️",
+            "UV",
+            num(
+                d.uv_index_max[index],
+                1
+            )
+        ],
+
+        [
+            "🌅",
+            "Wschód",
+            time(
+                d.sunrise[index]
+            )
+        ],
+
+        [
+            "🌇",
+            "Zachód",
+            time(
+                d.sunset[index]
+            )
+        ],
+
+        [
+            "💨",
+            "Maks. wiatr",
+            num(
+                d.wind_speed_10m_max[index]
+            ) + " km/h"
+        ],
+
+        [
+            "🌬️",
+            "Maks. porywy",
+            num(
+                d.wind_gusts_10m_max[index]
+            ) + " km/h"
+        ],
+
+        [
+            "🧭",
+            "Dominujący kierunek",
+            windDirection(
+                d.wind_direction_10m_dominant[index]
+            )
+        ],
+
+        [
+            "☀️",
+            "Nasłonecznienie",
+            num(
+                d.sunshine_duration[index] / 3600,
+                1
+            ) + " h"
+        ],
+
+        [
+            "🌤️",
+            "Długość dnia",
+            num(
+                d.daylight_duration[index] / 3600,
+                1
+            ) + " h"
+        ]
+    ];
+
+
+    ui.dayDetails.innerHTML = `
+
+        <div class="detail-grid">
+
+            ${
+                items.map(
+         
