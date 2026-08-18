@@ -2,12 +2,18 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="theme-color" content="#07111f">
-    <meta name="description" content="OnWeather 4.0 - profesjonalna pogoda na żywo">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>OnWeather 4.1</title>
+    <meta
+        name="theme-color"
+        content="#061525"
+    >
+
+    <title>OnWeather 4.1 PRO</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -17,25 +23,34 @@
 <header class="topbar">
 
     <div class="brand">
-        <div class="brand-icon">🌤️</div>
-        <div>
-            <strong>OnWeather</strong>
-            <small>4.1 GO</small>
+
+        <div class="brand-icon">
+            🌤️
         </div>
+
+        <div>
+            <h1>OnWeather</h1>
+            <span>4.1 PRO</span>
+        </div>
+
     </div>
 
     <div class="top-actions">
 
-        <button id="gpsBtn" title="Moja lokalizacja">
+        <button
+            id="locationBtn"
+            class="top-button"
+            title="Moja lokalizacja"
+        >
             📍
         </button>
 
-        <button id="refreshBtn" title="Odśwież">
+        <button
+            id="refreshBtn"
+            class="top-button"
+            title="Odśwież"
+        >
             ↻
-        </button>
-
-        <button id="settingsBtn" title="Ustawienia">
-            ⚙️
         </button>
 
     </div>
@@ -43,598 +58,267 @@
 </header>
 
 
-<main>
+<main class="container">
 
-    <!-- SEARCH -->
+    <!-- STATUS -->
 
-    <section class="search-section">
+    <div id="status" class="status">
+        🌦️ Uruchamianie OnWeather...
+    </div>
 
-        <div class="search-box">
 
-            <span>🔎</span>
+    <!-- WYSZUKIWARKA -->
 
-            <input
-                id="cityInput"
-                type="text"
-                autocomplete="off"
-                placeholder="Wyszukaj miasto..."
-            >
+    <section class="search-box">
 
-            <button id="searchBtn">
-                Szukaj
-            </button>
+        <input
+            id="cityInput"
+            type="text"
+            placeholder="🔎 Wpisz miasto..."
+            autocomplete="off"
+        >
+
+        <button id="searchBtn">
+            Szukaj
+        </button>
+
+    </section>
+
+    <div
+        id="searchResults"
+        class="search-results"
+    ></div>
+
+
+    <!-- LOKALIZACJA -->
+
+    <section class="location-header">
+
+        <div>
+
+            <h2 id="locationName">
+                Pobieranie lokalizacji...
+            </h2>
+
+            <p id="updatedAt">
+                --
+            </p>
 
         </div>
-
-        <div id="searchResults"></div>
 
     </section>
 
 
-    <!-- LOADING -->
+    <!-- AKTUALNA POGODA -->
 
-    <div id="loading" class="loading hidden">
-        <div class="spinner"></div>
-        <span>Pobieranie pogody...</span>
-    </div>
+    <section class="current-weather">
 
+        <div class="current-main">
 
-    <!-- ERROR -->
-
-    <div id="errorBox" class="error hidden"></div>
-
-
-    <!-- WEATHER -->
-
-    <div id="weatherApp">
-
-
-        <!-- HERO -->
-
-        <section class="hero">
-
-            <div class="hero-left">
-
-                <div class="location-line">
-
-                    <span>📍</span>
-
-                    <div>
-                        <h1 id="cityName">Warszawa</h1>
-                        <p id="countryName">Polska</p>
-                    </div>
-
-                </div>
-
-
-                <p id="currentDate" class="current-date">
-                    -
-                </p>
-
-
-                <div class="current-temperature">
-
-                    <span id="currentTemp">
-                        --
-                    </span>
-
-                    <sup>°C</sup>
-
-                </div>
-
-
-                <h2 id="weatherDescription">
-                    -
-                </h2>
-
-
-                <p class="feels">
-
-                    Odczuwalna:
-
-                    <strong id="feelsLike">
-                        --°C
-                    </strong>
-
-                </p>
-
-
-                <div id="weatherBadges" class="badges"></div>
-
-            </div>
-
-
-            <div class="hero-right">
-
-                <div
-                    id="weatherIcon"
-                    class="weather-icon"
-                >
-                    🌤️
-                </div>
-
-
-                <div class="sun-info">
-
-                    <div>
-
-                        <span>🌅</span>
-
-                        <small>
-                            Wschód
-                        </small>
-
-                        <strong id="sunrise">
-                            --:--
-                        </strong>
-
-                    </div>
-
-
-                    <div>
-
-                        <span>🌇</span>
-
-                        <small>
-                            Zachód
-                        </small>
-
-                        <strong id="sunset">
-                            --:--
-                        </strong>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ALERT -->
-
-        <section id="alertSection" class="alert-section hidden">
-
-            <div class="alert-icon">
-                ⚠️
+            <div
+                id="currentIcon"
+                class="current-icon"
+            >
+                🌤️
             </div>
 
             <div>
-                <strong id="alertTitle">
-                    Uwaga
-                </strong>
 
-                <p id="alertText">
-                    -
-                </p>
-            </div>
-
-        </section>
-
-
-        <!-- CURRENT CONDITIONS -->
-
-        <section>
-
-            <div class="section-title">
-
-                <div>
-                    <h2>Warunki teraz</h2>
-                    <p>Aktualne dane pogodowe</p>
+                <div class="temperature">
+                    <span id="currentTemp">--</span>°C
                 </div>
 
-                <span id="lastUpdate">
+                <div
+                    id="currentCondition"
+                    class="condition"
+                >
                     --
-                </span>
+                </div>
 
-            </div>
-
-
-            <div class="stats-grid">
-
-                <article class="stat-card">
-                    <span>💧</span>
-                    <small>Wilgotność</small>
-                    <strong id="humidity">--%</strong>
-                </article>
-
-                <article class="stat-card">
-                    <span>💨</span>
-                    <small>Wiatr</small>
-                    <strong id="wind">-- km/h</strong>
-                </article>
-
-                <article class="stat-card">
-                    <span>💨</span>
-                    <small>Porywy</small>
-                    <strong id="gust">-- km/h</strong>
-                </article>
-
-                <article class="stat-card">
-                    <span>🧭</span>
-                    <small>Kierunek wiatru</small>
-                    <strong id="windDirection">--</strong>
-                </article>
-
-                <article class="stat-card">
-                    <span>🌡️</span>
-                    <small>Punkt rosy</small>
-                    <strong id="dewPoint">--°C</strong>
-                </article>
-
-                <article class="stat-card">
-                    <span>☁️</span>
-                    <small>Zachmurzenie</small>
-                    <strong id="clouds">--%</strong>
-                </article>
-
-                <article class="stat-card">
-                    <span>🔽</span>
-                    <small>Ciśnienie</small>
-                    <strong id="pressure">-- hPa</strong>
-                </article>
-
-                <article class="stat-card">
-                    <span>👁️</span>
-                    <small>Widoczność</small>
-                    <strong id="visibility">-- km</strong>
-                </article>
-
-                <article class="stat-card">
-                    <span>☀️</span>
-                    <small>Indeks UV</small>
-                    <strong id="uv">--</strong>
-                </article>
-
-                <article class="stat-card">
-                    <span>🌧️</span>
-                    <small>Opad</small>
-                    <strong id="precipitation">--</strong>
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- HOURLY -->
-
-        <section>
-
-            <div class="section-title">
-
-                <div>
-                    <h2>🕐 Godzina po godzinie</h2>
-                    <p>Najbliższe 24 godziny</p>
+                <div class="feels">
+                    Odczuwalna:
+                    <b>
+                        <span id="feelsLike">--</span>°C
+                    </b>
                 </div>
 
             </div>
 
-
-            <div
-                id="hourlyForecast"
-                class="hourly-scroll"
-            ></div>
-
-        </section>
+        </div>
 
 
-        <!-- CHART -->
+        <div class="sun-grid">
 
-        <section>
+            <div class="sun-card">
 
-            <div class="section-title">
-
-                <div>
-                    <h2>📈 Wykres temperatury</h2>
-                    <p>Najbliższe 24 godziny</p>
+                <div class="sun-icon">
+                    🌅
                 </div>
 
-            </div>
+                <span>Wschód</span>
 
-
-            <div class="chart-card">
-
-                <canvas id="temperatureChart"></canvas>
-
-            </div>
-
-        </section>
-
-
-        <!-- PRECIPITATION CHART -->
-
-        <section>
-
-            <div class="section-title">
-
-                <div>
-                    <h2>🌧️ Opady</h2>
-                    <p>Prawdopodobieństwo i ilość opadów</p>
-                </div>
-
-            </div>
-
-
-            <div class="chart-card">
-
-                <canvas id="rainChart"></canvas>
-
-            </div>
-
-        </section>
-
-
-        <!-- 14 DAYS -->
-
-        <section>
-
-            <div class="section-title">
-
-                <div>
-                    <h2>📅 Prognoza 14 dni</h2>
-                    <p>Długoterminowa prognoza</p>
-                </div>
-
-            </div>
-
-
-            <div
-                id="dailyForecast"
-                class="daily-list"
-            ></div>
-
-        </section>
-
-
-        <!-- DETAILED HOURLY -->
-
-        <section>
-
-            <div class="section-title">
-
-                <div>
-                    <h2>📊 Szczegółowo</h2>
-                    <p>Dane godzinowe</p>
-                </div>
-
-            </div>
-
-
-            <div
-                id="detailedHourly"
-                class="details-list"
-            ></div>
-
-        </section>
-
-
-        <!-- SUN -->
-
-        <section>
-
-            <div class="section-title">
-
-                <div>
-                    <h2>☀️ Słońce</h2>
-                    <p>Dane astronomiczne</p>
-                </div>
+                <b id="sunrise">
+                    --:--
+                </b>
 
             </div>
 
 
             <div class="sun-card">
 
-                <div class="sun-time">
-
-                    <span>🌅</span>
-
-                    <small>
-                        Wschód
-                    </small>
-
-                    <strong id="sunrise2">
-                        --:--
-                    </strong>
-
+                <div class="sun-icon">
+                    🌇
                 </div>
 
+                <span>Zachód</span>
 
-                <div class="sun-track">
-
-                    <div class="sun-progress"></div>
-
-                    <div class="sun-ball"></div>
-
-                </div>
-
-
-                <div class="sun-time">
-
-                    <span>🌇</span>
-
-                    <small>
-                        Zachód
-                    </small>
-
-                    <strong id="sunset2">
-                        --:--
-                    </strong>
-
-                </div>
+                <b id="sunset">
+                    --:--
+                </b>
 
             </div>
-
-        </section>
-
-
-        <!-- LOCATION -->
-
-        <section>
-
-            <div class="section-title">
-
-                <div>
-                    <h2>📍 Lokalizacja</h2>
-                    <p>Informacje o wybranym miejscu</p>
-                </div>
-
-            </div>
-
-
-            <div class="location-grid">
-
-                <div>
-                    <small>Miejscowość</small>
-                    <strong id="infoCity">-</strong>
-                </div>
-
-                <div>
-                    <small>Kraj</small>
-                    <strong id="infoCountry">-</strong>
-                </div>
-
-                <div>
-                    <small>Region</small>
-                    <strong id="infoRegion">-</strong>
-                </div>
-
-                <div>
-                    <small>Współrzędne</small>
-                    <strong id="coordinates">-</strong>
-                </div>
-
-                <div>
-                    <small>Strefa czasowa</small>
-                    <strong id="timezone">-</strong>
-                </div>
-
-                <div>
-                    <small>Wysokość</small>
-                    <strong id="elevation">-</strong>
-                </div>
-
-            </div>
-
-        </section>
-
-
-    </div>
-
-</main>
-
-
-<!-- SETTINGS -->
-
-<div
-    id="settingsModal"
-    class="modal hidden"
->
-
-    <div class="modal-box">
-
-        <div class="modal-header">
-
-            <h2>⚙️ Ustawienia</h2>
-
-            <button id="closeSettings">
-                ×
-            </button>
 
         </div>
 
 
-        <label>
-            Jednostka temperatury
+        <div
+            id="rainNow"
+            class="rain-now hidden"
+        ></div>
 
-            <select id="temperatureUnit">
-
-                <option value="c">
-                    °C
-                </option>
-
-                <option value="f">
-                    °F
-                </option>
-
-            </select>
-
-        </label>
+    </section>
 
 
-        <label>
-            Jednostka wiatru
+    <!-- WARUNKI -->
 
-            <select id="windUnit">
+    <section class="section">
 
-                <option value="kmh">
-                    km/h
-                </option>
+        <div class="section-title">
 
-                <option value="mph">
-                    mph
-                </option>
+            <div>
+                <h2>Warunki teraz</h2>
+                <p>Aktualne dane pogodowe</p>
+            </div>
 
-            </select>
-
-        </label>
+        </div>
 
 
-        <label>
-            Motyw
+        <div
+            id="statsGrid"
+            class="stats-grid"
+        ></div>
 
-            <select id="theme">
-
-                <option value="dark">
-                    Ciemny
-                </option>
-
-                <option value="light">
-                    Jasny
-                </option>
-
-                <option value="auto">
-                    Automatyczny
-                </option>
-
-            </select>
-
-        </label>
+    </section>
 
 
-        <button
-            id="saveSettings"
-            class="save-btn"
-        >
-            Zapisz ustawienia
-        </button>
+    <!-- GODZINOWA -->
 
-    </div>
+    <section class="section">
 
-</div>
+        <div class="section-title">
+
+            <div>
+                <h2>Prognoza godzinowa</h2>
+                <p>Najbliższe 48 godzin</p>
+            </div>
+
+        </div>
+
+
+        <div
+            id="hourly"
+            class="hourly"
+        ></div>
+
+    </section>
+
+
+    <!-- 14 DNI -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <div>
+                <h2>Prognoza 14 dni</h2>
+                <p>Najbliższe dwa tygodnie</p>
+            </div>
+
+        </div>
+
+
+        <div
+            id="daily"
+            class="daily"
+        ></div>
+
+    </section>
+
+
+    <!-- SZCZEGÓŁY DNIA -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <div>
+
+                <h2>Szczegóły dnia</h2>
+
+                <p id="selectedDayLabel">
+                    --
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div id="dayDetails"></div>
+
+    </section>
+
+
+    <!-- INFORMACJA -->
+
+    <section class="info-card">
+
+        <div class="info-icon">
+            🌍
+        </div>
+
+        <div>
+
+            <h3>OnWeather 4.1 PRO</h3>
+
+            <p>
+                Dane pogodowe są pobierane na żywo
+                z Open-Meteo.
+            </p>
+
+            <p>
+                OnWeather nie wymaga klucza API.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
 
 
 <footer>
 
-    <strong>
-        On<span>Weather</span>
-        <small>4.0 PRO</small>
-    </strong>
+    <b>OnWeather 4.1 PRO</b>
 
-    <p>
-        Profesjonalna pogoda na żywo 🌦️
-    </p>
-
-    <small>
-        Dane pogodowe: Open-Meteo
-    </small>
+    <span>
+        Pogoda na żywo • 14 dni • 48 godzin
+    </span>
 
 </footer>
 
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="script.js"></script>
 
 </body>
-                </html>
+</html>
