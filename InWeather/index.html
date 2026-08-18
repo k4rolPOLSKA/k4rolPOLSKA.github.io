@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1220">
+  <title>InWeather GO</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="logo">
+    <span>☁️</span>
+    <div>
+      <strong>InWeather</strong>
+      <small>GO</small>
+    </div>
+  </div>
+
+  <button id="locationBtn" class="location-btn">
+    📍 Moja lokalizacja
+  </button>
+</header>
+
+<main>
+
+  <section class="search-section">
+    <div class="search-box">
+      <input id="searchInput" type="text" placeholder="🔎 Wpisz miejscowość...">
+      <button id="searchBtn">Szukaj</button>
+    </div>
+
+    <div id="searchResults" class="search-results"></div>
+  </section>
+
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Pobieranie danych pogodowych...</p>
+  </div>
+
+  <div id="app" class="hidden">
+
+    <!-- AKTUALNA POGODA -->
+    <section class="hero">
+
+      <div class="hero-location">
+        <span>📍</span>
+        <div>
+          <h1 id="cityName">--</h1>
+          <p id="countryName">--</p>
+        </div>
+      </div>
+
+      <div class="current-weather">
+        <div class="current-icon" id="currentIcon">☀️</div>
+
+        <div class="temperature">
+          <strong id="currentTemp">--°</strong>
+          <span id="weatherDescription">--</span>
+        </div>
+      </div>
+
+      <div class="feels">
+        Odczuwalna <strong id="feelsLike">--°C</strong>
+      </div>
+
+      <div class="hero-stats">
+        <div>
+          <span>🌡️</span>
+          <small>Min / Max</small>
+          <strong id="todayMinMax">-- / --</strong>
+        </div>
+
+        <div>
+          <span>🌧️</span>
+          <small>Deszcz</small>
+          <strong id="rainChance">--%</strong>
+        </div>
+
+        <div>
+          <span>💨</span>
+          <small>Wiatr</small>
+          <strong id="windSpeed">-- km/h</strong>
+        </div>
+
+        <div>
+          <span>💧</span>
+          <small>Wilgotność</small>
+          <strong id="humidity">--%</strong>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SZCZEGÓŁY -->
+    <section class="section">
+      <div class="section-title">
+        <h2>📊 Szczegóły teraz</h2>
+      </div>
+
+      <div class="details-grid">
+
+        <div class="info-card">
+          <span>🌡️</span>
+          <p>Odczuwalna</p>
+          <strong id="detailFeels">--°C</strong>
+        </div>
+
+        <div class="info-card">
+          <span>💧</span>
+          <p>Wilgotność</p>
+          <strong id="detailHumidity">--%</strong>
+        </div>
+
+        <div class="info-card">
+          <span>🔽</span>
+          <p>Ciśnienie</p>
+          <strong id="pressure">-- hPa</strong>
+        </div>
+
+        <div class="info-card">
+          <span>☁️</span>
+          <p>Zachmurzenie</p>
+          <strong id="clouds">--%</strong>
+        </div>
+
+        <div class="info-card">
+          <span>👁️</span>
+          <p>Widoczność</p>
+          <strong id="visibility">-- km</strong>
+        </div>
+
+        <div class="info-card">
+          <span>💨</span>
+          <p>Porywy</p>
+          <strong id="gusts">-- km/h</strong>
+        </div>
+
+        <div class="info-card">
+          <span>🧭</span>
+          <p>Kierunek wiatru</p>
+          <strong id="windDirection">--</strong>
+        </div>
+
+        <div class="info-card">
+          <span>🌧️</span>
+          <p>Opad teraz</p>
+          <strong id="precipitation">-- mm</strong>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SZANSE -->
+    <section class="section">
+      <div class="section-title">
+        <h2>🎯 Szanse pogodowe</h2>
+        <span>dzisiaj</span>
+      </div>
+
+      <div class="probability-grid">
+
+        <div class="probability-card">
+          <div class="prob-icon">🌧️</div>
+          <div>
+            <p>Deszcz</p>
+            <strong id="rainProbability">--%</strong>
+          </div>
+          <div class="progress">
+            <span id="rainBar"></span>
+          </div>
+        </div>
+
+        <div class="probability-card">
+          <div class="prob-icon">☀️</div>
+          <div>
+            <p>Słońce</p>
+            <strong id="sunProbability">--%</strong>
+          </div>
+          <div class="progress">
+            <span id="sunBar"></span>
+          </div>
+        </div>
+
+        <div class="probability-card">
+          <div class="prob-icon">☁️</div>
+          <div>
+            <p>Zachmurzenie</p>
+            <strong id="cloudProbability">--%</strong>
+          </div>
+          <div class="progress">
+            <span id="cloudBar"></span>
+          </div>
+        </div>
+
+        <div class="probability-card">
+          <div class="prob-icon">⛈️</div>
+          <div>
+            <p>Burza</p>
+            <strong id="stormProbability">--%</strong>
+          </div>
+          <div class="progress">
+            <span id="stormBar"></span>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="note">
+        ℹ️ Słońce, zachmurzenie i burza są wskaźnikami szacowanymi przez InWeather GO na podstawie danych pogodowych Open-Meteo.
+      </p>
+    </section>
+
+    <!-- GODZINY -->
+    <section class="section">
+      <div class="section-title">
+        <h2>🕐 Prognoza godzinowa</h2>
+      </div>
+
+      <div id="hourlyForecast" class="hourly"></div>
+    </section>
+
+    <!-- 14 DNI -->
+    <section class="section">
+      <div class="section-title">
+        <h2>📅 Prognoza na 14 dni</h2>
+        <span>InWeather GO</span>
+      </div>
+
+      <div id="dailyForecast" class="daily"></div>
+    </section>
+
+    <!-- SŁOŃCE -->
+    <section class="section">
+      <div class="section-title">
+        <h2>🌅 Słońce</h2>
+      </div>
+
+      <div class="sun-card">
+
+        <div>
+          <span>🌅</span>
+          <small>Wschód</small>
+          <strong id="sunrise">--:--</strong>
+        </div>
+
+        <div class="sun-line">
+          <span>☀️</span>
+          <div></div>
+          <span>🌙</span>
+        </div>
+
+        <div>
+          <span>🌇</span>
+          <small>Zachód</small>
+          <strong id="sunset">--:--</strong>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- STATUS -->
+    <section class="status-card">
+      <span>🟢</span>
+      <div>
+        <strong>InWeather GO działa</strong>
+        <p id="lastUpdate">Dane zostały pobrane.</p>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <strong>InWeather GO</strong>
+  <p>Pogoda napędzana przez Open-Meteo</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+        </html>
