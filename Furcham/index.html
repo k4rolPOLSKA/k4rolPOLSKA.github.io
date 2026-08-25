@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restauracja Furcham - Zamówienie Online</title>
+    <style>
+        :root {
+            --primary: #d9534f;
+            --primary-hover: #c9302c;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        header p {
+            margin: 5px 0 0 0;
+            font-size: 1.1em;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .category-title {
+            background: #eee;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 25px;
+            font-size: 1.3em;
+            color: #444;
+            border-left: 5px solid var(--primary);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .item-card {
+            background: var(--card-bg);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .item-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .item-name {
+            font-weight: bold;
+            font-size: 1.05em;
+            margin-bottom: 5px;
+        }
+
+        .item-price {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .btn-add {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-add:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Koszyk */
+        .cart-section {
+            background: var(--card-bg);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .cart-section h2 {
+            margin-top: 0;
+            border-bottom: 2px solid #f4f4f4;
+            padding-bottom: 10px;
+        }
+
+        .cart-items {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 5px;
+        }
+
+        .cart-item-controls button {
+            background: #eee;
+            border: none;
+            padding: 2px 6px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .cart-total {
+            font-size: 1.3em;
+            font-weight: bold;
+            text-align: right;
+            margin-bottom: 15px;
+        }
+
+        .order-form label {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .order-form input, .order-form textarea, .order-form select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .btn-order {
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+
+        .btn-order:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Restauracja Furcham</h1>
+    <p>Smaczne, domowe posiłki na każde życzenie!</p>
+</header>
+
+<div class="container">
+    <div id="menu">
+        <!-- Menu jest generowane dynamicznie przez JavaScript -->
+    </div>
+
+    <div class="cart-section">
+        <h2>Twoje Zamówienie 🛒</h2>
+        <ul id="cart-items" class="cart-items">
+            <li style="color: #777;">Koszyk jest pusty.</li>
+        </ul>
+        <div class="cart-total">
+            Suma: <span id="cart-total-price">0.00</span> zł
+        </div>
+
+        <form id="order-form" class="order-form" onsubmit="submitOrder(event)">
+            <label for="name">Imię i Nazwisko:</label>
+            <input type="text" id="name" required placeholder="Jan Kowalski">
+
+            <label for="phone">Numer telefonu:</label>
+            <input type="tel" id="phone" required placeholder="123 456 789">
+
+            <label for="address">Adres dostawy / Uwagi:</label>
+            <textarea id="address" rows="3" required placeholder="ul. Prosta 12/4, Warszawa..."></textarea>
+
+            <label for="payment">Forma płatności:</label>
+            <select id="payment">
+                <option value="Gotówka przy odbiorze">Gotówka przy odbiorze</option>
+                <option value="Karta przy odbiorze">Karta przy odbiorze</option>
+                <option value="BLIK przy odbiorze">BLIK przy odbiorze</option>
+            </select>
+
+            <button type="submit" class="btn-order">Złóż Zamówienie</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    const menuData = [
+        {
+            category: "🥣 ZUPY",
+            items: [
+                { name: "Rosół z makaronem", price: 4.50 },
+                { name: "Pomidorowa z makaronem", price: 4.50 },
+                { name: "Pomidorowa z ryżem", price: 4.50 },
+                { name: "Ogórkowa", price: 4.50 },
+                { name: "Krupnik", price: 4.00 },
+                { name: "Kapuśniak", price: 4.00 },
+                { name: "Grochówka", price: 5.00 },
+                { name: "Fasolowa", price: 5.00 },
+                { name: "Żurek", price: 6.00 },
+                { name: "Żurek z jajkiem", price: 7.00 },
+                { name: "Barszcz czerwony", price: 3.50 },
+                { name: "Zupa dnia", price: 3.99 }
+            ]
+        },
+        {
+            category: "🍖 OBIADY DOMOWE",
+            items: [
+                { name: "Ziemniaki + jajko sadzone + mizeria", price: 9.99 },
+                { name: "Ziemniaki + kotlet mielony + surówka", price: 12.99 },
+                { name: "Ziemniaki + schabowy + surówka", price: 14.99 },
+                { name: "Ziemniaki + udko z kurczaka + surówka", price: 12.99 },
+                { name: "Ziemniaki + wątróbka z cebulką", price: 11.99 },
+                { name: "Ziemniaki + pulpety w sosie", price: 12.99 },
+                { name: "Ziemniaki + gołąbek w sosie", price: 13.99 },
+                { name: "Gulasz + kasza + ogórek", price: 14.99 },
+                { name: "Bitki wieprzowe + ziemniaki", price: 15.99 },
+                { name: "Karkówka w sosie + ziemniaki", price: 15.99 },
+                { name: "De volaille + ziemniaki + surówka", price: 16.99 },
+                { name: "Pierś panierowana + frytki + surówka", price: 14.99 }
+            ]
+        },
+        {
+            category: "🥟 PIEROGI",
+            items: [
+                { name: "Ruskie 6 szt.", price: 8.99 },
+                { name: "Ruskie 10 szt.", price: 12.99 },
+                { name: "Z mięsem 6 szt.", price: 9.99 },
+                { name: "Z mięsem 10 szt.", price: 14.99 },
+                { name: "Z kapustą i grzybami 10 szt.", price: 13.99 },
+                { name: "Ze szpinakiem 10 szt.", price: 14.99 },
+                { name: "Z serem na słodko 10 szt.", price: 12.99 },
+                { name: "Mix pierogów 12 szt.", price: 15.99 }
+            ]
+        },
+        {
+            category: "🥔 DANIA MĄCZNE",
+            items: [
+                { name: "Kopytka", price: 7.99 },
+                { name: "Kopytka z sosem", price: 9.99 },
+                { name: "Pyzy z mięsem", price: 10.99 },
+                { name: "Placki ziemniaczane 3 szt.", price: 7.99 },
+                { name: "Placki ziemniaczane z sosem", price: 10.99 },
+                { name: "Łazanki z kapustą", price: 9.99 },
+                { name: "Naleśniki z serem 2 szt.", price: 8.99 },
+                { name: "Naleśniki z dżemem 2 szt.", price: 7.99 },
+                { name: "Racuchy z jabłkami 3 szt.", price: 7.99 }
+            ]
+        },
+        {
+            category: "🍳 ŚNIADANIA",
+            items: [
+                { name: "Jajecznica z 2 jaj + pieczywo", price: 5.99 },
+                { name: "Jajecznica z kiełbasą", price: 7.99 },
+                { name: "2 jajka sadzone + pieczywo", price: 5.99 },
+                { name: "Omlet z serem", price: 7.99 },
+                { name: "Parówki 2 szt. + pieczywo", price: 6.99 },
+                { name: "Kiełbasa + pieczywo + musztarda", price: 7.99 },
+                { name: "Bułka z jajkiem i serem", price: 5.99 }
+            ]
+        },
+        {
+            category: "🍔 NA SZYBKO",
+            items: [
+                { name: "Hamburger", price: 7.99 },
+                { name: "Cheeseburger", price: 8.99 },
+                { name: "Chicken burger", price: 9.99 },
+                { name: "Burger XXL", price: 12.99 },
+                { name: "Hot-dog", price: 5.99 },
+                { name: "Hot-dog XXL", price: 8.99 },
+                { name: "Zapiekanka", price: 7.99 },
+                { name: "Zapiekanka XXL", price: 10.99 },
+                { name: "Frytki małe", price: 4.99 },
+                { name: "Frytki duże", price: 6.99 },
+                { name: "Nuggetsy 6 szt.", price: 7.99 },
+                { name: "Nuggetsy 9 szt.", price: 10.99 },
+                { name: "Stripsy z kurczaka", price: 9.99 },
+                { name: "Kebab box", price: 11.99 },
+                { name: "Tortilla z kurczakiem", price: 11.99 }
+            ]
+        },
+        {
+            category: "🍝 MAKARONY",
+            items: [
+                { name: "Makaron z sosem pomidorowym", price: 8.99 },
+                { name: "Spaghetti bolońskie", price: 11.99 },
+                { name: "Spaghetti carbonara", price: 12.99 },
+                { name: "Makaron z kurczakiem", price: 12.99 },
+                { name: "Makaron ze szpinakiem", price: 10.99 },
+                { name: "Makaron z serem", price: 7.99 }
+            ]
+        },
+        {
+            category: "🍕 PIZZA",
+            items: [
+                { name: "Margherita 20 cm", price: 9.99 },
+                { name: "Salami 20 cm", price: 11.99 },
+                { name: "Hawajska 20 cm", price: 11.99 },
+                { name: "Pepperoni 20 cm", price: 12.99 },
+                { name: "Wiejska 20 cm", price: 13.99 },
+                { name: "Kurczak BBQ 20 cm", price: 13.99 },
+                { name: "Pizza XXL", price: 19.99 }
+            ]
+        },
+        {
+            category: "🥗 DODATKI",
+            items: [
+                { name: "Ziemniaki", price: 2.99 },
+                { name: "Frytki", price: 4.99 },
+                { name: "Ryż", price: 2.99 },
+                { name: "Kasza", price: 2.99 },
+                { name: "Mizeria", price: 3.99 },
+                { name: "Buraczki", price: 3.49 },
+                { name: "Kapusta kiszona", price: 2.99 },
+                { name: "Surówka z marchewki", price: 2.99 },
+                { name: "Ogórek kiszony", price: 1.99 },
+                { name: "Sos czosnkowy", price: 1.50 },
+                { name: "Ketchup", price: 1.00 }
+            ]
+        },
+        {
+            category: "🍰 DESERY",
+            items: [
+                { name: "Budyń", price: 3.50 },
+                { name: "Kisiel", price: 3.00 },
+                { name: "Galaretka", price: 3.50 },
+                { name: "Naleśnik z cukrem", price: 4.99 },
+                { name: "Naleśnik z dżemem", price: 5.99 },
+                { name: "Szarlotka", price: 5.99 },
+                { name: "Sernik", price: 6.99 },
+                { name: "Gofr z cukrem pudrem", price: 4.99 },
+                { name: "Gofr z bitą śmietaną", price: 6.99 }
+            ]
+        },
+        {
+            category: "🥤 NAPOJE",
+            items: [
+                { name: "Kompot", price: 2.50 },
+                { name: "Herbata", price: 2.50 },
+                { name: "Woda", price: 2.00 },
+                { name: "Lemoniada", price: 3.50 },
+                { name: "Sok", price: 3.99 },
+                { name: "Cola", price: 4.99 },
+                { name: "Kawa", price: 4.50 },
+                { name: "Kakao", price: 4.99 }
+            ]
+        },
+        {
+            category: "🔥 MEGA TANIE ZESTAWY",
+            items: [
+                { name: "Zestaw „Polski Obiad” (Zupa + kotlet mielony + ziemniaki + surówka)", price: 14.99 },
+                { name: "Zestaw „Schabowy” (Zupa + schabowy + ziemniaki + surówka + kompot)", price: 17.99 },
+                { name: "Zestaw „Pierogi” (Zupa + 10 pierogów + kompot)", price: 14.99 },
+                { name: "Zestaw „Student” (Ziemniaki + jajko sadzone + surówka + kompot)", price: 9.99 },
+                { name: "Zestaw „Burger” (Cheeseburger + frytki + napój)", price: 12.99 },
+                { name: "Zestaw „Rodzinny” (4 zupy + 4 dania główne + 4 napoje)", price: 39.99 },
+                { name: "HIT: „OBIAD ZA DYCHĘ” (Zupa dnia + ziemniaki + jajko sadzone + surówka)", price: 9.99 }
+            ]
+        }
+    ];
+
+    let cart = [];
+
+    function renderMenu() {
+        const menuContainer = document.getElementById('menu');
+        menuContainer.innerHTML = '';
+
+        menuData.forEach(cat => {
+            const catTitle = document.createElement('div');
+            catTitle.className = 'category-title';
+            catTitle.innerText = cat.category;
+            menuContainer.appendChild(catTitle);
+
+            const grid = document.createElement('div');
+            grid.className = 'menu-grid';
+
+            cat.items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <div>
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-price">${item.price.toFixed(2)} zł</div>
+                    </div>
+                    <button class="btn-add" onclick="addToCart('${item.name.replace(/'/g, "\\'")}', ${item.price})">Dodaj do koszyka</button>
+                `;
+                grid.appendChild(card);
+            });
+
+            menuContainer.appendChild(grid);
+        });
+    }
+
+    function addToCart(name, price) {
+        const existingItem = cart.find(item => item.name === name);
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({ name, price, quantity: 1 });
+        }
+        updateCart();
+    }
+
+    function changeQuantity(name, delta) {
+        const item = cart.find(item => item.name === name);
+        if (item) {
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.name !== name);
+            }
+        }
+        updateCart();
+    }
+
+    function updateCart() {
+        const cartList = document.getElementById('cart-items');
+        const totalPriceEl = document.getElementById('cart-total-price');
+
+        cartList.innerHTML = '';
+
+        if (cart.length === 0) {
+            cartList.innerHTML = '<li style="color: #777;">Koszyk jest pusty.</li>';
+            totalPriceEl.innerText = '0.00';
+            return;
+        }
+
+        let total = 0;
+
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+
+            const li = document.createElement('li');
+            li.className = 'cart-item';
+            li.innerHTML = `
+                <div>
+                    <strong>${item.name}</strong><br>
+                    ${item.price.toFixed(2)} zł x ${item.quantity} = ${itemTotal.toFixed(2)} zł
+                </div>
+                <div class="cart-item-controls">
+                    <button onclick="changeQuantity('${item.name.replace(/'/g, "\\'")}', -1)">-</button>
+                    <button onclick="changeQuantity('${item.name.replace(/'/g, "\\'")}', 1)">+</button>
+                </div>
+            `;
+            cartList.appendChild(li);
+        });
+
+        totalPriceEl.innerText = total.toFixed(2);
+    }
+
+    function submitOrder(event) {
+        event.preventDefault();
+
+        if (cart.length === 0) {
+            alert('Twój koszyk jest pusty!');
+            return;
+        }
+
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const address = document.getElementById('address').value;
+        const payment = document.getElementById('payment').value;
+
+        let summary = `Dziękujemy za zamówienie, ${name}!\n\n`;
+        summary += `Zamówione dania:\n`;
+        let total = 0;
+        cart.forEach(item => {
+            const sum = item.price * item.quantity;
+            total += sum;
+            summary += `- ${item.name} x${item.quantity} (${sum.toFixed(2)} zł)\n`;
+        });
+        summary += `\nŁączna kwota: ${total.toFixed(2)} zł\n`;
+        summary += `Płatność: ${payment}\n`;
+        summary += `Adres dostawy: ${address}\n`;
+        summary += `Telefon kontaktowy: ${phone}\n\n`;
+        summary += `Zamówienie zostało przekazane do Restauracji Furcham!`;
+
+        alert(summary);
+
+        // Czyszczenie koszyka
+        cart = [];
+        updateCart();
+        document.getElementById('order-form').reset();
+    }
+
+    // Inicjalizacja menu przy załadowaniu strony
+    renderMenu();
+</script>
+
+</body>
+</html>
