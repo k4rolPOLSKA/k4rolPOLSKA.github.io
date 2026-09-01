@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Minecraft Skript Generator</title>
+  
+  <!-- Podpięcie własnych stylów CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Ładowanie Google Blockly z CDN -->
+  <script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
+  <script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
+  <script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
+  <script src="https://unpkg.com/blockly/msg/pl.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Generator Skryptów Minecraft (.sk)</h1>
+    
+    <div id="blocklyDiv"></div>
+
+    <div class="controls">
+      <button class="btn-generate" onclick="generateSkript()">Wygeneruj kod</button>
+      <button class="btn-download" onclick="downloadSkript()">Pobierz plik .sk</button>
+    </div>
+
+    <textarea id="codeOutput" readonly placeholder="Kliknij 'Wygeneruj kod', aby zobaczyć wynik..."></textarea>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
