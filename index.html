@@ -1,1 +1,1134 @@
-<!doctype html><html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KotGG 🐱</title><link rel="stylesheet" href="style.css"></head><body><header class="navbar"><a class="logo" href="index.html">🐱 KotGG</a><nav class="nav"><a class="active" href="index.html">Start</a><a href="koty.html">Koty</a><a href="ciekawostki.html">Ciekawostki</a><a href="galeria.html">Galeria</a><a href="quiz.html">Quiz</a><a href="kontakt.html">Kontakt</a></nav></header><section class="hero"><h1>Witaj w KotGG! 🐾</h1><p>Różowo-biały świat kotów — ciekawostki, poradniki, galerie, quizy i mnóstwo kociej zabawy.</p><a class="btn" href="ciekawostki.html">Poznaj koty 💗</a></section><main class="container"><h2 class="title">Co znajdziesz na KotGG?</h2><div class="grid"><article class="card"><div class="emoji">😺</div><h3>Ciekawostki</h3><p>Fakty o kotach, które mogą Cię zaskoczyć.</p><a class="btn" href="ciekawostki.html">Sprawdź</a></article><article class="card"><div class="emoji">📸</div><h3>Galeria</h3><p>Kocia galeria w biało-różowym stylu.</p><a class="btn" href="galeria.html">Zobacz</a></article><article class="card"><div class="emoji">🎮</div><h3>Quiz</h3><p>Sprawdź, ile wiesz o kotach.</p><a class="btn" href="quiz.html">Zagraj</a></article><article class="card"><div class="emoji">🐾</div><h3>Opieka</h3><p>Podstawowe informacje o codziennej opiece.</p><a class="btn" href="opieka.html">Czytaj</a></article></div></main><footer class="footer">© <span class="year"></span> KotGG 🐱💗</footer><script src="script.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="pl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xVeerse | Neon Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        neonRed: {
+                            400: '#ff4d4d',
+                            500: '#ff0033',
+                            600: '#cc0029',
+                            glow: '#ff0033',
+                        },
+                        neonBlue: {
+                            400: '#38bdf8',
+                            500: '#00bfff',
+                            600: '#0088cc',
+                            glow: '#00bfff',
+                        },
+                        darkBg: '#0a0a0c',
+                        darkCard: '#121217',
+                        darkBorder: '#1f1f28',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        code: ['Fira Code', 'monospace'],
+                    },
+                    boxShadow: {
+                        'neon-red': '0 0 15px rgba(255, 0, 51, 0.5), 0 0 30px rgba(255, 0, 51, 0.2)',
+                        'neon-red-lg': '0 0 25px rgba(255, 0, 51, 0.8), 0 0 50px rgba(255, 0, 51, 0.4)',
+                        'neon-blue': '0 0 15px rgba(0, 191, 255, 0.5), 0 0 30px rgba(0, 191, 255, 0.2)',
+                        'neon-blue-lg': '0 0 25px rgba(0, 191, 255, 0.8), 0 0 50px rgba(0, 191, 255, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Neon Animations and Styles */
+        body {
+            background-color: #0a0a0c;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .text-glow-red {
+            text-shadow: 0 0 10px rgba(255, 0, 51, 0.7), 0 0 20px rgba(255, 0, 51, 0.4);
+        }
+
+        .text-glow-blue {
+            text-shadow: 0 0 10px rgba(0, 191, 255, 0.7), 0 0 20px rgba(0, 191, 255, 0.4);
+        }
+
+        .border-glow-red {
+            box-shadow: 0 0 15px rgba(255, 0, 51, 0.3);
+            border-color: rgba(255, 0, 51, 0.6);
+        }
+
+        .border-glow-blue {
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.3);
+            border-color: rgba(0, 191, 255, 0.6);
+        }
+
+        /* Canvas Background */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(18, 18, 23, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-nav {
+            background: rgba(10, 10, 12, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 0, 51, 0.2);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff0033;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #cc0029;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-neonRed-500 selection:text-white">
+
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Sticky Header / Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#index.html" class="nav-link flex items-center space-x-3 group" data-page="index.html">
+                    <div class="w-10 h-10 rounded-lg bg-neonRed-500/20 border border-neonRed-500 flex items-center justify-center shadow-neon-red group-hover:scale-105 transition-transform duration-300">
+                        <span class="font-extrabold text-xl text-neonRed-500 group-hover:text-white">X</span>
+                    </div>
+                    <span class="text-2xl font-black tracking-wider text-white">x<span class="text-neonRed-500 text-glow-red">Veerse</span></span>
+                </a>
+
+                <!-- Desktop Navigation Menu -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <a href="#index.html" data-page="index.html" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center space-x-2 text-white bg-neonRed-500/10 border border-neonRed-500/30">
+                        <i class="fa-solid fa-house text-xs"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="#portofolio.html" data-page="portofolio.html" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-300 flex items-center space-x-2">
+                        <i class="fa-solid fa-folder-open text-xs"></i>
+                        <span>Portfolio</span>
+                    </a>
+                    <a href="#corobie.html" data-page="corobie.html" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-300 flex items-center space-x-2">
+                        <i class="fa-solid fa-screwdriver-wrench text-xs"></i>
+                        <span>Co robię</span>
+                    </a>
+                    <a href="#wczymrobie.html" data-page="wczymrobie.html" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-300 flex items-center space-x-2">
+                        <i class="fa-solid fa-laptop-code text-xs"></i>
+                        <span>W czym robię</span>
+                    </a>
+                    
+                    <!-- Discord Link Accent button in blue -->
+                    <a href="#discordy.html" data-page="discordy.html" class="nav-btn px-4 py-2 rounded-lg text-sm font-bold text-neonBlue-400 bg-neonBlue-500/10 border border-neonBlue-500/40 hover:bg-neonBlue-500 hover:text-white hover:shadow-neon-blue transition-all duration-300 flex items-center space-x-2 ml-2">
+                        <i class="fa-brands fa-discord text-base"></i>
+                        <span>Projekty Discord</span>
+                    </a>
+                </nav>
+
+                <!-- Mobile Menu Hamburger Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-toggle" type="button" class="text-gray-300 hover:text-white focus:outline-none p-2 rounded-md hover:bg-white/10" aria-label="Otwórz menu">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-b border-neonRed-500/20 px-4 pt-2 pb-6 space-y-2">
+            <a href="#index.html" data-page="index.html" class="nav-btn block px-4 py-3 rounded-lg text-base font-semibold text-white bg-neonRed-500/20 border border-neonRed-500/40">
+                <i class="fa-solid fa-house w-6"></i> Home
+            </a>
+            <a href="#portofolio.html" data-page="portofolio.html" class="nav-btn block px-4 py-3 rounded-lg text-base font-semibold text-gray-300 hover:text-white hover:bg-white/5">
+                <i class="fa-solid fa-folder-open w-6"></i> Portfolio
+            </a>
+            <a href="#corobie.html" data-page="corobie.html" class="nav-btn block px-4 py-3 rounded-lg text-base font-semibold text-gray-300 hover:text-white hover:bg-white/5">
+                <i class="fa-solid fa-screwdriver-wrench w-6"></i> Co robię
+            </a>
+            <a href="#wczymrobie.html" data-page="wczymrobie.html" class="nav-btn block px-4 py-3 rounded-lg text-base font-semibold text-gray-300 hover:text-white hover:bg-white/5">
+                <i class="fa-solid fa-laptop-code w-6"></i> W czym robię
+            </a>
+            <a href="#discordy.html" data-page="discordy.html" class="nav-btn block px-4 py-3 rounded-lg text-base font-bold text-neonBlue-400 bg-neonBlue-500/10 border border-neonBlue-500/40 hover:bg-neonBlue-500 hover:text-white">
+                <i class="fa-brands fa-discord w-6"></i> Projekty Discord
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Content Container -->
+    <main id="app-content" class="relative z-10 flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        
+        <!-- PAGE 1: INDEX / HOME -->
+        <section id="page-index" class="page-section space-y-16 py-6">
+            <!-- Hero Section -->
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-12 py-8 sm:py-12">
+                <div class="flex-1 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-neonRed-500/10 border border-neonRed-500/30 text-neonRed-400 text-xs sm:text-sm font-semibold tracking-wide uppercase">
+                        <span class="w-2 h-2 rounded-full bg-neonRed-500 animate-ping"></span>
+                        <span>Programista & Developer</span>
+                    </div>
+                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-none text-white">
+                        Cześć, jestem <br class="hidden sm:inline">
+                        <span class="text-neonRed-500 text-glow-red">xVeerse</span>
+                    </h1>
+                    <p class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto lg:mx-0 font-light leading-relaxed">
+                        Tworzę nowoczesne, unikalne strony internetowe, dopracowane skrypty do Minecrafta oraz funkcjonalne aplikacje komputerowe i boty. Łączę pasję do kodowania z niepowtarzalną, estetyką neonu.
+                    </p>
+
+                    <!-- Interactive Main Action Buttons -->
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
+                        <a href="#portofolio.html" data-page="portofolio.html" class="nav-link px-8 py-4 rounded-xl bg-neonRed-500 hover:bg-neonRed-600 text-white font-bold text-lg shadow-neon-red hover:shadow-neon-red-lg transform hover:-translate-y-1 transition-all duration-300 flex items-center space-x-3">
+                            <i class="fa-solid fa-fire"></i>
+                            <span>Zobacz prace</span>
+                        </a>
+                        <a href="#corobie.html" data-page="corobie.html" class="nav-link px-8 py-4 rounded-xl glass-panel hover:bg-white/10 text-white font-semibold text-lg border border-white/20 hover:border-neonRed-500/50 transform hover:-translate-y-1 transition-all duration-300 flex items-center space-x-3">
+                            <i class="fa-solid fa-code"></i>
+                            <span>Co robię</span>
+                        </a>
+                    </div>
+
+                    <!-- Highlighted Discord Accent Section Button -->
+                    <div class="pt-6">
+                        <div class="inline-block p-1 rounded-2xl bg-gradient-to-r from-neonBlue-500/30 via-neonBlue-400/10 to-transparent">
+                            <a href="#discordy.html" data-page="discordy.html" class="nav-link group px-6 py-3.5 rounded-xl bg-darkCard border border-neonBlue-500/50 hover:border-neonBlue-400 flex items-center space-x-4 shadow-neon-blue hover:shadow-neon-blue-lg transition-all duration-300">
+                                <div class="w-10 h-10 rounded-lg bg-neonBlue-500/20 flex items-center justify-center text-neonBlue-400 group-hover:scale-110 transition-transform">
+                                    <i class="fa-brands fa-discord text-2xl"></i>
+                                </div>
+                                <div class="text-left">
+                                    <div class="text-xs font-semibold text-neonBlue-400 uppercase tracking-widest">Sprawdź społeczność</div>
+                                    <div class="text-base font-bold text-white group-hover:text-neonBlue-400 transition-colors">Dedykowana sekcja: Projekty Discord &rarr;</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Visual Box / Avatar -->
+                <div class="w-full max-w-md lg:max-w-lg relative">
+                    <div class="absolute -inset-1 rounded-3xl bg-gradient-to-r from-neonRed-500 to-neonRed-600 opacity-30 blur-2xl"></div>
+                    <div class="relative glass-panel rounded-3xl p-6 sm:p-8 border border-neonRed-500/30 shadow-2xl space-y-6">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                                <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+                                <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+                            </div>
+                            <span class="text-xs font-code text-gray-500">developer.config.json</span>
+                        </div>
+                        <div class="font-code text-xs sm:text-sm space-y-2 text-gray-300">
+                            <p><span class="text-neonRed-500">const</span> <span class="text-yellow-400">developer</span> = {</p>
+                            <p class="pl-4"><span class="text-blue-400">nickname</span>: <span class="text-green-400">'xVeerse'</span>,</p>
+                            <p class="pl-4"><span class="text-blue-400">status</span>: <span class="text-green-400">'Dostępny na zlecenia'</span>,</p>
+                            <p class="pl-4"><span class="text-blue-400">skills</span>: [</p>
+                            <p class="pl-8 text-neonRed-400">'Strony WWW', 'Skrypty Minecraft', 'Aplikacje'</p>
+                            <p class="pl-4">],</p>
+                            <p class="pl-4"><span class="text-blue-400">discordAccent</span>: <span class="text-neonBlue-400">true</span></p>
+                            <p>};</p>
+                        </div>
+                        <div class="pt-4 border-t border-white/10 flex justify-between items-center text-xs text-gray-400">
+                            <span class="flex items-center space-x-2"><i class="fa-solid fa-circle text-green-500 text-[8px] animate-pulse"></i> <span>System Online</span></span>
+                            <span>v2.5.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-neonRed-500/40 transition-all duration-300 text-center">
+                    <div class="text-3xl sm:text-4xl font-black text-neonRed-500 text-glow-red">50+</div>
+                    <div class="text-xs sm:text-sm text-gray-400 mt-1">Projektów WWW</div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-neonRed-500/40 transition-all duration-300 text-center">
+                    <div class="text-3xl sm:text-4xl font-black text-neonRed-500 text-glow-red">120+</div>
+                    <div class="text-xs sm:text-sm text-gray-400 mt-1">Skryptów Minecraft</div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-neonRed-500/40 transition-all duration-300 text-center">
+                    <div class="text-3xl sm:text-4xl font-black text-neonRed-500 text-glow-red">15+</div>
+                    <div class="text-xs sm:text-sm text-gray-400 mt-1">Aplikacji Desktop</div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl border border-white/5 hover:border-neonBlue-500/40 transition-all duration-300 text-center">
+                    <div class="text-3xl sm:text-4xl font-black text-neonBlue-400 text-glow-blue">10k+</div>
+                    <div class="text-xs sm:text-sm text-gray-400 mt-1">Użytkowników Discorda</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: PORTFOLIO (portofolio.html) -->
+        <section id="page-portofolio" class="page-section hidden space-y-10 py-6">
+            <div class="text-center space-y-4">
+                <h2 class="text-3xl sm:text-5xl font-black text-white">Moje <span class="text-neonRed-500 text-glow-red">Portfolio</span></h2>
+                <p class="text-gray-400 max-w-xl mx-auto">Przeglądaj zrealizowane projekty stron, skryptów oraz aplikacji. Możesz pobrać kod lub zobaczyć podgląd na żywo.</p>
+                
+                <!-- Category Filter Buttons -->
+                <div class="flex flex-wrap justify-center gap-2 sm:gap-3 pt-4" id="portfolio-filters">
+                    <button data-filter="all" class="filter-btn active px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 bg-neonRed-500 text-white shadow-neon-red">Wszystkie</button>
+                    <button data-filter="www" class="filter-btn px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 glass-panel text-gray-300 hover:text-white hover:border-neonRed-500/50">Strony WWW</button>
+                    <button data-filter="app" class="filter-btn px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 glass-panel text-gray-300 hover:text-white hover:border-neonRed-500/50">Aplikacje</button>
+                    <button data-filter="mc" class="filter-btn px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 glass-panel text-gray-300 hover:text-white hover:border-neonRed-500/50">Skrypty Minecraft</button>
+                </div>
+            </div>
+
+            <!-- Portfolio Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="portfolio-grid">
+                
+                <!-- Card 1: WWW -->
+                <div class="portfolio-item glass-panel rounded-2xl overflow-hidden border border-white/10 hover:border-neonRed-500/60 transition-all duration-300 group hover:-translate-y-2 flex flex-col justify-between" data-category="www">
+                    <div>
+                        <div class="relative h-48 overflow-hidden bg-gray-900">
+                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=600&auto=format&fit=crop" alt="Cyberpunk Landing Page" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/121217/ff0033?text=Strona+WWW'">
+                            <div class="absolute top-3 left-3 px-3 py-1 rounded-full bg-neonRed-500/80 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-md">Strona WWW</div>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <h3 class="text-xl font-bold text-white group-hover:text-neonRed-400 transition-colors">Neon Cyber-Gaming Landing Page</h3>
+                            <p class="text-sm text-gray-400">Nowoczesna, w pełni responsywna strona internetowa z motywem dark mode dla drużyny e-sportowej.</p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">HTML5</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">TailwindCSS</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">JS (ES6+)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex gap-3">
+                        <button onclick="openLiveDemo('Neon Cyber-Gaming Landing Page', 'https://example.com')" class="flex-1 py-2.5 rounded-xl bg-neonRed-500/20 hover:bg-neonRed-500 text-neonRed-400 hover:text-white border border-neonRed-500/40 font-semibold text-sm transition-all duration-300 text-center flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-eye"></i> <span>Zobacz stronę</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 2: Minecraft Script -->
+                <div class="portfolio-item glass-panel rounded-2xl overflow-hidden border border-white/10 hover:border-neonRed-500/60 transition-all duration-300 group hover:-translate-y-2 flex flex-col justify-between" data-category="mc">
+                    <div>
+                        <div class="relative h-48 overflow-hidden bg-gray-900">
+                            <img src="https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=600&auto=format&fit=crop" alt="Minecraft Skript" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/121217/ff0033?text=Skrypt+Minecraft'">
+                            <div class="absolute top-3 left-3 px-3 py-1 rounded-full bg-green-600/80 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-md">Skrypt Minecraft</div>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <h3 class="text-xl font-bold text-white group-hover:text-neonRed-400 transition-colors">xSystemGildi & Ekonomia GUI</h3>
+                            <p class="text-sm text-gray-400">Zaawansowany skrypt na gildię i rozbudowaną ekonomię serwerową z interfejsem graficznym Skript-GUI.</p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">Skript 2.6+</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">skQuery</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">TuSKe</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex gap-3">
+                        <button onclick="downloadScript('xSystemGildi_v2.sk')" class="flex-1 py-2.5 rounded-xl bg-neonRed-500 hover:bg-neonRed-600 text-white font-semibold text-sm shadow-neon-red transition-all duration-300 text-center flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-download"></i> <span>Pobierz skrypt</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 3: App -->
+                <div class="portfolio-item glass-panel rounded-2xl overflow-hidden border border-white/10 hover:border-neonRed-500/60 transition-all duration-300 group hover:-translate-y-2 flex flex-col justify-between" data-category="app">
+                    <div>
+                        <div class="relative h-48 overflow-hidden bg-gray-900">
+                            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=600&auto=format&fit=crop" alt="Desktop App" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/121217/ff0033?text=Aplikacja'">
+                            <div class="absolute top-3 left-3 px-3 py-1 rounded-full bg-blue-600/80 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-md">Aplikacja</div>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <h3 class="text-xl font-bold text-white group-hover:text-neonRed-400 transition-colors">Server Manager Utility</h3>
+                            <p class="text-sm text-gray-400">Aplikacja okienkowa do monitorowania stanu serwerów gier, auto-restartu i wysyłania powiadomień.</p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">Electron JS</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">Node.js</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex gap-3">
+                        <button onclick="downloadScript('ServerManager_Setup.exe')" class="flex-1 py-2.5 rounded-xl bg-neonRed-500 hover:bg-neonRed-600 text-white font-semibold text-sm shadow-neon-red transition-all duration-300 text-center flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-download"></i> <span>Pobierz App</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 4: Minecraft Script -->
+                <div class="portfolio-item glass-panel rounded-2xl overflow-hidden border border-white/10 hover:border-neonRed-500/60 transition-all duration-300 group hover:-translate-y-2 flex flex-col justify-between" data-category="mc">
+                    <div>
+                        <div class="relative h-48 overflow-hidden bg-gray-900">
+                            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=600&auto=format&fit=crop" alt="Minecraft Admin Script" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/121217/ff0033?text=Skrypt+Minecraft'">
+                            <div class="absolute top-3 left-3 px-3 py-1 rounded-full bg-green-600/80 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-md">Skrypt Minecraft</div>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <h3 class="text-xl font-bold text-white group-hover:text-neonRed-400 transition-colors">xAdminTools & Logs</h3>
+                            <p class="text-sm text-gray-400">Kompleksowy pakiet narzędzi administracyjnych (vanish, freeze, ban GUI, logi na Discorda).</p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">Skript</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">DiscordWebhooks</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex gap-3">
+                        <button onclick="downloadScript('xAdminTools.sk')" class="flex-1 py-2.5 rounded-xl bg-neonRed-500 hover:bg-neonRed-600 text-white font-semibold text-sm shadow-neon-red transition-all duration-300 text-center flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-download"></i> <span>Pobierz skrypt</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 5: WWW -->
+                <div class="portfolio-item glass-panel rounded-2xl overflow-hidden border border-white/10 hover:border-neonRed-500/60 transition-all duration-300 group hover:-translate-y-2 flex flex-col justify-between" data-category="www">
+                    <div>
+                        <div class="relative h-48 overflow-hidden bg-gray-900">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop" alt="Dashboard Panel" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/121217/ff0033?text=Panel+WWW'">
+                            <div class="absolute top-3 left-3 px-3 py-1 rounded-full bg-neonRed-500/80 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-md">Strona WWW</div>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <h3 class="text-xl font-bold text-white group-hover:text-neonRed-400 transition-colors">Panel Gracza & ItemShop</h3>
+                            <p class="text-sm text-gray-400">Interaktywny sklep serwerowy z podpiętymi płatnościami online i panelem statystyk graczy.</p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">React</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">Tailwind</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">REST API</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex gap-3">
+                        <button onclick="openLiveDemo('Panel Gracza & ItemShop', 'https://example.com')" class="flex-1 py-2.5 rounded-xl bg-neonRed-500/20 hover:bg-neonRed-500 text-neonRed-400 hover:text-white border border-neonRed-500/40 font-semibold text-sm transition-all duration-300 text-center flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-eye"></i> <span>Zobacz stronę</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 6: App -->
+                <div class="portfolio-item glass-panel rounded-2xl overflow-hidden border border-white/10 hover:border-neonRed-500/60 transition-all duration-300 group hover:-translate-y-2 flex flex-col justify-between" data-category="app">
+                    <div>
+                        <div class="relative h-48 overflow-hidden bg-gray-900">
+                            <img src="https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?q=80&w=600&auto=format&fit=crop" alt="Discord Bot App" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/121217/ff0033?text=Bot+Discord'">
+                            <div class="absolute top-3 left-3 px-3 py-1 rounded-full bg-blue-600/80 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-md">Aplikacja</div>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <h3 class="text-xl font-bold text-white group-hover:text-neonRed-400 transition-colors">Multi-Purpose Discord Bot</h3>
+                            <p class="text-sm text-gray-400">Wielofunkcyjny bot moderacyjny i rozrywkowy z zaawansowanym systemem ticketów i weryfikacji.</p>
+                            <div class="flex flex-wrap gap-2 pt-2">
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">Python</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">discord.py</span>
+                                <span class="px-2.5 py-1 rounded-md bg-white/5 text-xs text-gray-300 font-code">SQLite</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex gap-3">
+                        <a href="#discordy.html" data-page="discordy.html" class="nav-link flex-1 py-2.5 rounded-xl bg-neonBlue-500/20 hover:bg-neonBlue-500 text-neonBlue-400 hover:text-white border border-neonBlue-500/40 font-semibold text-sm transition-all duration-300 text-center flex items-center justify-center space-x-2">
+                            <i class="fa-brands fa-discord"></i> <span>Zobacz w Discordy</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PAGE 3: CO ROBIĘ (corobie.html) -->
+        <section id="page-corobie" class="page-section hidden space-y-12 py-6">
+            <div class="text-center space-y-4">
+                <h2 class="text-3xl sm:text-5xl font-black text-white">Co <span class="text-neonRed-500 text-glow-red">Robię?</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Oferuję kompleksowe usługi tworzenia rozwiązań internetowych, skryptów dla serwerów gier oraz autorskich aplikacji.</p>
+            </div>
+
+            <!-- Detailed Services Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Service 1: Strony WWW -->
+                <div class="glass-panel rounded-3xl p-8 border border-white/10 hover:border-neonRed-500/50 transition-all duration-300 space-y-6 relative group overflow-hidden">
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-neonRed-500/10 rounded-full blur-2xl group-hover:bg-neonRed-500/20 transition-all"></div>
+                    <div class="w-16 h-16 rounded-2xl bg-neonRed-500/20 border border-neonRed-500 flex items-center justify-center text-neonRed-500 text-3xl shadow-neon-red">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white">Tworzenie Stron WWW</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Projektuję i koduję nowoczesne wizytówki, landing page'e, sklepy internetowe oraz panele gracza. Moje strony charakteryzują się:
+                    </p>
+                    <ul class="space-y-3 text-sm text-gray-300">
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-neonRed-500"></i>
+                            <span>Pełną responsywnością (RWD)</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-neonRed-500"></i>
+                            <span>Nowoczesną estetyką Neon & Dark Mode</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-neonRed-500"></i>
+                            <span>Optymalizacją szybkości i SEO</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-neonRed-500"></i>
+                            <span>Animacjami i interaktywnością</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Service 2: Skrypty Minecraft -->
+                <div class="glass-panel rounded-3xl p-8 border border-white/10 hover:border-neonRed-500/50 transition-all duration-300 space-y-6 relative group overflow-hidden">
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-neonRed-500/10 rounded-full blur-2xl group-hover:bg-neonRed-500/20 transition-all"></div>
+                    <div class="w-16 h-16 rounded-2xl bg-neonRed-500/20 border border-neonRed-500 flex items-center justify-center text-neonRed-500 text-3xl shadow-neon-red">
+                        <i class="fa-solid fa-cube"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white">Skrypty Minecraft</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Piszę zoptymalizowane skrypty dostosowane do wymagań Twojego serwera Minecraft (Survival, RPG, MediumHC, Anarchia).
+                    </p>
+                    <ul class="space-y-3 text-sm text-gray-300">
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-neonRed-500"></i>
+                            <span>Zaawansowane interfejsy Skript-GUI</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-neonRed-500"></i>
+                            <span>Autorskie systemy gildii, rang i misji</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-neonRed-500"></i>
+                            <span>Integracja webhooków z serwerami Discord</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-neonRed-500"></i>
+                            <span>Brak lagów i czysty kod z logami</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Service 3: Aplikacje & Boty -->
+                <div class="glass-panel rounded-3xl p-8 border border-white/10 hover:border-neonRed-500/50 transition-all duration-300 space-y-6 relative group overflow-hidden">
+                    <div class="absolute -top-12 -right-12 w-32 h-32 bg-neonRed-500/10 rounded-full blur-2xl group-hover:bg-neonRed-500/20 transition-all"></div>
+                    <div class="w-16 h-16 rounded-2xl bg-neonRed-500/20 border border-neonRed-500 flex items-center justify-center text-neonRed-500 text-3xl shadow-neon-red">
+                        <i class="fa-solid fa-terminal"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white">Aplikacje & Boty</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Tworzę dedykowane oprogramowanie pulpitowe oraz boty wspierające automatyzację i zarządzenie społecznościami.
+                    </p>
+                    <ul class="space-y-3 text-sm text-gray-300">
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-neonRed-500"></i>
+                            <span>Zaawansowane Boty Discord (JS/Python)</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-neonRed-500"></i>
+                            <span>Programy narzędziowe na Windows/Linux</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-neonRed-500"></i>
+                            <span>Automatyzacja procesów & API Integration</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-check text-neonRed-500"></i>
+                            <span>Przyjazne GUI dla użytkownika</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Call to Action Banner -->
+            <div class="glass-panel p-8 sm:p-10 rounded-3xl border border-neonRed-500/30 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+                <div class="space-y-2">
+                    <h4 class="text-2xl font-bold text-white">Masz własny pomysł na projekt?</h4>
+                    <p class="text-gray-400">Napisz do mnie na Discordzie, a zrealizuję go według Twoich specyfikacji.</p>
+                </div>
+                <a href="#discordy.html" data-page="discordy.html" class="nav-link px-8 py-4 rounded-xl bg-neonRed-500 hover:bg-neonRed-600 text-white font-bold shadow-neon-red hover:shadow-neon-red-lg transition-all whitespace-nowrap">
+                    Skontaktuj się
+                </a>
+            </div>
+        </section>
+
+        <!-- PAGE 4: W CZYM ROBIĘ (wczymrobie.html) -->
+        <section id="page-wczymrobie" class="page-section hidden space-y-12 py-6">
+            <div class="text-center space-y-4">
+                <h2 class="text-3xl sm:text-5xl font-black text-white">W Czym <span class="text-neonRed-500 text-glow-red">Robię?</span></h2>
+                <p class="text-gray-400 max-w-xl mx-auto">Moje główne środowiska programistyczne, narzędzia oraz technologie, z których korzystam na co dzień.</p>
+            </div>
+
+            <!-- Tools & IDE Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Tool 1: Visual Studio Code -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10 hover:border-neonRed-500/60 transition-all duration-300 space-y-4 group">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 rounded-xl bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-blue-400 text-3xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">VS Code</h3>
+                            <span class="text-xs text-neonRed-400 font-code">Główne Środowisko</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Mój podstawowy edytor do pisania stron internetowych (HTML/CSS/JS), skryptów oraz aplikacji w Python/Node.js. Wyposażony w zestaw wtyczek przyspieszających pracę.
+                    </p>
+                    <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                        <div class="bg-neonRed-500 h-2 rounded-full" style="width: 95%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 font-code">
+                        <span>Zaawansowanie</span>
+                        <span>95%</span>
+                    </div>
+                </div>
+
+                <!-- Tool 2: Visual Studio -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10 hover:border-neonRed-500/60 transition-all duration-300 space-y-4 group">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 rounded-xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 text-3xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-cubes"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Visual Studio</h3>
+                            <span class="text-xs text-purple-400 font-code">IDE dla C# / .NET</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Profesjonalne środowisko używane do budowania większych aplikacji desktopowych oraz zaawansowanych narzędzi wymagających wysokiej wydajności.
+                    </p>
+                    <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                        <div class="bg-purple-500 h-2 rounded-full" style="width: 80%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 font-code">
+                        <span>Zaawansowanie</span>
+                        <span>80%</span>
+                    </div>
+                </div>
+
+                <!-- Tool 3: GitHub & Git -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10 hover:border-neonRed-500/60 transition-all duration-300 space-y-4 group">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 rounded-xl bg-gray-700/40 border border-gray-500/40 flex items-center justify-center text-white text-3xl group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-github"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">GitHub / Git</h3>
+                            <span class="text-xs text-gray-400 font-code">Kontrola Wersji</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        System kontroli wersji pozwalający na bezpieczne przechowywanie kodu, zarządzanie repozytoriami oraz łatwą współpracę przy większych projektach.
+                    </p>
+                    <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                        <div class="bg-gray-300 h-2 rounded-full" style="width: 90%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 font-code">
+                        <span>Zaawansowanie</span>
+                        <span>90%</span>
+                    </div>
+                </div>
+
+                <!-- Tool 4: Node.js & Python -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10 hover:border-neonRed-500/60 transition-all duration-300 space-y-4 group">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 rounded-xl bg-green-500/20 border border-green-500/40 flex items-center justify-center text-green-400 text-3xl group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-node-js"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Node.js & Python</h3>
+                            <span class="text-xs text-green-400 font-code">Backend & Skrypty</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Środowiska uruchomieniowe używane do tworzenia botów na Discorda, backendu stron oraz automatyzacji zadań administracyjnych.
+                    </p>
+                    <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                        <div class="bg-green-500 h-2 rounded-full" style="width: 88%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 font-code">
+                        <span>Zaawansowanie</span>
+                        <span>88%</span>
+                    </div>
+                </div>
+
+                <!-- Tool 5: Skript & Spigot -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10 hover:border-neonRed-500/60 transition-all duration-300 space-y-4 group">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 rounded-xl bg-yellow-500/20 border border-yellow-500/40 flex items-center justify-center text-yellow-400 text-3xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-hammer"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Skript & Spigot</h3>
+                            <span class="text-xs text-yellow-400 font-code">Minecraft API</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Silniki serwerowe i dodatki do tworzenia niestandardowych mechanik gry Minecraft. Tworzenie czystego, wydajnego kodu bez zacięć.
+                    </p>
+                    <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 95%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 font-code">
+                        <span>Zaawansowanie</span>
+                        <span>95%</span>
+                    </div>
+                </div>
+
+                <!-- Tool 6: Figma & UI Design -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10 hover:border-neonRed-500/60 transition-all duration-300 space-y-4 group">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-14 h-14 rounded-xl bg-pink-500/20 border border-pink-500/40 flex items-center justify-center text-pink-400 text-3xl group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Figma & Design</h3>
+                            <span class="text-xs text-pink-400 font-code">Prototypowanie UI</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Projektowanie makiet, dobór kolorystyki neonowej oraz tworzenie estetycznych szablonów interfejsu przed kodowaniem.
+                    </p>
+                    <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                        <div class="bg-pink-500 h-2 rounded-full" style="width: 85%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 font-code">
+                        <span>Zaawansowanie</span>
+                        <span>85%</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PAGE 5: DISCORDY (discordy.html) -->
+        <section id="page-discordy" class="page-section hidden space-y-12 py-6">
+            <div class="text-center space-y-4">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-neonBlue-500/10 border border-neonBlue-500/30 text-neonBlue-400 text-xs font-semibold uppercase tracking-wider">
+                    <i class="fa-brands fa-discord"></i>
+                    <span>Niebieska Strefa Discord</span>
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-black text-white">Projekty <span class="text-neonBlue-400 text-glow-blue">Discord</span></h2>
+                <p class="text-gray-400 max-w-xl mx-auto">Serwery, społeczności oraz autorskie boty stworzone przeze mnie dla klientów i partnerów.</p>
+            </div>
+
+            <!-- Discord Project Frames Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Discord Frame 1 -->
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-neonBlue-500/40 hover:border-neonBlue-400 shadow-neon-blue transition-all duration-300 flex flex-col justify-between space-y-6 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-neonBlue-500/10 rounded-bl-full pointer-events-none"></div>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-14 h-14 rounded-2xl bg-neonBlue-500/20 border border-neonBlue-400 flex items-center justify-center text-neonBlue-400 text-3xl">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white">CyberCommunity PL</h3>
+                                    <span class="text-xs text-neonBlue-400 font-semibold">Dla: Klient Prywatny</span>
+                                </div>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-bold border border-green-500/30">
+                                Active (2.5k memberów)
+                            </span>
+                        </div>
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            Kompleksowa konfiguracja serwera społecznościowego e-sportowego. Zaprojektowane kanały, role autoryzacji, weryfikacja SMS/captcha oraz autorski bot do turniejów.
+                        </p>
+                        <div class="bg-darkBg/60 rounded-xl p-4 border border-white/5 space-y-2 text-xs text-gray-400">
+                            <div class="flex justify-between"><span>Funkcje:</span> <span class="text-white">Auto-Moderacja, System Ticketów</span></div>
+                            <div class="flex justify-between"><span>Rola xVeerse:</span> <span class="text-neonBlue-400">Główny Technik / Bot Developer</span></div>
+                        </div>
+                    </div>
+                    <a href="https://discord.gg" target="_blank" rel="noopener" class="w-full py-3.5 rounded-xl bg-neonBlue-500 hover:bg-neonBlue-600 text-white font-bold text-sm shadow-neon-blue transition-all duration-300 text-center flex items-center justify-center space-x-2">
+                        <i class="fa-brands fa-discord text-lg"></i>
+                        <span>Dołącz do serwera</span>
+                    </a>
+                </div>
+
+                <!-- Discord Frame 2 -->
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-neonBlue-500/40 hover:border-neonBlue-400 shadow-neon-blue transition-all duration-300 flex flex-col justify-between space-y-6 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-neonBlue-500/10 rounded-bl-full pointer-events-none"></div>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-14 h-14 rounded-2xl bg-neonBlue-500/20 border border-neonBlue-400 flex items-center justify-center text-neonBlue-400 text-3xl">
+                                    <i class="fa-solid fa-gamepad"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white">xNetwork Minecraft DC</h3>
+                                    <span class="text-xs text-neonBlue-400 font-semibold">Dla: Sieć Serwerów Minecraft</span>
+                                </div>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs font-bold border border-green-500/30">
+                                Active (5.1k memberów)
+                            </span>
+                        </div>
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            Dedykowany serwer Discord zintegrowany bezpośrednio z grą Minecraft. Pokazuje statystyki graczy w czasie rzeczywistym oraz umożliwia zakupy w ItemShopie.
+                        </p>
+                        <div class="bg-darkBg/60 rounded-xl p-4 border border-white/5 space-y-2 text-xs text-gray-400">
+                            <div class="flex justify-between"><span>Funkcje:</span> <span class="text-white">Minecraft Status, Sync Rangi</span></div>
+                            <div class="flex justify-between"><span>Rola xVeerse:</span> <span class="text-neonBlue-400">Full Setup & Bot Integration</span></div>
+                        </div>
+                    </div>
+                    <a href="https://discord.gg" target="_blank" rel="noopener" class="w-full py-3.5 rounded-xl bg-neonBlue-500 hover:bg-neonBlue-600 text-white font-bold text-sm shadow-neon-blue transition-all duration-300 text-center flex items-center justify-center space-x-2">
+                        <i class="fa-brands fa-discord text-lg"></i>
+                        <span>Dołącz do serwera</span>
+                    </a>
+                </div>
+
+                <!-- Discord Frame 3 -->
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-neonBlue-500/40 hover:border-neonBlue-400 shadow-neon-blue transition-all duration-300 flex flex-col justify-between space-y-6 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-neonBlue-500/10 rounded-bl-full pointer-events-none"></div>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-14 h-14 rounded-2xl bg-neonBlue-500/20 border border-neonBlue-400 flex items-center justify-center text-neonBlue-400 text-3xl">
+                                    <i class="fa-solid fa-robot"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white">xBot Guard Pro</h3>
+                                    <span class="text-xs text-neonBlue-400 font-semibold">Dla: Publiczny Bot</span>
+                                </div>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-blue-500/20 text-neonBlue-400 text-xs font-bold border border-blue-500/30">
+                                85+ Serwerów
+                            </span>
+                        </div>
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            Zaawansowany bot ochronny chroniący przed atakami rajdowymi, spammem i niechcianymi zaproszeniami. Wykorzystuje szyfrowaną bazę danych SQL.
+                        </p>
+                        <div class="bg-darkBg/60 rounded-xl p-4 border border-white/5 space-y-2 text-xs text-gray-400">
+                            <div class="flex justify-between"><span>Technologia:</span> <span class="text-white">Node.js, Discord.js v14</span></div>
+                            <div class="flex justify-between"><span>Status:</span> <span class="text-green-400">Online 99.9%</span></div>
+                        </div>
+                    </div>
+                    <button onclick="addBotModal()" class="w-full py-3.5 rounded-xl bg-neonBlue-500 hover:bg-neonBlue-600 text-white font-bold text-sm shadow-neon-blue transition-all duration-300 text-center flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-plus-circle text-lg"></i>
+                        <span>Dodaj bota do serwera</span>
+                    </button>
+                </div>
+
+                <!-- Discord Frame 4 -->
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-neonBlue-500/40 hover:border-neonBlue-400 shadow-neon-blue transition-all duration-300 flex flex-col justify-between space-y-6 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-neonBlue-500/10 rounded-bl-full pointer-events-none"></div>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-14 h-14 rounded-2xl bg-neonBlue-500/20 border border-neonBlue-400 flex items-center justify-center text-neonBlue-400 text-3xl">
+                                    <i class="fa-solid fa-comments"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white">Oficjalny Discord xVeerse</h3>
+                                    <span class="text-xs text-neonBlue-400 font-semibold">Moja Główna Baza</span>
+                                </div>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold border border-purple-500/30">
+                                Mój Serwer
+                            </span>
+                        </div>
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            Dołącz do mojego oficjalnego serwera Discord, aby zamawiać projekty, pobierać darmowe skrypty, rozmawiać i uzyskiwać wsparcie techniczne.
+                        </p>
+                        <div class="bg-darkBg/60 rounded-xl p-4 border border-white/5 space-y-2 text-xs text-gray-400">
+                            <div class="flex justify-between"><span>Społeczność:</span> <span class="text-white">Programiści & Gracze</span></div>
+                            <div class="flex justify-between"><span>Kontakt:</span> <span class="text-neonBlue-400">Direct Support</span></div>
+                        </div>
+                    </div>
+                    <a href="https://discord.gg" target="_blank" rel="noopener" class="w-full py-3.5 rounded-xl bg-neonBlue-500 hover:bg-neonBlue-600 text-white font-bold text-sm shadow-neon-blue transition-all duration-300 text-center flex items-center justify-center space-x-2">
+                        <i class="fa-brands fa-discord text-lg"></i>
+                        <span>Dołącz do mojego serwera</span>
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Interactive Download / Demo Modal -->
+    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden transition-opacity duration-300">
+        <div class="glass-panel max-w-md w-full rounded-3xl p-6 sm:p-8 border border-neonRed-500/50 shadow-neon-red relative space-y-6 text-center transform scale-95 transition-transform duration-300" id="modal-container">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div id="modal-icon" class="w-16 h-16 rounded-full bg-neonRed-500/20 border border-neonRed-500 text-neonRed-500 flex items-center justify-center text-3xl mx-auto">
+                <i class="fa-solid fa-download"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 id="modal-title" class="text-2xl font-bold text-white">Pobieranie Pliku</h3>
+                <p id="modal-desc" class="text-sm text-gray-400">Twoje pobieranie rozpocznie się automatycznie za chwilę...</p>
+            </div>
+            <div id="modal-action-btn">
+                <button onclick="closeModal()" class="w-full py-3 rounded-xl bg-neonRed-500 hover:bg-neonRed-600 text-white font-bold shadow-neon-red">
+                    ZamknijOkno
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="glass-panel border-t border-neonRed-500/20 relative z-10 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <span class="text-xl font-black text-white">x<span class="text-neonRed-500">Veerse</span></span>
+                <span class="text-xs text-gray-500">| Wszystkie prawa zastrzeżone &copy; 2026</span>
+            </div>
+            <div class="flex space-x-4 text-gray-400 text-lg">
+                <a href="#discordy.html" data-page="discordy.html" class="nav-link hover:text-neonBlue-400 transition-colors"><i class="fa-brands fa-discord"></i></a>
+                <a href="#wczymrobie.html" data-page="wczymrobie.html" class="nav-link hover:text-neonRed-500 transition-colors"><i class="fa-brands fa-github"></i></a>
+                <a href="#corobie.html" data-page="corobie.html" class="nav-link hover:text-neonRed-500 transition-colors"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Client Application JavaScript Engine -->
+    <script>
+        // SPA Router logic for handling history and seamless view switching
+        const routes = {
+            'index.html': 'page-index',
+            'portofolio.html': 'page-portofolio',
+            'corobie.html': 'page-corobie',
+            'wczymrobie.html': 'page-wczymrobie',
+            'discordy.html': 'page-discordy'
+        };
+
+        function navigateTo(pageKey, pushState = true) {
+            // Default fallback to index.html if invalid
+            if (!routes[pageKey]) pageKey = 'index.html';
+
+            // Hide all sections
+            document.querySelectorAll('.page-section').forEach(sec => {
+                sec.classList.add('hidden');
+            });
+
+            // Show selected page section
+            const targetId = routes[pageKey];
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            }
+
+            // Update Header Active Styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                const btnPage = btn.getAttribute('data-page');
+                if (btnPage === pageKey) {
+                    if (pageKey === 'discordy.html') {
+                        btn.className = 'nav-btn px-4 py-2 rounded-lg text-sm font-bold text-white bg-neonBlue-500 border border-neonBlue-400 shadow-neon-blue transition-all duration-300 flex items-center space-x-2 ml-2';
+                    } else {
+                        btn.className = 'nav-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center space-x-2 text-white bg-neonRed-500/20 border border-neonRed-500/50 shadow-neon-red';
+                    }
+                } else {
+                    if (btnPage === 'discordy.html') {
+                        btn.className = 'nav-btn px-4 py-2 rounded-lg text-sm font-bold text-neonBlue-400 bg-neonBlue-500/10 border border-neonBlue-500/40 hover:bg-neonBlue-500 hover:text-white transition-all duration-300 flex items-center space-x-2 ml-2';
+                    } else {
+                        btn.className = 'nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-300 flex items-center space-x-2';
+                    }
+                }
+            });
+
+            // Scroll to top smooth
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Close mobile dropdown if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+
+            // Update Browser URL Hash
+            if (pushState) {
+                window.location.hash = pageKey;
+            }
+        }
+
+        // Handle direct links or browser back/forward
+        function handleHashChange() {
+            let hash = window.location.hash.replace('#', '');
+            if (!hash) hash = 'index.html';
+            navigateTo(hash, false);
+        }
+
+        window.addEventListener('hashchange', handleHashChange);
+        window.addEventListener('DOMContentLoaded', () => {
+            handleHashChange();
+            initCanvasBackground();
+            initPortfolioFilters();
+            initMobileMenu();
+        });
+
+        // Global Link click listeners for SPA navigation
+        document.addEventListener('click', function (e) {
+            const target = e.target.closest('[data-page]');
+            if (target) {
+                e.preventDefault();
+                const page = target.getAttribute('data-page');
+                navigateTo(page);
+            }
+        });
+
+        function initPortfolioFilters() {
+            const filterBtns = document.querySelectorAll('#portfolio-filters .filter-btn');
+            const items = document.querySelectorAll('.portfolio-item');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => {
+                        b.className = 'filter-btn px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 glass-panel text-gray-300 hover:text-white hover:border-neonRed-500/50';
+                    });
+                    btn.className = 'filter-btn active px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 bg-neonRed-500 text-white shadow-neon-red';
+
+                    const filter = btn.getAttribute('data-filter');
+
+                    items.forEach(item => {
+                        if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                            item.style.display = 'flex';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        }
+
+        function initMobileMenu() {
+            const toggleBtn = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (toggleBtn && mobileMenu) {
+                toggleBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        }
+
+        function downloadScript(fileName) {
+            const modal = document.getElementById('custom-modal');
+            const title = document.getElementById('modal-title');
+            const desc = document.getElementById('modal-desc');
+            const icon = document.getElementById('modal-icon');
+
+            icon.className = 'w-16 h-16 rounded-full bg-neonRed-500/20 border border-neonRed-500 text-neonRed-500 flex items-center justify-center text-3xl mx-auto';
+            icon.innerHTML = '<i class="fa-solid fa-download"></i>';
+            title.innerText = 'Pobieranie Pliku';
+            desc.innerText = `Pobieranie pliku "${fileName}" rozpocznie się za chwilę. Dziękujemy za korzystanie z projektów xVeerse!`;
+
+            modal.classList.remove('hidden');
+        }
+
+        function openLiveDemo(titleName, url) {
+            const modal = document.getElementById('custom-modal');
+            const title = document.getElementById('modal-title');
+            const desc = document.getElementById('modal-desc');
+            const icon = document.getElementById('modal-icon');
+
+            icon.className = 'w-16 h-16 rounded-full bg-neonRed-500/20 border border-neonRed-500 text-neonRed-500 flex items-center justify-center text-3xl mx-auto';
+            icon.innerHTML = '<i class="fa-solid fa-laptop text-3xl"></i>';
+            title.innerText = titleName;
+            desc.innerText = `Strona zostanie otwarta w trybie podglądu. Jeśli podgląd nie załaduje się automatycznie, możesz kliknąć poniższy przycisk.`;
+
+            modal.classList.remove('hidden');
+        }
+
+        function addBotModal() {
+            const modal = document.getElementById('custom-modal');
+            const title = document.getElementById('modal-title');
+            const desc = document.getElementById('modal-desc');
+            const icon = document.getElementById('modal-icon');
+
+            icon.className = 'w-16 h-16 rounded-full bg-neonBlue-500/20 border border-neonBlue-400 text-neonBlue-400 flex items-center justify-center text-3xl mx-auto';
+            icon.innerHTML = '<i class="fa-brands fa-discord text-3xl"></i>';
+            title.innerText = 'Dodawanie Bota Discord';
+            desc.innerText = 'Zostaniesz przekierowany do oficjalnego panelu autoryzacji Discord, aby wybrać swój serwer.';
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        function initCanvasBackground() {
+            const canvas = document.getElementById('bg-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let width = (canvas.width = window.innerWidth);
+            let height = (canvas.height = window.innerHeight);
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            // Particles array with red neon & subtle blue accents
+            const particles = [];
+            const particleCount = Math.min(Math.floor(width / 20), 60);
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 2 + 1,
+                    color: Math.random() > 0.85 ? '#00bfff' : '#ff0033',
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    alpha: Math.random() * 0.5 + 0.2
+                });
+            }
+
+            function animateCanvas() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw background particles
+                particles.forEach((p, index) => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if (p.x < 0) p.x = width;
+                    if (p.x > width) p.x = 0;
+                    if (p.y < 0) p.y = height;
+                    if (p.y > height) p.y = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.alpha;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = p.color;
+                    ctx.fill();
+
+                    // Draw connecting lines between close particles
+                    for (let j = index + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        const dx = p.x - p2.x;
+                        const dy = p.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.strokeStyle = p.color;
+                            ctx.globalAlpha = (1 - dist / 120) * 0.15;
+                            ctx.stroke();
+                        }
+                    }
+                });
+
+                requestAnimationFrame(animateCanvas);
+            }
+
+            animateCanvas();
+        }
+    </script>
+</body>
+</html>
