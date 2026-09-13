@@ -1,0 +1,328 @@
+# ------------------------------- #
+            # TO-DO:
+            # - Dorobienie oddzielnego chatu dla sprawdzajacego i sprawdzanego
+            # - Dodanie topki sprawdzonych osob
+            # - Dodanie historii sprawdzonych osob
+            # - Dodanie historii gracza: kto, kiedy i za co - sprawdzal owego gracza
+            # ------------------------------- #
+
+            # ------------------------------- #
+            # Komendy [DO SPRAWDZANIA]
+            #  - /spr sprawdz <nick>
+            #  - /spr czysty <nick>
+            # ------------------------------- #
+            # Komendy [DO BANOWANIA]
+            #  - /spr cheater <nick>
+            #  - /spr przyznanie <nick>
+            #  - /spr brakwspolpracy <nick>
+            # ------------------------------- #
+            # Komendy [DO USTAWIANIA]
+            #  - /spr setspawn
+            #  - /spr setlobby
+            # ------------------------------- #
+            # Komendy [INNE]
+            #  - /spr licznik <nick>
+            # ------------------------------- #
+            # Komendy [DLA GRACZA]
+            #  - /przyznajesie
+            # ------------------------------- #
+            
+    
+variables:
+    {vCheck.sprawdz::%player%} = false
+    {vCheck.licznik::%player%} = 0
+    {vCheck.czysty::%player%} = 0
+    {vCheck.cheater::%player%} = 0
+    {vCheck.przyznanie::%player%} = 0
+    {vCheck.brakwspolpracy::%player%} = 0
+    
+options:
+    # Glowny tag wiadomosci
+    tag: &8&lSprawdzanie &8»
+    
+    # Brak permisji
+    perm_message: &8» &cNie posiadasz permisji do tej komendy!
+    # Permisja do komendy /sprawdz
+    perm_sprawdz: core.check
+    # Permisja do komend /sprawdz setlobby | /sprawdz setspawn
+    perm_ustaw: core.setcheck
+    
+    # Anty Ban dla wyzszej administracji
+    admini: "Vayss"
+    
+
+on quit:
+    if {vCheck.sprawdz::%player%} is true:
+        set {vCheck.sprawdz::%player%} to false
+        execute console command "tempban %player% 7d Logout"
+        add 1 to {vCheck.cheater::%{vCheck.sprawdzajacy::%player%}%}
+        broadcast " "
+        broadcast " {@tag} &c%player% &7wylogowal sie podczas sprawdzania"
+        broadcast " {@tag} &7Osoba sprawdzajaca: &6&l%{vCheck.sprawdzajacy::%player%}%"
+        broadcast " "
+        broadcast " &f● &cZostal zbanowany tymczasowo za swoje bledy!"
+        broadcast " "
+        clear {vCheck.sprawdzajacy::%player%}
+        stop
+        
+on command:
+    if {vCheck.sprawdz::%player%} is true:
+        if command is not "msg" or "r" or "helpop" or "przyznajesie":
+            cancel event
+            send " {@tag} &7Tej akcji nie mozesz wykonac podczas sprawdzania!" to player
+            stop
+            
+on chat:
+    if {vCheck.sprawdz::%player%} is true:
+        cancel event
+        send " {@tag} &7Tej akcji nie mozesz wykonac podczas sprawdzania!" to player
+        stop
+            
+    
+command /sprawdz [<text>] [<player>]:
+    permission: {@perm_sprawdz}
+    permission message: {@perm_message}
+    executable by: player
+    aliases: spr, check, vcheck
+    trigger:
+        if argument 1 is "spr" or "sprawdz" or "gracz" or "g":
+            if player-argument is set:
+                if {vCheck.sprawdz::%player-argument%} is false:
+                    if player-argument is not {@admini}:
+                        if {vCheck.xlobby} is set:
+                            set {vCheck.sprawdz::%player-argument%} to true
+                            set {vCheck.sprawdzajacy::%player-argument%} to "%player%"
+                            add 1 to {vCheck.licznik::%player%}
+                            teleport player-argument to {vCheck.xlobby}
+                            teleport player to {vCheck.xlobby}
+                            
+                            # --- --- --- --- --- --- --- --- --- --- --- #
+                            
+                            broadcast " "
+                            broadcast " {@tag} &c%player-argument% &7zostal wezwany do sprawdzenia!"
+                            broadcast " {@tag} &7Aktualnie jest sprawdzany przez &6&l%{vCheck.sprawdzajacy::%player-argument%}%"
+                            broadcast " "
+                            broadcast " &f● &cPamietaj, aby wykonywac polecenia osoby sprawdzajacej!"
+                            broadcast " "
+                            stop
+                        else:
+                            send " {@tag} &7Brak ustawionej lokacji &2&lSPRAWDZARKI" to player
+                            stop
+                    else:
+                        send " {@tag} &7Nie mozesz uzywac tej komendy na Administracji!" to player
+                        send " {@tag} &c%player% &7probowal sprawdzic &f%player-argument%&7 przez komende &6&l/sprawdz" to all ops
+                        stop
+                else:
+                    send " {@tag} &7Gracz jest juz sprawdzany!" to player
+                    stop
+            else:
+                send " {@tag} &7Poprawne uzycie &6&l/sprawdz <spr/sprawdz/gracz/g> <nick>" to player
+                stop
+                
+        # ------------------------------------------------- #        
+        
+        if argument 1 is "czysty" or "czy":
+            if player-argument is set:
+                if {vCheck.sprawdz::%player-argument%} is true:
+                    if {vCheck.xspawn} is set:
+                        set {vCheck.sprawdz::%player-argument%} to false
+                        add 1 to {vCheck.czysty::%player%}
+                        teleport player-argument to {vCheck.xspawn}
+                        teleport player to {vCheck.xspawn}
+                        
+                        # --- --- --- --- --- --- --- --- --- --- --- #
+                        
+                        broadcast " "
+                        broadcast " {@tag} &c%player-argument% &7okazal sie byc &f&lczystym"
+                        broadcast " {@tag} &7Osoba sprawdzajaca: &6&l%{vCheck.sprawdzajacy::%player-argument%}%"
+                        broadcast " "
+                        clear {vCheck.sprawdzajacy::%player-argument%}
+                        stop
+                    else:
+                        send " {@tag} &7Brak ustawionej lokacji &2&lSPAWN" to player
+                        stop
+                else:
+                    send " {@tag} &7Gracz nie jest sprawdzany!" to player
+                    stop
+            else:
+                send " {@tag} &7Poprawne uzycie &6&l/sprawdz <czysty/czy> <nick>" to player
+                stop
+                
+        # ------------------------------------------------- #
+        
+        if argument 1 is "cheater" or "cheat" or "ch":
+            if player-argument is set:
+                if {vCheck.sprawdz::%player-argument%} is true:
+                    if player-argument is not {@admini}:
+                        set {vCheck.sprawdz::%player-argument%} to false
+                        add 1 to {vCheck.cheater::%player%}
+                        
+                        # --- --- --- --- --- --- --- --- --- --- --- #
+                        
+                        execute console command "tempban %player-argument% 7d Wykrycie cheatow podczas sprawdzania"
+                        broadcast " "
+                        broadcast " {@tag} &c%player-argument% &7okazal sie byc &f&lcheaterem"
+                        broadcast " {@tag} &7Osoba sprawdzajaca: &6&l%{vCheck.sprawdzajacy::%player-argument%}%"
+                        broadcast " "
+                        broadcast " &f● &cZostal zbanowany permanentnie za swoje bledy!"
+                        broadcast " "
+                        clear {vCheck.sprawdzajacy::%player-argument%}
+                        stop
+                    else:
+                        send " {@tag} &7Nie mozesz uzywac tej komendy na Administracji!" to player
+                        send " {@tag} &c%player% &7probowal zbanowac &f%player-argument%&7 przez komende &6&l/sprawdz cheater" to all ops
+                        stop
+                else:
+                    send " {@tag} &7Gracz nie jest sprawdzany!" to player
+                    stop
+            else:
+                send " {@tag} &7Poprawne uzycie &6&l/sprawdz <cheater/cheat/ch> <nick>" to player
+                stop
+                
+        # ------------------------------------------------- #
+        
+        if argument 1 is "przyznanie" or "przyzn" or "przyz" or "prz":
+            if player-argument is set:
+                if {vCheck.sprawdz::%player-argument%} is true:
+                    if player-argument is not {@admini}:
+                        set {vCheck.sprawdz::%player-argument%} to false
+                        add 1 to {vCheck.przyznanie::%player%}
+                        
+                        # --- --- --- --- --- --- --- --- --- --- --- #
+                        
+                        execute console command "tempban %player-argument% 3d Przyznanie sie do cheatow"
+                        broadcast " "
+                        broadcast " {@tag} &c%player-argument% &7przyznal sie do uzywania &f&lcheatow"
+                        broadcast " {@tag} &7Osoba sprawdzajaca: &6&l%{vCheck.sprawdzajacy::%player-argument%}%"
+                        broadcast " "
+                        broadcast " &f● &cZostal zbanowany tymczasowo za swoje bledy!"
+                        broadcast " "
+                        clear {vCheck.sprawdzajacy::%player-argument%}
+                        stop
+                    else:
+                        send " {@tag} &7Nie mozesz uzywac tej komendy na Administracji!" to player
+                        send " {@tag} &c%player% &7probowal zbanowac &f%player-argument%&7 przez komende &6&l/sprawdz przyznanie" to all ops
+                        stop
+                else:
+                    send " {@tag} &7Gracz nie jest sprawdzany!" to player
+                    stop
+            else:
+                send " {@tag} &7Poprawne uzycie &6&l/sprawdz <przyznanie/przyzn/przyz/prz> <nick>" to player
+                stop
+                
+        # ------------------------------------------------- #
+        
+        if argument 1 is "brakwspolpracy" or "brakwsp" or "brak":
+            if player-argument is set:
+                if {vCheck.sprawdz::%player-argument%} is true:
+                    if player-argument is not {@admini}:
+                        set {vCheck.sprawdz::%player-argument%} to false
+                        add 1 to {vCheck.brakwspolpracy::%player%}
+                        
+                        # --- --- --- --- --- --- --- --- --- --- --- #
+                        
+                        execute console command "tempban %player-argument% 5d Brak wspolpracy"
+                        broadcast " "
+                        broadcast " {@tag} &c%player-argument% &7nie wykonywal polecen sprawdzajacego"
+                        broadcast " {@tag} &7Osoba sprawdzajaca: &6&l%{vCheck.sprawdzajacy::%player-argument%}%"
+                        broadcast " "
+                        broadcast " &f● &cZostal zbanowany tymczasowo za swoje bledy!"
+                        broadcast " "
+                        clear {vCheck.sprawdzajacy::%player-argument%}
+                        stop
+                    else:
+                        send " {@tag} &7Nie mozesz uzywac tej komendy na Administracji!" to player
+                        send " {@tag} &c%player% &7probowal zbanowac &f%player-argument%&7 przez komende &6&l/sprawdz brakwspolpracy" to all ops
+                        stop
+                else:
+                    send " {@tag} &7Gracz nie jest sprawdzany!" to player
+                    stop
+            else:
+                send " {@tag} &7Poprawne uzycie &6&l/sprawdz <brakwspolpracy/brakwsp/brak> <nick>" to player
+                stop
+                
+        # ------------------------------------------------- #        
+        
+        if argument 1 is "licznik":
+            if player-argument is set:
+                if {vCheck.licznik::%player-argument%} is equal to 0:
+                    send " {@tag} &7Ten Administrator jeszcze nikogo nie sprawdzil!" to player
+                    stop
+                else if {vCheck.licznik::%player-argument%} is bigger than 0:
+                    if {vCheck.licznik::%player-argument%} is 1:
+                        send " {@tag} &7Administrator &c%player-argument% &7sprawdzil &6&l1 &7osobe!"
+                        send "  &f● &7W tym: &f%{vCheck.czysty::%player-argument%}% (czysty) &e%{vCheck.cheater::%player-argument%}% (cheater) &b%{vCheck.przyznanie::%player-argument%}% (przyznanie) &a%{vCheck.brakwspolpracy::%player-argument%}% (brakwspolpracy)"
+                        stop
+                    if {vCheck.licznik::%player-argument%} is 2 or 3 or 4:
+                        send " {@tag} &7Administrator &c%player-argument% &7sprawdzil &6&l%{vCheck.licznik::%player-argument%}% &7osoby!"
+                        send "  &f● &7W tym: &f%{vCheck.czysty::%player-argument%}% (czysci) &e%{vCheck.cheater::%player-argument%}% (cheaterzy) &b%{vCheck.przyznanie::%player-argument%}% (przyznanie) &a%{vCheck.brakwspolpracy::%player-argument%}% (brakwspolpracy)"
+                        stop
+                    else if {vCheck.licznik::%player-argument%} is bigger than or equal to 5:
+                        send " {@tag} &7Administrator &c%player-argument% &7sprawdzil &6&l%{vCheck.licznik::%player-argument%}% &7osob!"
+                        send "  &f● &7W tym: &f%{vCheck.czysty::%player-argument%}% (czysci) &e%{vCheck.cheater::%player-argument%}% (cheaterzy) &b%{vCheck.przyznanie::%player-argument%}% (przyznanie) &a%{vCheck.brakwspolpracy::%player-argument%}% (brakwspolpracy)"
+                        stop
+            else:
+                send " {@tag} &7Poprawne uzycie &6&l/sprawdz licznik <nick>" to player
+                stop
+                
+        # ------------------------------------------------- #
+        
+        if argument 1 is "setlobby":
+            if player has permission "{@perm_ustaw}":
+                set {vCheck.xlobby} to location of player
+                send " {@tag} &7Lokacja &2&lSPAWDZARKI &7zostala ustawiona!" to player
+                stop
+        
+        # ------------------------------------------------- #
+        
+        if argument 1 is "setspawn":
+            if player has permission "{@perm_ustaw}":
+                set {vCheck.xspawn} to location of player
+                send " {@tag} &7Lokacja &2&lSPAWNU &7zostala ustawiona!" to player
+                stop
+                
+        # ------------------------------------------------- #
+        
+        else:
+            send " &f[ &8&m---------------&r&f&l Sprawdzanie &8&m---------------&r&f ] " to player
+            send " " to player
+            send "   &6&lGLOWNE KOMENDY &e&o(perm: {@perm_sprawdz})" to player
+            send "  &8» &f/sprawdz spr <nick> &7&o(Sprawdzanie gracza)" to player
+            send "  &8» &f/sprawdz czy <nick> &7&o(Oczyszczanie gracza z zarzutow)" to player
+            send "  &8» &f/sprawdz ch <nick> &7&o(Zbanowanie gracz za cheaty)" to player
+            send "  &8» &f/sprawdz przyz <nick> &7&o(Zbanowanie gracz za przyznanie sie)" to player
+            send "  &8» &f/sprawdz brak <nick> &7&o(Zbanowanie gracz za brak wspolpracy)" to player
+            send "  &8» &f/sprawdz licznik <nick> &7&o(Sprawdzanie ilosci sprawdzonych osob)" to player
+            if player has permission "{@perm_ustaw}":
+                send " " to player
+                send "   &6&lPOBOCZNE &e&o(perm: {@perm_ustaw})" to player
+                send "  &8» &f/sprawdz setlobby &7&o(Ustawianie SPRAWDZARKI)" to player
+                send "  &8» &f/sprawdz setspawn &7&o(Ustawianie SPAWNU)" to player
+            send " " to player
+            send " &f[ &8&m---------------&r&f&l Sprawdzanie &8&m---------------&r&f ] " to player
+            stop
+            
+command /przyznajesie [<text>]:
+    executable by: player
+    trigger:
+        if {vCheck.sprawdz::%player%} is true:
+            set {vCheck.sprawdz::%player%} to false
+            add 1 to {vCheck.przyznanie::%{vCheck.sprawdzajacy::%player%}%}
+            
+            # --- --- --- --- --- --- --- --- --- --- --- #
+            
+            execute console command "tempban %player% 3d Przyznanie sie do cheatow"
+            broadcast " "
+            broadcast " {@tag} &c%player% &7przyznal sie do uzywania &f&lcheatow"
+            broadcast " {@tag} &7Osoba sprawdzajaca: &6&l%{vCheck.sprawdzajacy::%player%}%"
+            broadcast " "
+            broadcast " &f● &cZostal zbanowany tymczasowo za swoje bledy!"
+            broadcast " "
+            clear {vCheck.sprawdzajacy::%player%}
+            stop
+        else:
+            send " {@tag} &7Nie jestes sprawdzany!" to player
+            stop
+            
+            
+# ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- #

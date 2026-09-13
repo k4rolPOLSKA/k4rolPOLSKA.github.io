@@ -1,0 +1,379 @@
+
+    
+function activate_thorns(p: player, t: number):
+    set {kolce.%uuid of {_p}%} to true
+
+    wait {@kolce-czas} seconds
+    deactivate_thorns({_p})
+
+function deactivate_thorns(p: player):
+    delete {kolce.%uuid of {_p}%}
+    send "&4✖ &cKolce wygasły!" to {_p}
+
+
+options:
+    cooldown: 25
+    kolce-czas: 7
+    futro-czas: 8
+    rozga-blok: 8
+    pokeball-szansa: 50
+    kolce-szansa: 50
+    mieczchwaly-szansa: 50
+
+
+
+command /deleteskull:
+    trigger:
+        delete {czaszka}
+command /eventowki-minestar:
+    permission: jotmar-eventowki.list
+    trigger:
+        if {czaszka} is not set:
+            
+            set player's selected hotbar slot to 0
+            set {_tool} to player's tool
+            set player's tool to air
+            
+            execute player command "skinsrestorer:skull https://www.minecraftskins.com/uploads/skins/2025/04/22/elegant-golden-skeleton-23217340.png?v938"
+            wait 25 ticks
+            set name of player's tool to "&x&d&9&a&9&1&b&lᴢ&x&d&9&a&b&1&e&lʟ&x&d&9&a&e&2&1&lᴏ&x&d&9&b&0&2&4&lᴛ&x&d&9&b&2&2&6&lᴀ&x&d&9&b&4&2&9&l &x&d&a&b&7&2&c&lᴄ&x&d&a&b&9&2&f&lᴢ&x&d&a&b&b&3&2&lᴀ&x&d&a&b&d&3&5&lꜱ&x&d&a&c&0&3&7&lᴢ&x&d&a&c&2&3&a&lᴋ&x&d&a&c&4&3&d&lᴀ"
+            add "&8x &fPosiadając ja w ekwipunku, po śmierci" to lore of player's tool
+            add "&8x &anie tracimy &fżadnych przedmiotów" to lore of player's tool
+            add "" to lore of player's tool
+            add "&8x &4&lUwaga! &cPrzedmiot ten jest jednorazowy" to lore of player's tool
+            add "" to lore of player's tool
+            add "&8x &7Przedmiot pochodzi z eventu &aᴘᴏꜱᴢᴜᴋɪᴡᴀᴄᴢᴇ ꜱᴋᴀʀʙᴏᴡ 2024" to lore of player's tool
+            set {czaszka} to player's tool
+            
+            set player's tool to {_tool}
+        set {_inv} to chest inventory with 6 rows named "&7Mythic items &8- &aList"
+        
+        set slot 0 of {_inv} to weeping vines named "&x&e&d&8&6&5&a&lᴋ&x&e&7&8&6&5&0&lᴏ&x&e&1&8&7&4&6&lʟ&x&d&a&8&7&3&c&lᴄ&x&d&4&8&8&3&2&lᴇ&x&c&e&8&8&2&8&l &x&c&8&8&9&1&e&lᴊ&x&c&1&8&9&1&4&lᴇ&x&b&b&8&a&0&a&lᴢ&x&b&5&8&a&0&0&lᴀ" with lore "" and "&8x &fPo użyciu przez kilka sekund mamy szanse na blokowanie " and "&8x &fuderzeń oraz oddawanie &cotrzymanaych obrazen &7rywalowi" 
+        set slot 1 of {_inv} to honeycomb named "&x&c&4&4&5&d&d&lᴍ&x&b&a&4&a&d&b&lɪ&x&b&0&4&f&d&a&lꜱ&x&a&7&5&4&d&8&lᴛ&x&9&d&5&9&d&6&lᴜ&x&9&3&5&e&d&5&lʀ&x&8&9&6&3&d&3&lᴀ&x&8&0&6&8&d&1&l &x&7&6&6&d&d&0&lᴏ&x&6&c&7&2&c&e&lᴅ&x&6&2&7&6&c&c&lᴍ&x&5&8&7&b&c&b&lʟ&x&4&f&8&0&c&9&lᴏ&x&4&5&8&5&c&7&lᴅ&x&3&b&8&a&c&6&lᴢ&x&3&1&8&f&c&4&lᴇ&x&2&8&9&4&c&2&lɴ&x&1&e&9&9&c&1&lɪ&x&1&4&9&e&b&f&lᴀ" with lore "&8x &fPo wypiciu regeneruje" and "&8x &fnasze &azdrowie &fdo pelna" and "" and "&8x &fPrzedmiot mozna trafic w &b&lLodowej &fskrzyni" 
+        set slot 2 of {_inv} to stick named "&x&9&4&4&c&0&a&lʀ&x&a&3&6&2&1&6&lᴏ&x&b&1&7&8&2&2&l&x&c&0&8&d&2&d&lᴢ&x&c&e&a&3&3&9&lɢ&x&d&d&b&9&4&5&lᴀ" with lore "" and "&8x &fPo uderzeniu przeciwnika &cblokujemy &fmu" and "&8x &fmożliwość korzystania z &7elytry"
+        set slot 3 of {_inv} to firework named "&x&5&9&0&a&9&4&lꜱ&x&6&0&0&e&9&9&lᴍ&x&6&6&1&1&9&d&lᴏ&x&6&d&1&5&a&2&lᴄ&x&7&4&1&9&a&6&lᴢ&x&7&a&1&c&a&b&lᴀ&x&8&1&2&0&a&f&l &x&8&8&2&4&b&4&lꜰ&x&8&f&2&8&b&9&lᴀ&x&9&5&2&b&b&d&lᴊ&x&9&c&2&f&c&2&lᴇ&x&a&3&3&3&c&6&lʀ&x&a&9&3&6&c&b&lᴡ&x&b&0&3&a&c&f&lᴇ&x&b&7&3&e&d&4&lʀ&x&b&d&4&1&d&8&lᴋ&x&c&4&4&5&d&d&lᴀ" with lore "&8x &7Nieskonczona fajerwerka" and "" and "&8x &7Pochodzi z eventu &bᴀꜰᴋ 2024"
+        set slot 4 of {_inv} to white dye named "&x&5&f&d&3&e&b&lꜱ&x&6&2&d&4&e&b&lɪ&x&6&6&d&4&e&b&lᴇ&x&6&9&d&5&e&b&lʀ&x&6&d&d&5&e&b&lꜱ&x&7&0&d&6&e&b&lᴄ&x&7&3&d&6&e&b&l &x&7&7&d&7&e&b&lɴ&x&7&a&d&7&e&b&lɪ&x&7&e&d&8&e&b&lᴇ&x&8&1&d&8&e&b&lᴅ&x&8&4&d&9&e&b&lᴢ&x&8&8&d&9&e&b&lᴡ&x&8&b&d&a&e&b&lɪ&x&8&f&d&b&e&b&lᴇ&x&9&2&d&b&e&a&lᴅ&x&9&5&d&c&e&a&lᴢ&x&9&9&d&c&e&a&lɪ&x&9&c&d&d&e&a&lᴀ&x&9&f&d&d&e&a&l &x&a&3&d&e&e&a&lᴘ&x&a&6&d&e&e&a&lᴏ&x&a&a&d&f&e&a&lʟ&x&a&d&d&f&e&a&lᴀ&x&b&0&e&0&e&a&lʀ&x&b&4&e&0&e&a&lɴ&x&b&7&e&1&e&a&lᴇ&x&b&b&e&1&e&a&lᴢ&x&b&e&e&2&e&a&lᴏ" with lore "&8x &fPo uzyciu przez kilka sekund &ctracimy" and "&8x &fo &c50%% mniej zdrowia &fgdy jestesmy atakowani" and "" and "&8x &fPrzedmiot mozna trafic w &b&lLodowej &fskrzyni" and "" and "&eKliknij aby użyć"
+        set slot 5 of {_inv} to lead named "&x&d&1&b&a&2&e&lʟ&x&d&7&c&3&4&5&lᴀ&x&d&d&c&c&5&c&lꜱ&x&e&2&d&4&7&2&lꜱ&x&e&8&d&d&8&9&lᴏ" with lore "&8x &fPo zarzuceniu nim na wroga nie moze sie on" and "&8x &fod nas oddalic &epowyzej 10 kratek" and "&8x &fPo ponownym kliknieciu &aprzyciaga go &fdo nas" and "" and "&8x &7Przedmiot pochodzi z event &eᴘᴏꜱᴢᴜᴋɪᴡᴀᴄᴢᴇ ꜱᴋʀᴀʙᴏᴡ 2024" and "" and "&8x &6Kliknij prawym na gracza, aby aktywowac!"
+        set slot 6 of {_inv} to fishing rod named "&x&d&1&2&e&2&e&lʜ&x&d&7&4&2&4&2&lᴀ&x&d&c&5&6&5&6&lᴋ" with lore "&8x &7Przyciaga cie w miejsce &crzucenia &7haka" and "" and "&8x &7Przedmiot mozna trafic w &d&lMistycznej &7skrzyni"
+        set slot 7 of {_inv} to heart of the sea named "&c&lᴘᴏᴋᴇ&f&lʙᴀʟʟ" with lore "&8x &fPo kliknieciu &6prawym &fwyrzucamy &cᴘᴏᴋᴇʙᴀʟʟ, &fjeśli trafimy" and "&8x &fnim w gracza mamy szanse na &aprzeteleportowanie go &fdo nas" and "" and "&8x &7Przedmiot pochodzi z eventu &cᴅᴢɪᴇɴ ᴅᴢɪᴇᴄᴋᴀ 2024"
+        set slot 8 of {_inv} to carrot of knockback 4 with item flags hide enchants named "&x&c&6&c&3&b&a&lɴ&x&c&a&b&7&a&8&lᴏ&x&c&f&a&b&9&6&lꜱ&x&d&3&9&f&8&4&l &x&d&8&9&4&7&2&lᴏ&x&d&c&8&8&6&0&lʟ&x&e&0&7&c&4&e&lᴀ&x&e&5&7&0&3&c&lꜰ&x&e&9&6&4&2&a&lᴀ" with lore "&8x &fPrzy uderzeniu gracza odpycha go " and "&8x &fprzy pomocy zaklecia &cOdrzut IV" and "" and "&8x &fPrzedmiot mozna trafic w &b&lLodowej &fskrzyni"
+        set slot 9 of {_inv} to {czaszka}
+        set slot 10 of {_inv} to fire charge named "&x&e&0&3&3&c&f&lɢ&x&e&3&4&e&d&7&lᴜ&x&e&7&6&a&d&e&lᴍ&x&e&a&8&5&e&6&lᴋ&x&e&d&a&0&e&d&lᴀ" with lore "&8x &fPo użyciu, wszystkie bloki w obrebie" and "&8x &fkilku kratek zostaja &cwymazane" and "" and "&8x &7Przedmiot pochodzi z eventu &eꜱᴢᴋᴏʟɴᴇɢᴏ 2024"
+        set slot 11 of {_inv} to unbreakable golden chestplate of protection 5 with item flags hide enchants and hide attributes and hide unbreakable named "&x&f&f&0&0&0&0&lɢ&x&f&f&2&a&0&0&lᴡ&x&f&f&5&5&0&0&lɪ&x&f&f&7&f&0&0&lᴇ&x&f&f&a&a&0&0&lᴢ&x&f&f&d&4&0&0&lᴅ&x&f&f&f&f&0&0&lɴ&x&a&a&f&f&0&0&lʏ&x&5&5&f&f&0&0&l &x&0&0&f&f&0&0&lɴ&x&0&0&a&a&5&5&lᴀ&x&0&0&5&5&a&a&lᴘ&x&0&0&0&0&f&f&lɪ&x&1&9&0&0&d&5&lᴇ&x&3&2&0&0&a&c&lʀ&x&4&b&0&0&8&2&lꜱ&x&6&3&0&0&9&d&lɴ&x&7&c&0&0&b&8&lɪ&x&9&4&0&0&d&3&lᴋ" with lore "&8x &6Przedmiot jedyny w swoim rodzaju!" and "&8x &7Posiada go &etylko jedna osoba &7na calym serwerze" and "&8x &7oraz nie da sie go &c&lzniszczyc &7w zaden sposób!" and "" and "&8= &eBonusy &7po zalozeniu:" and "&8→ &cSiła II" and "&8→ &bSzybkosc II" and "&8→ &6Odpornosc na ogien 1" and "&8→ &dSzansa na zablokowanie uderzenia"
+        set slot 12 of {_inv} to netherite sword of sharpness 6 named "&x&2&9&b&1&1&c&lᴍ&x&3&c&b&8&1&9&lɪ&x&5&0&b&f&1&7&lᴇ&x&6&3&c&6&1&4&lᴄ&x&7&6&c&d&1&2&lᴢ&x&8&a&d&4&0&f&l &x&9&d&d&c&0&d&lᴄ&x&b&1&e&3&0&a&lʜ&x&c&4&e&a&0&8&lᴡ&x&d&7&f&1&0&5&lᴀ&x&e&b&f&8&0&3&lʟ&x&f&e&f&f&0&0&lʏ" with lore "&8x &fPosiada zaklecie &cOstrość VI" and "" and "&8x &fUderzajac nim gracza mamy szanse " and "&8x &fpostawic mu &epajeczyne &fpod nogami" and "" and "&8x &7Przedmiot pochodzi z eventu &eꜱᴢᴋᴏʟɴᴇɢᴏ 2024"
+        
+        open {_inv} to player
+
+
+
+every second:
+    loop all players:
+        if name of loop-player's chestplate contains "&x&f&f&0&0&0&0&lɢ&x&f&f&2&a&0&0&lᴡ&x&f&f&5&5&0&0&lɪ&x&f&f&7&f&0&0&lᴇ&x&f&f&a&a&0&0&lᴢ&x&f&f&d&4&0&0&lᴅ&x&f&f&f&f&0&0&lɴ&x&a&a&f&f&0&0&lʏ&x&5&5&f&f&0&0&l &x&0&0&f&f&0&0&lɴ&x&0&0&a&a&5&5&lᴀ&x&0&0&5&5&a&a&lᴘ&x&0&0&0&0&f&f&lɪ&x&1&9&0&0&d&5&lᴇ&x&3&2&0&0&a&c&lʀ&x&4&b&0&0&8&2&lꜱ&x&6&3&0&0&9&d&lɴ&x&7&c&0&0&b&8&lɪ&x&9&4&0&0&d&3&lᴋ":
+            apply strength potion of tier 2 without any particles whilst hiding the potion icon to the loop-player for 1 second
+            apply speed potion of tier 2 without any particles whilst hiding the potion icon to the loop-player for 1 second
+            apply fire resistance potion of tier 1 without any particles whilst hiding the potion icon to the loop-player for 1 second
+on right click:
+    if name of event-item is "&x&e&0&3&3&c&f&lɢ&x&e&3&4&e&d&7&lᴜ&x&e&7&6&a&d&e&lᴍ&x&e&a&8&5&e&6&lᴋ&x&e&d&a&0&e&d&lᴀ":
+        cancel event
+        if {cd.%uuid of player%.gumka} > now:
+            send "&cPoczekaj!" to player
+            stop
+
+        set {cd.%uuid of player%.gumka} to now + {@cooldown} seconds
+        set item cooldown of player's tool for player to {@cooldown} seconds
+        send title "&aPrzedmiot uzyty!" with subtitle "&aUżyles &x&e&0&3&3&c&f&lɢ&x&e&3&4&e&d&7&lᴜ&x&e&7&6&a&d&e&lᴍ&x&e&a&8&5&e&6&lᴋ&x&e&d&a&0&e&d&lᴀ"
+        set {_block} to location of player
+        play explosion emitter at location of player
+        set {_center} to location of player
+        loop all blocks in radius 5 around {_center}:
+            break loop-block naturally
+        
+    if name of event-item is "&x&d&1&b&a&2&e&lʟ&x&d&7&c&3&4&5&lᴀ&x&d&d&c&c&5&c&lꜱ&x&e&2&d&4&7&2&lꜱ&x&e&8&d&d&8&9&lᴏ":
+        cancel event
+        
+       
+        if {cd.%uuid of player%.lasso} > now:
+            send "&cPoczekaj!" to player
+            stop
+        if {cd.%uuid of player%.lasso} < now:
+        
+            if clicked entity is a player:
+                set {_victim} to clicked entity
+                
+                
+                
+                if {_victim} is player:
+                    send "&cNie możesz złapać samego siebie!" to player
+                    stop
+                
+               
+                
+                
+           
+                set {lasso.target.%uuid of player%} to {_victim}
+               
+                
+                send "&aZłapałeś &f%{_victim}% &alassem na 30 sekund!" to player
+                send "&cZostałeś złapany lasso przez &f%player%&c!" to {_victim}
+                
+          
+                wait 30 seconds
+                if {lasso.target.%uuid of player%} is {_victim}:
+                    delete {lasso.target.%uuid of player%}
+                    send "&7Lasso samo się uwolniło." to player
+                    if {_victim} is online:
+                        send "&aLasso samo się uwolniło!" to {_victim}
+                
+                stop
+        
+ 
+        if {lasso.target.%uuid of player%} is set:
+            set {_target} to {lasso.target.%uuid of player%}
+            
+            if {_target} is online:
+                teleport {_target} to player
+                send "&aPrzyciągnąłeś &f%{_target}% &ado siebie!" to player
+                send "&cKtoś przyciągnął cię lasso!" to {_target}
+                set {cd.%uuid of player%.lasso} to now + {@cooldown} seconds
+                set item cooldown of player's tool for player to {@cooldown} seconds
+                
+
+                delete {lasso.target.%uuid of player%}
+                send "&7Lasso zostało uwolnione." to player
+                if {_target} is online:
+                    send "&aLasso zostało uwolnione!" to {_target}
+            else:
+                send "&cTen gracz wyszedł z serwera." to player
+                delete {lasso.target.%uuid of player%}
+        else:
+            send "&eKliknij na gracza, aby go złapać lasso!" to player
+
+
+on quit:
+    if {lasso.target.%uuid of player%} is set:
+        set {_target} to {lasso.target.%uuid of player%}
+        delete {lasso.target.%uuid of player%}
+        if {_target} is online:
+            send "&7Zostałeś uwolniony z lasso (gracz wyszedł)." to {_target}
+            
+on right click:
+    if name of event-item is "&x&d&1&2&e&2&e&lʜ&x&d&7&4&2&4&2&lᴀ&x&d&c&5&6&5&6&lᴋ": 
+        cancel event
+        if {cd.%uuid of player%.hak} > now:
+            send "&cPoczekaj!" to player
+            stop
+
+        set {cd.%uuid of player%.hak} to now + {@cooldown} seconds
+        set item cooldown of player's tool for player to {@cooldown} seconds
+        send title "&aPrzedmiot uzyty!" with subtitle "&aUżyles &x&d&1&2&e&2&e&lʜ&x&d&7&4&2&4&2&lᴀ&x&d&c&5&6&5&6&lᴋ"
+        push player upwards
+        set {_block} to block 8 in front of player
+        push the player towards {_block}
+
+    if name of event-item is "&x&e&d&8&6&5&a&lᴋ&x&e&7&8&6&5&0&lᴏ&x&e&1&8&7&4&6&lʟ&x&d&a&8&7&3&c&lᴄ&x&d&4&8&8&3&2&lᴇ&x&c&e&8&8&2&8&l &x&c&8&8&9&1&e&lᴊ&x&c&1&8&9&1&4&lᴇ&x&b&b&8&a&0&a&lᴢ&x&b&5&8&a&0&0&lᴀ":
+        cancel event
+        if {cd.%uuid of player%.kolce} > now:
+            send "&cPoczekaj!" to player
+            stop
+        set item cooldown of player's tool for player to {@cooldown} seconds
+        set {cd.%uuid of player%.kolce} to now + {@cooldown} seconds
+        set {kolce.%uuid of player%} to true
+        send title "&aPrzedmiot uzyty!" with subtitle "&aUżyles &x&e&d&8&6&5&a&lᴋ&x&e&7&8&6&5&0&lᴏ&x&e&1&8&7&4&6&lʟ&x&d&a&8&7&3&c&lᴄ&x&d&4&8&8&3&2&lᴇ&x&c&e&8&8&2&8&l &x&c&8&8&9&1&e&lᴊ&x&c&1&8&9&1&4&lᴇ&x&b&b&8&a&0&a&lᴢ&x&b&5&8&a&0&0&lᴀ"
+        set {_p} to player
+        activate_thorns(player, 8)
+        
+
+    if name of event-item is "&x&c&4&4&5&d&d&lᴍ&x&b&a&4&a&d&b&lɪ&x&b&0&4&f&d&a&lꜱ&x&a&7&5&4&d&8&lᴛ&x&9&d&5&9&d&6&lᴜ&x&9&3&5&e&d&5&lʀ&x&8&9&6&3&d&3&lᴀ&x&8&0&6&8&d&1&l &x&7&6&6&d&d&0&lᴏ&x&6&c&7&2&c&e&lᴅ&x&6&2&7&6&c&c&lᴍ&x&5&8&7&b&c&b&lʟ&x&4&f&8&0&c&9&lᴏ&x&4&5&8&5&c&7&lᴅ&x&3&b&8&a&c&6&lᴢ&x&3&1&8&f&c&4&lᴇ&x&2&8&9&4&c&2&lɴ&x&1&e&9&9&c&1&lɪ&x&1&4&9&e&b&f&lᴀ": 
+        cancel event
+        if {cd.%uuid of player%.mikstura} > now:
+            send "&cPoczekaj!" to player
+            stop
+        set item cooldown of player's tool for player to {@cooldown} seconds
+        
+        send title "&aPrzedmiot uzyty!" with subtitle "&aUżyles &x&c&4&4&5&d&d&lᴍ&x&b&a&4&a&d&b&lɪ&x&b&0&4&f&d&a&lꜱ&x&a&7&5&4&d&8&lᴛ&x&9&d&5&9&d&6&lᴜ&x&9&3&5&e&d&5&lʀ&x&8&9&6&3&d&3&lᴀ&x&8&0&6&8&d&1&l &x&7&6&6&d&d&0&lᴏ&x&6&c&7&2&c&e&lᴅ&x&6&2&7&6&c&c&lᴍ&x&5&8&7&b&c&b&lʟ&x&4&f&8&0&c&9&lᴏ&x&4&5&8&5&c&7&lᴅ&x&3&b&8&a&c&6&lᴢ&x&3&1&8&f&c&4&lᴇ&x&2&8&9&4&c&2&lɴ&x&1&e&9&9&c&1&lɪ&x&1&4&9&e&b&f&lᴀ"
+        set {cd.%uuid of player%.mikstura} to now + {@cooldown} seconds
+        heal player
+
+    if name of event-item is "&x&5&f&d&3&e&b&lꜱ&x&6&2&d&4&e&b&lɪ&x&6&6&d&4&e&b&lᴇ&x&6&9&d&5&e&b&lʀ&x&6&d&d&5&e&b&lꜱ&x&7&0&d&6&e&b&lᴄ&x&7&3&d&6&e&b&l &x&7&7&d&7&e&b&lɴ&x&7&a&d&7&e&b&lɪ&x&7&e&d&8&e&b&lᴇ&x&8&1&d&8&e&b&lᴅ&x&8&4&d&9&e&b&lᴢ&x&8&8&d&9&e&b&lᴡ&x&8&b&d&a&e&b&lɪ&x&8&f&d&b&e&b&lᴇ&x&9&2&d&b&e&a&lᴅ&x&9&5&d&c&e&a&lᴢ&x&9&9&d&c&e&a&lɪ&x&9&c&d&d&e&a&lᴀ&x&9&f&d&d&e&a&l &x&a&3&d&e&e&a&lᴘ&x&a&6&d&e&e&a&lᴏ&x&a&a&d&f&e&a&lʟ&x&a&d&d&f&e&a&lᴀ&x&b&0&e&0&e&a&lʀ&x&b&4&e&0&e&a&lɴ&x&b&7&e&1&e&a&lᴇ&x&b&b&e&1&e&a&lᴢ&x&b&e&e&2&e&a&lᴏ": # FUTRO
+        cancel event
+        if {cd.%uuid of player%.futro} > now:
+            send "&cPoczekaj!" to player
+            stop
+        send title "&aPrzedmiot uzyty!" with subtitle "&aUżyles &x&5&f&d&3&e&b&lꜱ&x&6&2&d&4&e&b&lɪ&x&6&6&d&4&e&b&lᴇ&x&6&9&d&5&e&b&lʀ&x&6&d&d&5&e&b&lꜱ&x&7&0&d&6&e&b&lᴄ&x&7&3&d&6&e&b&l &x&7&7&d&7&e&b&lɴ&x&7&a&d&7&e&b&lɪ&x&7&e&d&8&e&b&lᴇ&x&8&1&d&8&e&b&lᴅ&x&8&4&d&9&e&b&lᴢ&x&8&8&d&9&e&b&lᴡ&x&8&b&d&a&e&b&lɪ&x&8&f&d&b&e&b&lᴇ&x&9&2&d&b&e&a&lᴅ&x&9&5&d&c&e&a&lᴢ&x&9&9&d&c&e&a&lɪ&x&9&c&d&d&e&a&lᴀ&x&9&f&d&d&e&a&l &x&a&3&d&e&e&a&lᴘ&x&a&6&d&e&e&a&lᴏ&x&a&a&d&f&e&a&lʟ&x&a&d&d&f&e&a&lᴀ&x&b&0&e&0&e&a&lʀ&x&b&4&e&0&e&a&lɴ&x&b&7&e&1&e&a&lᴇ&x&b&b&e&1&e&a&lᴢ&x&b&e&e&2&e&a&lᴏ" 
+        set item cooldown of player's tool for player to {@cooldown} seconds
+        set {cd.%uuid of player%.futro} to now + {@cooldown} seconds
+        set {futro.%uuid of player%} to true
+
+        set {_p} to player
+        wait {@futro-czas} seconds
+        delete {futro.%uuid of {_p}%}
+    if name of event-item is "&c&lᴘᴏᴋᴇ&f&lʙᴀʟʟ":
+        cancel event
+        if {cd.%uuid of player%.pokeball} > now:
+            send "&cPoczekaj!" to player
+            stop
+        set item cooldown of player's tool for player to {@cooldown} seconds
+        send title "&aPrzedmiot uzyty!" with subtitle "&aUżyles &c&lᴘᴏᴋᴇ&f&lʙᴀʟʟ"
+        play sound "minecraft:entity.arrow.shoot" to player
+        shoot an arrow at speed 3
+        set {_arrow} to last shot projectile
+        set name of {_arrow} to "pokeball"
+        set {cd.%uuid of player%.pokeball} to now + {@cooldown} seconds
+        
+
+
+
+
+on projectile collide:
+    name of projectile is "pokeball":
+        if chance of {@pokeball-szansa}%:
+            play sound "minecraft:entity.experience_orb.pickup" to shooter
+            teleport event-entity to shooter
+            send "&2✔ &aUdalo ci sie przyciagnac &2%event-entity% &ado siebie!" to shooter
+        else:
+            send "&4x &cNie udalo sie!"
+        
+        
+    
+
+
+            
+
+
+
+
+
+
+on death:
+    victim is a player:
+        if victim has {czaszka}:
+            keep the inventory and experiences
+            remove {czaszka} from victim's inventory
+            clear drops
+            send title "&aPrzedmiot uzyty!" with subtitle "&aUżyles %name of {czaszka}%" to victim
+on damage:
+    attacker is player
+    victim is player
+    if name of attacker's tool is "&x&2&9&b&1&1&c&lᴍ&x&3&c&b&8&1&9&lɪ&x&5&0&b&f&1&7&lᴇ&x&6&3&c&6&1&4&lᴄ&x&7&6&c&d&1&2&lᴢ&x&8&a&d&4&0&f&l &x&9&d&d&c&0&d&lᴄ&x&b&1&e&3&0&a&lʜ&x&c&4&e&a&0&8&lᴡ&x&d&7&f&1&0&5&lᴀ&x&e&b&f&8&0&3&lʟ&x&f&e&f&f&0&0&lʏ":
+        chance of {@mieczchwaly-szansa}%:
+            
+            set block at location of victim to cobweb
+            
+    if name of victim's chestplate contains "&x&f&f&0&0&0&0&lɢ&x&f&f&2&a&0&0&lᴡ&x&f&f&5&5&0&0&lɪ&x&f&f&7&f&0&0&lᴇ&x&f&f&a&a&0&0&lᴢ&x&f&f&d&4&0&0&lᴅ&x&f&f&f&f&0&0&lɴ&x&a&a&f&f&0&0&lʏ&x&5&5&f&f&0&0&l &x&0&0&f&f&0&0&lɴ&x&0&0&a&a&5&5&lᴀ&x&0&0&5&5&a&a&lᴘ&x&0&0&0&0&f&f&lɪ&x&1&9&0&0&d&5&lᴇ&x&3&2&0&0&a&c&lʀ&x&4&b&0&0&8&2&lꜱ&x&6&3&0&0&9&d&lɴ&x&7&c&0&0&b&8&lɪ&x&9&4&0&0&d&3&lᴋ":
+        chance of 5%:
+            cancel event
+            send title "&6★" with subtitle "&fWykonales unik!" to victim
+            send title "&6★" with subtitle "&fPrzeciwnik wykonal unik!" to attacker
+    
+    if {futro.%uuid of victim%} is set:
+        set damage to damage * 0.5
+on damage:
+    attacker is a player
+    victim is a player
+    if {kolce.%uuid of victim%} is true:
+        
+        if chance of {@kolce-szansa}%:
+            damage attacker by damage
+            send "&cOtrzymałeś obrażenia od kolców przeciwnika!" to attacker
+            
+
+
+
+ 
+    
+
+on damage:
+    if name of attacker's tool is "&x&9&4&4&c&0&a&lʀ&x&a&3&6&2&1&6&lᴏ&x&b&1&7&8&2&2&l&x&c&0&8&d&2&d&lᴢ&x&c&e&a&3&3&9&lɢ&x&d&d&b&9&4&5&lᴀ":
+
+        if {cd.%uuid of attacker%.rozga} > now:
+            send "&cPoczekaj!" to attacker
+            cancel event
+            stop
+        
+        set {cd.%uuid of attacker%.rozga} to now + {@cooldown} seconds
+        set {elytra-blok.%uuid of victim%} to true
+        
+        set {_v} to victim
+        wait {@rozga-blok} seconds
+        delete {elytra-blok.%uuid of {_v}%}
+
+    
+    
+
+
+
+
+
+on elytra boost:
+    if the used firework will be consumed:
+        if name of event-item is "&x&5&9&0&a&9&4&lꜱ&x&6&0&0&e&9&9&lᴍ&x&6&6&1&1&9&d&lᴏ&x&6&d&1&5&a&2&lᴄ&x&7&4&1&9&a&6&lᴢ&x&7&a&1&c&a&b&lᴀ&x&8&1&2&0&a&f&l &x&8&8&2&4&b&4&lꜰ&x&8&f&2&8&b&9&lᴀ&x&9&5&2&b&b&d&lᴊ&x&9&c&2&f&c&2&lᴇ&x&a&3&3&3&c&6&lʀ&x&a&9&3&6&c&b&lᴡ&x&b&0&3&a&c&f&lᴇ&x&b&7&3&e&d&4&lʀ&x&b&d&4&1&d&8&lᴋ&x&c&4&4&5&d&d&lᴀ":
+            prevent the used firework from being consumed
+
+    if {elytra-blok.%uuid of player%} is set:
+        cancel event
+        send "&cNie możesz używać elytry! Ktoś użył na ciebie rozgi" to player
+on right click:
+    if name of event-item is "&x&5&9&0&a&9&4&lꜱ&x&6&0&0&e&9&9&lᴍ&x&6&6&1&1&9&d&lᴏ&x&6&d&1&5&a&2&lᴄ&x&7&4&1&9&a&6&lᴢ&x&7&a&1&c&a&b&lᴀ&x&8&1&2&0&a&f&l &x&8&8&2&4&b&4&lꜰ&x&8&f&2&8&b&9&lᴀ&x&9&5&2&b&b&d&lᴊ&x&9&c&2&f&c&2&lᴇ&x&a&3&3&3&c&6&lʀ&x&a&9&3&6&c&b&lᴡ&x&b&0&3&a&c&f&lᴇ&x&b&7&3&e&d&4&lʀ&x&b&d&4&1&d&8&lᴋ&x&c&4&4&5&d&d&lᴀ":
+        if targeted block is set:
+            if distance between player and targeted block < 5:
+                cancel event
+
+
+function activate_rozga(p: player):
+    set {rozga.%{_p}%} to true
+    wait 2 seconds
+    deactivate_rozga({_p})
+
+function deactivate_rozga(p: player):
+    delete {rozga.%{_p}%}
+    send "&4✖ &cRózga wygasla!!" to {_p}
+
+
+on right click:
+    if name of event-item contains "&x&9&4&4&c&0&a&lʀ":
+        cancel event
+       
+        
+       
+        {cd.%uuid of player%.rozga} > now:
+            
+            send action bar "&cCzekaj!" to player
+            stop
+        
+       
+        if clicked entity is a player:
+            set {_victim} to clicked entity
+            
+            if {_victim} is player:
+                send "&cNie możesz użyć różgi na sobie!" to player
+                stop
+            
+            
+            set {cd.%uuid of player%.rozga} to now + {@cooldown} seconds
+            set item cooldown of player's tool for player to {@cooldown} seconds
+            
+           
+            set {elytra-blok.%uuid of {_victim}%} to true
+            
+            
+            send "&a✓ Zablokowałeś elytrę graczowi &f%{_victim}% &ana &e{@rozga-blok} &asekund!" to player
+            send "&4x &cKtoś zablokował ci elytrę na &f{@rozga-blok} &csekund!" to {_victim}
+            
+            
+            wait 5 seconds
+            if {elytra-blok.%uuid of {_victim}%} is set:
+                delete {elytra-blok.%uuid of {_victim}%}
+                send "&a✓ Twoja elytra została odblokowana!" to {_victim}
+                if player is online:
+                    send "&7Elytra gracza &f%{_victim}% &7została odblokowana." to player
+        else:
+            send "&eℹ Kliknij na gracza, aby zablokować mu elytrę!" to player
+
+
+on elytra boost:
+    if {elytra-blok.%uuid of player%} is set:
+        cancel event
+        send action bar "&c✖ Nie możesz używać elytry! Ktoś użył na ciebie różgi" to player
+on right click with firework:
+    if {elytra-blok.%uuid of player%} is set:
+        cancel event
