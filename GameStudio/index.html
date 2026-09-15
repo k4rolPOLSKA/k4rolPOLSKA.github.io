@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="pl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameStudio - Neonowa Platforma Gamingowa</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Orbitron & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        neonGreen: '#00ff88',
+                        neonBlue: '#00d8ff',
+                        darkBg: '#050811',
+                        cardBg: '#0d1322',
+                        cardBorder: '#1a2638'
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050811;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Neon Text & Box Shadows */
+        .glow-green {
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.7), 0 0 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .glow-blue {
+            text-shadow: 0 0 10px rgba(0, 216, 255, 0.7), 0 0 20px rgba(0, 216, 255, 0.4);
+        }
+
+        .box-glow-green {
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3), inset 0 0 15px rgba(0, 255, 136, 0.1);
+        }
+
+        .box-glow-blue {
+            box-shadow: 0 0 15px rgba(0, 216, 255, 0.3), inset 0 0 15px rgba(0, 216, 255, 0.1);
+        }
+
+        .card-neon-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-neon-hover:hover {
+            transform: translateY(-5px);
+            border-color: #00ff88;
+            box-shadow: 0 10px 25px -5px rgba(0, 255, 136, 0.3);
+        }
+
+        /* Cyber Background Grid */
+        .cyber-grid {
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 216, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 216, 255, 0.04) 1px, transparent 1px);
+        }
+
+        /* Glassmorphism Panel */
+        .glass-panel {
+            background: rgba(13, 19, 34, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 216, 255, 0.15);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050811;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1a2638;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00ff88;
+        }
+
+        /* Glitch Effect Keyframes */
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+        .glitch-hover:hover {
+            animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+    </style>
+</head>
+<body class="cyber-grid min-h-screen flex flex-col justify-between selection:bg-neonGreen selection:text-black">
+
+    <!-- Background Particles Canvas -->
+    <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+
+    <!-- NAVIGATION BAR -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between relative z-10">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3 cursor-pointer group" onclick="navigateTo('index.html')">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-neonGreen to-neonBlue flex items-center justify-center font-orbitron text-black font-black text-2xl shadow-[0_0_20px_rgba(0,255,136,0.6)] group-hover:scale-105 transition transform">
+                    G
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-orbitron font-black text-2xl tracking-wider text-white leading-none">
+                        GAME<span class="text-neonGreen glow-green">STUDIO</span>
+                    </span>
+                    <span class="text-[10px] font-mono text-neonBlue tracking-widest uppercase mt-0.5">NEXT-GEN GAMING PORTAL</span>
+                </div>
+            </div>
+
+            <!-- Links Desktop -->
+            <nav class="hidden md:flex items-center space-x-6 font-orbitron text-xs font-bold tracking-wider">
+                <button onclick="navigateTo('index.html')" id="nav-index.html" class="nav-link text-neonGreen transition-all duration-300 hover:text-neonGreen flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-900/50 border border-neonGreen/30">
+                    <i class="fa-solid fa-house text-neonGreen"></i> STRONA GŁÓWNA
+                </button>
+                <button onclick="navigateTo('gry.html')" id="nav-gry.html" class="nav-link text-slate-300 transition-all duration-300 hover:text-neonBlue flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-900/50 border border-transparent hover:border-neonBlue/30">
+                    <i class="fa-solid fa-gamepad text-neonBlue"></i> KATALOG GIER
+                </button>
+                <button onclick="navigateTo('ważneinfo.html')" id="nav-ważneinfo.html" class="nav-link text-slate-300 transition-all duration-300 hover:text-neonGreen flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-900/50 border border-transparent hover:border-neonGreen/30">
+                    <i class="fa-solid fa-bolt text-yellow-400"></i> WIADOMOŚCI & API
+                </button>
+            </nav>
+
+            <!-- Quick Actions -->
+            <div class="hidden sm:flex items-center space-x-4">
+                <!-- Audio Player Widget -->
+                <div class="flex items-center space-x-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
+                    <canvas id="audioVisualizer" width="50" height="20" class="rounded bg-slate-900"></canvas>
+                    <button id="synthAudioBtn" onclick="toggleSynthAudio()" class="p-1.5 rounded-lg bg-slate-800 text-neonBlue hover:text-neonGreen transition text-xs flex items-center gap-1 font-mono">
+                        <i class="fa-solid fa-play" id="audioIcon"></i> SYNTH
+                    </button>
+                </div>
+
+                <!-- Ulubione Button -->
+                <button onclick="openFavoritesModal()" class="relative p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-neonGreen hover:border-neonGreen transition">
+                    <i class="fa-solid fa-heart"></i>
+                    <span id="favCountBadge" class="absolute -top-1 -right-1 bg-neonGreen text-black text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                </button>
+
+                <!-- Status indicator -->
+                <div class="flex items-center space-x-2 bg-slate-950 px-3 py-2 rounded-xl border border-slate-800 text-[11px] font-mono">
+                    <span class="w-2 h-2 rounded-full bg-neonGreen animate-ping"></span>
+                    <span class="text-slate-400">ONLINE: <span id="onlineCounter" class="text-neonGreen font-bold">1,482</span></span>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden flex items-center space-x-2">
+                <button onclick="toggleMobileNav()" class="p-2 rounded-lg bg-slate-900 text-slate-300 text-xl border border-slate-800">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileNav" class="hidden md:hidden bg-cardBg border-b border-slate-800 px-4 py-4 space-y-3 font-orbitron text-sm">
+            <button onclick="navigateTo('index.html')" class="block w-full text-left py-2.5 px-3 rounded-lg bg-slate-900 text-neonGreen"><i class="fa-solid fa-house mr-2"></i> Strona Główna</button>
+            <button onclick="navigateTo('gry.html')" class="block w-full text-left py-2.5 px-3 rounded-lg text-slate-300 hover:text-neonBlue"><i class="fa-solid fa-gamepad mr-2"></i> Katalog Gier</button>
+            <button onclick="navigateTo('ważneinfo.html')" class="block w-full text-left py-2.5 px-3 rounded-lg text-slate-300 hover:text-neonGreen"><i class="fa-solid fa-bolt mr-2"></i> Wiadomości & API</button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER (SPA Views Container) -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full relative z-10">
+
+        <!-- ================================================================= -->
+        <!-- VIEW 1: INDEX / STRONA GŁÓWNA -->
+        <!-- ================================================================= -->
+        <section id="view-index.html" class="spa-view space-y-16">
+            
+            <!-- Hero Banner -->
+            <div class="relative rounded-3xl overflow-hidden glass-panel border border-neonBlue/30 p-8 sm:p-16 text-center my-2 shadow-[0_0_50px_rgba(0,216,255,0.1)]">
+                <div class="absolute inset-0 bg-gradient-to-r from-neonGreen/10 via-transparent to-neonBlue/10 pointer-events-none"></div>
+                
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-950/90 text-neonGreen font-orbitron text-xs font-bold tracking-widest border border-neonGreen/40 mb-6 shadow-sm">
+                    <i class="fa-solid fa-shield-halved text-neonBlue"></i> OFICJALNY PORTAL GIER & NEWSÓW 2026
+                </span>
+
+                <h1 class="font-orbitron font-black text-4xl sm:text-6xl lg:text-7xl text-white tracking-tight leading-none mb-6">
+                    ODKRYJ NAJNOWSZE <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonGreen via-emerald-400 to-neonBlue glow-green">
+                        HITY GAMINGOWE
+                    </span>
+                </h1>
+
+                <p class="max-w-3xl mx-auto text-slate-300 text-base sm:text-xl font-light mb-10 leading-relaxed">
+                    GameStudio to Twoje oficjalne centrum dowodzenia. Przeglądaj legendarne tytuły AAA, e-sportowe strzelanki i niezależne perły. Sprawdzaj wymagania sprzętowe, czytaj najświeższe newsy i pobieraj gry bezpośrednio z autoryzowanych platform!
+                </p>
+
+                <!-- DWA GŁÓWNE PRZYCISKI CALL TO ACTION -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
+                    <button onclick="playButtonClickSound(); navigateTo('gry.html');" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-neonGreen text-black font-orbitron font-extrabold text-base sm:text-lg tracking-wider hover:bg-white transition-all duration-300 transform hover:-translate-y-1 box-glow-green flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-gamepad text-xl"></i> ZOBACZ GRY
+                    </button>
+                    
+                    <button onclick="playButtonClickSound(); navigateTo('ważneinfo.html');" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-transparent border-2 border-neonBlue text-neonBlue font-orbitron font-extrabold text-base sm:text-lg tracking-wider hover:bg-neonBlue/10 transition-all duration-300 transform hover:-translate-y-1 box-glow-blue flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-newspaper text-xl text-neonBlue"></i> WIADOMOŚCI & API
+                    </button>
+                </div>
+            </div>
+
+            <!-- Realtime Portal Stats -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-neonGreen flex items-center space-x-4 hover:border-slate-700 transition">
+                    <div class="p-4 rounded-xl bg-neonGreen/10 text-neonGreen text-3xl">
+                        <i class="fa-solid fa-compact-disc"></i>
+                    </div>
+                    <div>
+                        <div class="font-orbitron font-extrabold text-2xl text-white">12+ Hitów</div>
+                        <div class="text-xs text-slate-400 font-mono uppercase">Zweryfikowane Gry</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-neonBlue flex items-center space-x-4 hover:border-slate-700 transition">
+                    <div class="p-4 rounded-xl bg-neonBlue/10 text-neonBlue text-3xl">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div>
+                        <div class="font-orbitron font-extrabold text-2xl text-white">1.4M+</div>
+                        <div class="text-xs text-slate-400 font-mono uppercase">Graczy w Społeczności</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-neonGreen flex items-center space-x-4 hover:border-slate-700 transition">
+                    <div class="p-4 rounded-xl bg-neonGreen/10 text-neonGreen text-3xl">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                        <div class="font-orbitron font-extrabold text-2xl text-white">4.9 / 5.0</div>
+                        <div class="text-xs text-slate-400 font-mono uppercase">Srednia Ocena Gier</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-neonBlue flex items-center space-x-4 hover:border-slate-700 transition">
+                    <div class="p-4 rounded-xl bg-neonBlue/10 text-neonBlue text-3xl">
+                        <i class="fa-solid fa-download"></i>
+                    </div>
+                    <div>
+                        <div class="font-orbitron font-extrabold text-2xl text-white">100%</div>
+                        <div class="text-xs text-slate-400 font-mono uppercase">Oficjalne Linki</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Top Games Preview -->
+            <div>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
+                    <div>
+                        <h2 class="font-orbitron font-extrabold text-3xl text-white flex items-center gap-3">
+                            <span class="w-3 h-8 bg-neonGreen rounded-full inline-block"></span>
+                            NAJPOPULARNIEJSZE GRY SEZONU
+                        </h2>
+                        <p class="text-slate-400 text-sm mt-1">Najczęściej pobierane i kupowane tytuły w serwisie GameStudio</p>
+                    </div>
+                    <button onclick="navigateTo('gry.html')" class="text-neonBlue hover:text-white font-orbitron text-xs font-bold flex items-center gap-2 transition px-4 py-2 rounded-xl bg-slate-900 border border-neonBlue/30">
+                        ZOBACZ PEŁEN KATALOG GIER <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="homeFeaturedGamesGrid">
+                    <!-- Dynamic Top 3 Games populated by JS -->
+                </div>
+            </div>
+
+            <!-- Community & Avatar Generator Preview Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Avatar Generator Widget -->
+                <div class="glass-panel p-8 rounded-3xl border border-neonGreen/30 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-mono text-neonGreen uppercase tracking-widest"><i class="fa-solid fa-wand-magic-sparkles"></i> MATRIX GENERATOR</span>
+                            <span class="bg-neonGreen/10 text-neonGreen text-[10px] font-orbitron px-2.5 py-1 rounded-full border border-neonGreen/30">DARMOWY</span>
+                        </div>
+                        <h3 class="font-orbitron font-bold text-2xl text-white mb-2">Wygeneruj Neonowy Avatar Gracza</h3>
+                        <p class="text-slate-400 text-sm mb-6">Wpisz swój nick i stwórz unikalny, cybernetyczny avatar dla swojego profilu w serwisie GameStudio!</p>
+                        
+                        <div class="flex gap-3 mb-6">
+                            <input type="text" id="avatarNickInput" placeholder="Wpisz Twój GamerTag..." class="bg-slate-950 border border-slate-700 focus:border-neonGreen text-white px-4 py-3 rounded-xl text-sm outline-none flex-grow font-orbitron">
+                            <button onclick="generateNeonAvatar()" class="px-5 py-3 bg-neonGreen text-black font-orbitron font-bold rounded-xl text-xs hover:bg-white transition flex items-center gap-2">
+                                <i class="fa-solid fa-rotate"></i> GENERUJ
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-6 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                        <img id="avatarPreviewImg" src="https://api.dicebear.com/7.x/bottts/svg?seed=GameStudioPlayer" alt="Neon Avatar" class="w-20 h-20 rounded-xl bg-slate-900 border-2 border-neonGreen p-1 shadow-[0_0_15px_rgba(0,255,136,0.3)]">
+                        <div>
+                            <div id="avatarNickDisplay" class="font-orbitron font-extrabold text-lg text-neonGreen">GameStudioPlayer</div>
+                            <div class="text-xs text-slate-400 font-mono mt-0.5">Status: Cyber Cyberpunk Operative</div>
+                            <button onclick="downloadAvatar()" class="mt-2 text-xs font-orbitron text-neonBlue hover:underline flex items-center gap-1">
+                                <i class="fa-solid fa-download"></i> Pobierz Avatar SVG
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Chat Simulator Widget -->
+                <div class="glass-panel p-8 rounded-3xl border border-neonBlue/30 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-mono text-neonBlue uppercase tracking-widest"><i class="fa-solid fa-comments"></i> CYBER CHAT ROOM</span>
+                            <span class="flex items-center gap-1.5 text-xs text-neonGreen font-mono"><span class="w-2 h-2 rounded-full bg-neonGreen animate-ping"></span> LIVE</span>
+                        </div>
+                        <h3 class="font-orbitron font-bold text-2xl text-white mb-2">Czat Społeczności Graczy</h3>
+                        <p class="text-slate-400 text-sm mb-4">Dyskutuj o najnowszych grach, szukaj grupy do gry w CS2 lub Valoranta w czasie rzeczywistym!</p>
+                    </div>
+
+                    <!-- Chat Box Frame -->
+                    <div class="space-y-4">
+                        <div id="chatMessagesBox" class="h-44 bg-slate-950 rounded-2xl border border-slate-800 p-4 overflow-y-auto space-y-3 font-sans text-xs">
+                            <!-- Messages rendered by JS -->
+                        </div>
+
+                        <div class="flex gap-2">
+                            <input type="text" id="chatInputMessage" placeholder="Napisz wiadomość na czacie..." onkeypress="if(event.key==='Enter') sendChatMessage()" class="bg-slate-950 border border-slate-700 focus:border-neonBlue text-white px-4 py-2.5 rounded-xl text-xs outline-none flex-grow">
+                            <button onclick="sendChatMessage()" class="px-4 py-2.5 bg-neonBlue text-black font-orbitron font-bold rounded-xl text-xs hover:bg-white transition">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- VIEW 2: GRY / KATALOG GIER (gry.html) -->
+        <!-- ================================================================= -->
+        <section id="view-gry.html" class="spa-view hidden space-y-8">
+            
+            <!-- Header Section -->
+            <div class="border-b border-slate-800/80 pb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div>
+                    <h1 class="font-orbitron font-black text-3xl sm:text-5xl text-white">
+                        KATALOG <span class="text-neonBlue glow-blue">GIER</span>
+                    </h1>
+                    <p class="text-slate-400 text-sm mt-1">Przeglądaj największe hity, sprawdzaj oficjalne linki do Steam / Epic Games oraz wymagania PC.</p>
+                </div>
+
+                <!-- Filters & Controls Bar -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-grow sm:flex-grow-0">
+                        <input type="text" id="gameSearchInput" oninput="filterAndRenderGames()" placeholder="Szukaj gry np. Witcher, GTA..." class="bg-cardBg border border-slate-700 focus:border-neonGreen text-white px-4 py-2.5 pl-10 rounded-xl text-xs outline-none w-full sm:w-64 transition font-orbitron">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+                    </div>
+
+                    <!-- Category Filter Dropdown -->
+                    <select id="categoryFilter" onchange="filterAndRenderGames()" class="bg-cardBg border border-slate-700 focus:border-neonBlue text-slate-200 px-4 py-2.5 rounded-xl text-xs outline-none transition font-orbitron">
+                        <option value="ALL">Wszystkie Gatunki</option>
+                        <option value="FPS">FPS / Strzelanki</option>
+                        <option value="RPG">RPG / Fantasy</option>
+                        <option value="Akcja">Akcja / Open World</option>
+                        <option value="Racing">Wyścigi / Symulatory</option>
+                        <option value="Battle Royale">Battle Royale</option>
+                        <option value="Sandbox">Sandbox / Survival</option>
+                    </select>
+
+                    <!-- Sort Order Dropdown -->
+                    <select id="sortFilter" onchange="filterAndRenderGames()" class="bg-cardBg border border-slate-700 focus:border-neonGreen text-slate-200 px-4 py-2.5 rounded-xl text-xs outline-none transition font-orbitron">
+                        <option value="RATING_DESC">Ocena: Najwyższa</option>
+                        <option value="NAME_ASC">Nazwa: A-Z</option>
+                        <option value="PRICE_ASC">Cena: Darmowe / Najtańsze</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Games Grid Display -->
+            <div id="gamesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Populated dynamically via JS -->
+            </div>
+
+            <!-- MINIGRA INTERAKTYWNA: NEON SPACE SHOOTER ARCADES -->
+            <div class="mt-16 glass-panel rounded-3xl p-6 sm:p-10 border-2 border-neonGreen/40 relative overflow-hidden">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-6">
+                    <div>
+                        <span class="px-3 py-1 bg-neonGreen/20 text-neonGreen border border-neonGreen/40 text-[10px] font-orbitron font-bold rounded-full uppercase tracking-wider">
+                            <i class="fa-solid fa-gamepad mr-1"></i> WBUDOWANA MINIGRA MINI-ARCADE
+                        </span>
+                        <h2 class="font-orbitron font-extrabold text-2xl sm:text-3xl text-white mt-2">CYBER NEON SHOOTER</h2>
+                        <p class="text-slate-400 text-xs mt-1">Steruj statkiem kosmicznym (strzałki/A-D lub myszka/dotyk) i niszcz przeszkody neonowe!</p>
+                    </div>
+
+                    <div class="flex items-center space-x-6 font-orbitron">
+                        <div class="text-center bg-slate-950 px-4 py-2 rounded-xl border border-slate-800">
+                            <div class="text-[10px] text-slate-400 uppercase">TWÓJ WYNIK</div>
+                            <div id="miniGameScore" class="text-2xl font-black text-neonGreen">0</div>
+                        </div>
+                        <div class="text-center bg-slate-950 px-4 py-2 rounded-xl border border-slate-800">
+                            <div class="text-[10px] text-slate-400 uppercase">REKORD BAZY</div>
+                            <div id="miniGameHighScore" class="text-2xl font-black text-neonBlue">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Canvas Game Screen -->
+                <div class="relative w-full h-80 bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden flex items-center justify-center">
+                    <canvas id="arcadeCanvas" class="w-full h-full block"></canvas>
+
+                    <!-- Game Overlay controls -->
+                    <div id="arcadeStartOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
+                        <i class="fa-solid fa-rocket text-neonGreen text-5xl mb-4 animate-bounce"></i>
+                        <h3 class="font-orbitron font-black text-2xl text-white mb-2">CYBER NEON SHOOTER</h3>
+                        <p class="text-slate-400 text-xs max-w-md mb-6">Używaj strzałek W lewo / W prawo lub myszki, aby unikać i zestrzeliwać neony!</p>
+                        <button onclick="startArcadeGame()" class="px-8 py-3.5 bg-neonGreen text-black font-orbitron font-extrabold text-sm rounded-xl box-glow-green hover:bg-white transition transform hover:scale-105">
+                            URUCHOM MINIGRĘ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- VIEW 3: WAŻNE INFO / NEWSY (ważneinfo.html) -->
+        <!-- ================================================================= -->
+        <section id="view-ważneinfo.html" class="spa-view hidden space-y-12">
+            
+            <div class="border-b border-slate-800/80 pb-6">
+                <h1 class="font-orbitron font-black text-3xl sm:text-5xl text-white">
+                    WIADOMOŚCI & <span class="text-neonGreen glow-green">LIVE API</span>
+                </h1>
+                <p class="text-slate-400 text-sm mt-1">Najświeższe informacje e-sportowe, darmowe gry w sieci oraz kalkulator wymagań sprzetowych dla graczy.</p>
+            </div>
+
+            <!-- HARDWARE REQUIREMENTS CALCULATOR -->
+            <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-neonBlue/30">
+                <div class="flex items-center space-x-3 mb-6">
+                    <span class="w-3 h-8 bg-neonBlue rounded-full"></span>
+                    <div>
+                        <h2 class="font-orbitron font-bold text-xl sm:text-2xl text-white">Kalkulator Wymagań Sprzętowych PC</h2>
+                        <p class="text-slate-400 text-xs">Wybierz swoją kartę graficzną i procesor, aby sprawdzić czy gra Ci pójdzie!</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-orbitron text-slate-300 mb-2">Wybierz Gra:</label>
+                        <select id="calcGameSelect" class="w-full bg-slate-950 border border-slate-700 focus:border-neonBlue text-white p-3 rounded-xl text-xs font-orbitron outline-none">
+                            <option value="CYBERPUNK">Cyberpunk 2077 (Wymagająca)</option>
+                            <option value="WITCHER3">Wiedźmin 3: Dziki Gon (Średnia)</option>
+                            <option value="CS2">Counter-Strike 2 (Niska / E-sport)</option>
+                            <option value="ELDEN">Elden Ring (Średnia/Wysoka)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-orbitron text-slate-300 mb-2">Twoja Karta Graficzna (GPU):</label>
+                        <select id="calcGpuSelect" class="w-full bg-slate-950 border border-slate-700 focus:border-neonBlue text-white p-3 rounded-xl text-xs font-orbitron outline-none">
+                            <option value="3">NVIDIA RTX 4070 / RTX 3080 / RX 7800 (Potężna)</option>
+                            <option value="2">NVIDIA RTX 3060 / GTX 1080 / RX 6600 (Średnia)</option>
+                            <option value="1">NVIDIA GTX 1050 Ti / GTX 960 (Podstawowa)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-orbitron text-slate-300 mb-2">Pamięć RAM:</label>
+                        <select id="calcRamSelect" class="w-full bg-slate-950 border border-slate-700 focus:border-neonBlue text-white p-3 rounded-xl text-xs font-orbitron outline-none">
+                            <option value="32">32 GB RAM lub więcej</option>
+                            <option value="16">16 GB RAM</option>
+                            <option value="8">8 GB RAM</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between bg-slate-950 p-4 rounded-2xl border border-slate-800 flex-col sm:flex-row gap-4">
+                    <button onclick="calculateHardwareSpecs()" class="w-full sm:w-auto px-6 py-3 bg-neonBlue text-black font-orbitron font-extrabold text-xs rounded-xl hover:bg-white transition">
+                        SPRAWDŹ KOMPATYBILNOŚĆ
+                    </button>
+
+                    <div id="calcResultDisplay" class="font-orbitron text-xs text-neonGreen font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check"></i> Kliknij przycisk powyżej, aby przeanalizować sprzęt!
+                    </div>
+                </div>
+            </div>
+
+            <!-- LIVE FREE GAMES API FEED -->
+            <div>
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-3 h-8 bg-neonGreen rounded-full"></span>
+                        <h2 class="font-orbitron font-bold text-2xl text-white">Darmowe Gry Tygodnia (Live API Feed)</h2>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400"><i class="fa-solid fa-cloud-arrow-down text-neonGreen"></i> API FreeToGame</span>
+                </div>
+
+                <div id="apiGamesContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="col-span-full text-center py-12 text-slate-400 font-mono">
+                        <i class="fa-solid fa-circle-notch animate-spin text-neonGreen text-3xl mb-3"></i><br>
+                        Ładowanie darmowych gier z sieciowego API...
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEWS & ESPORT ANNOUNCEMENTS -->
+            <div>
+                <div class="flex items-center space-x-3 mb-6">
+                    <span class="w-3 h-8 bg-yellow-400 rounded-full"></span>
+                    <h2 class="font-orbitron font-bold text-2xl text-white">Najważniejsze Ogłoszenia & Nadchodzące Premiery</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-panel p-6 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center text-xs font-mono text-yellow-400 mb-2">
+                                <span><i class="fa-solid fa-trophy mr-1"></i> E-SPORT NEWS</span>
+                                <span>15 WRZEŚNIA 2026</span>
+                            </div>
+                            <h3 class="font-orbitron font-bold text-xl text-white mb-2">Wielki Finał CS2 GameStudio Masters!</h3>
+                            <p class="text-slate-400 text-xs leading-relaxed mb-4">
+                                Już w ten weekend rusza międzynarodowy turniej Counter-Strike 2 z pulą nagród wynoszącą 100,000 USD. Oglądaj transmisję na żywo i zgarniaj darmowe klucze skinów!
+                            </p>
+                        </div>
+                        <span class="text-xs font-orbitron text-neonGreen"><i class="fa-solid fa-play mr-1"></i> Transmisja na Twitch / YouTube</span>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-2xl border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center text-xs font-mono text-neonBlue mb-2">
+                                <span><i class="fa-solid fa-wrench mr-1"></i> UPDATE SERWERA</span>
+                                <span>14 WRZEŚNIA 2026</span>
+                            </div>
+                            <h3 class="font-orbitron font-bold text-xl text-white mb-2">Aktualizacja Bazy Danych Gier AAA</h3>
+                            <p class="text-slate-400 text-xs leading-relaxed mb-4">
+                                Dodaliśmy pełną integrację z oficjalnymi sklepami Steam oraz Epic Games Store. Od teraz możesz pobierać darmowe pozycje jednym kliknięciem myszy.
+                            </p>
+                        </div>
+                        <span class="text-xs font-orbitron text-neonBlue"><i class="fa-solid fa-check mr-1"></i> Status: Wdrożono v2.4</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- GAME DETAILS MODAL -->
+    <div id="gameDetailsModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-2xl rounded-3xl p-6 sm:p-8 border-2 border-neonGreen text-left relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeGameDetailsModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-2xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div id="modalGameContent">
+                <!-- Content injected dynamically via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- FAVORITES MODAL -->
+    <div id="favoritesModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-lg rounded-3xl p-6 border border-neonBlue text-left relative">
+            <button onclick="closeFavoritesModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h2 class="font-orbitron font-extrabold text-2xl text-white mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-heart text-neonGreen"></i> Twoje Ulubione Gry
+            </h2>
+
+            <div id="favoritesListContainer" class="space-y-3 max-h-72 overflow-y-auto pr-1">
+                <!-- Favorites list generated via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800/80 glass-panel mt-20 py-10 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-lg bg-neonGreen text-black font-orbitron font-black text-xl flex items-center justify-center">G</div>
+                <span class="font-orbitron font-extrabold text-slate-200 text-lg">GameStudio &copy; 2026</span>
+            </div>
+            
+            <p class="text-slate-500 text-xs text-center max-w-md">
+                Oficjalna neonowa platforma cyfrowej rozrywki. Wszystkie nazwy gier, znaki towarowe i grafiki należą do ich odpowiednich właścicieli (CD Projekt Red, Rockstar Games, Valve, Riot Games, Mojang itp.).
+            </p>
+
+            <div class="flex space-x-5 text-slate-400 text-xl">
+                <a href="https://discord.com" target="_blank" class="hover:text-neonGreen transition"><i class="fa-brands fa-discord"></i></a>
+                <a href="https://twitter.com" target="_blank" class="hover:text-neonBlue transition"><i class="fa-brands fa-twitter"></i></a>
+                <a href="https://youtube.com" target="_blank" class="hover:text-red-500 transition"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://store.steampowered.com" target="_blank" class="hover:text-neonBlue transition"><i class="fa-brands fa-steam"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        /* ================================================================= */
+        /* REAL GAMES DATABASE (Prawdziwe gry z oficjalnymi linkami)          */
+        /* ================================================================= */
+        const gamesDatabase = [
+            {
+                id: "cp2077",
+                title: "Cyberpunk 2077",
+                category: "RPG",
+                rating: 4.8,
+                price: 199.00,
+                isFree: false,
+                image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
+                desc: "Rozbudowana gra RPG z otwartym światem osadzona w tętniącym życiem, futurystycznym Night City.",
+                developer: "CD Projekt Red",
+                officialUrl: "https://store.steampowered.com/app/1091500/Cyberpunk_2077/",
+                specs: {
+                    cpu: "Intel Core i7-12700K / AMD Ryzen 7 7800X3D",
+                    gpu: "NVIDIA GeForce RTX 3070 / AMD Radeon RX 6800 XT",
+                    ram: "16 GB RAM"
+                }
+            },
+            {
+                id: "witcher3",
+                title: "Wiedźmin 3: Dziki Gon",
+                category: "RPG",
+                rating: 5.0,
+                price: 149.99,
+                isFree: false,
+                image: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=800&q=80",
+                desc: "Wciel się w Geralta z Rivii, zawodowego zabójcę potworów, w poszukiwaniu Dziecka Przeznaczenia.",
+                developer: "CD Projekt Red",
+                officialUrl: "https://store.steampowered.com/app/292030/The_Witcher_3_Wild_Hunt/",
+                specs: {
+                    cpu: "Intel Core i5-7400 / AMD Ryzen 5 1600",
+                    gpu: "NVIDIA GeForce GTX 1070 / AMD Radeon RX 480",
+                    ram: "12 GB RAM"
+                }
+            },
+            {
+                id: "gtav",
+                title: "Grand Theft Auto V",
+                category: "Akcja",
+                rating: 4.9,
+                price: 129.00,
+                isFree: false,
+                image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80",
+                desc: "Legenda otwartego świata w Los Santos. Przygoda fabularna oraz gigantyczny tryb GTA Online.",
+                developer: "Rockstar Games",
+                officialUrl: "https://store.epicgames.com/pl/p/grand-theft-auto-v",
+                specs: {
+                    cpu: "Intel Core i5 3470 / AMD X8 FX-8350",
+                    gpu: "NVIDIA GTX 660 / AMD HD 7870",
+                    ram: "8 GB RAM"
+                }
+            },
+            {
+                id: "cs2",
+                title: "Counter-Strike 2",
+                category: "FPS",
+                rating: 4.7,
+                price: 0,
+                isFree: true,
+                image: "https://images.unsplash.com/photo-1560253023-3ec5d502959f?auto=format&fit=crop&w=800&q=80",
+                desc: "Najpopularniejsza taktyczna strzelanka e-sportowa na świecie napędzana silnikiem Source 2.",
+                developer: "Valve",
+                officialUrl: "https://store.steampowered.com/app/730/CounterStrike_2/",
+                specs: {
+                    cpu: "Intel Core i5-2500K / AMD FX-6300",
+                    gpu: "NVIDIA GeForce GTX 960 / AMD Radeon R9 280",
+                    ram: "8 GB RAM"
+                }
+            },
+            {
+                id: "minecraft",
+                title: "Minecraft",
+                category: "Sandbox",
+                rating: 4.9,
+                price: 129.99,
+                isFree: false,
+                image: "https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=800&q=80",
+                desc: "Buduj, twórz i przetrwaj w nieskończonym proceduralnym świecie złożonym z klocków.",
+                developer: "Mojang Studios",
+                officialUrl: "https://www.minecraft.net/",
+                specs: {
+                    cpu: "Intel Core i5-4690 / AMD A10-7800",
+                    gpu: "Intel HD Graphics 520 / NVIDIA GeForce 700 Series",
+                    ram: "8 GB RAM"
+                }
+            },
+            {
+                id: "valorant",
+                title: "VALORANT",
+                category: "FPS",
+                rating: 4.6,
+                price: 0,
+                isFree: true,
+                image: "https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=800&q=80",
+                desc: "Taktyczna strzelanka 5v5 oparta na postaciach z unikalnymi umiejętnościami od Riot Games.",
+                developer: "Riot Games",
+                officialUrl: "https://playvalorant.com/",
+                specs: {
+                    cpu: "Intel Core i3-4150 / AMD Ryzen 3 1200",
+                    gpu: "NVIDIA GeForce GT 730 / AMD Radeon R7 240",
+                    ram: "4 GB RAM"
+                }
+            },
+            {
+                id: "eldenring",
+                title: "Elden Ring",
+                category: "RPG",
+                rating: 4.9,
+                price: 249.00,
+                isFree: false,
+                image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
+                desc: "Arcydzieło gatunku Souls-like z otwartym światem stworzonym przez Hidetaka Miyazakiego i George R.R. Martina.",
+                developer: "FromSoftware",
+                officialUrl: "https://store.steampowered.com/app/1245620/ELDEN_RING/",
+                specs: {
+                    cpu: "Intel Core i7-8700K / AMD Ryzen 5 3600X",
+                    gpu: "NVIDIA GeForce GTX 1070 / AMD Radeon RX Vega 56",
+                    ram: "16 GB RAM"
+                }
+            },
+            {
+                id: "forza5",
+                title: "Forza Horizon 5",
+                category: "Racing",
+                rating: 4.8,
+                price: 259.00,
+                isFree: false,
+                image: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80",
+                desc: "Niesamowity festiwal motoryzacyjny w tętniącym życiem otwartym świecie Meksyku.",
+                developer: "Playground Games",
+                officialUrl: "https://store.steampowered.com/app/1551360/Forza_Horizon_5/",
+                specs: {
+                    cpu: "Intel i5-8400 / AMD Ryzen 5 1500X",
+                    gpu: "NVIDIA GTX 1070 / AMD RX 590",
+                    ram: "16 GB RAM"
+                }
+            },
+            {
+                id: "fortnite",
+                title: "Fortnite",
+                category: "Battle Royale",
+                rating: 4.5,
+                price: 0,
+                isFree: true,
+                image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+                desc: "Światowy fenomen Battle Royale z budowaniem, koncertami na żywo i wieloma trybami gry.",
+                developer: "Epic Games",
+                officialUrl: "https://www.fortnite.com/",
+                specs: {
+                    cpu: "Intel Core i5-7300U / AMD Ryzen 3 3300U",
+                    gpu: "NVIDIA GTX 960 / AMD R9 280",
+                    ram: "8 GB RAM"
+                }
+            },
+            {
+                id: "rdr2",
+                title: "Red Dead Redemption 2",
+                category: "Akcja",
+                rating: 5.0,
+                price: 249.00,
+                isFree: false,
+                image: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80",
+                desc: "Porywająca opowieść o Dzikim Zachodzie i gangu Arthura Morgana od twórców GTA.",
+                developer: "Rockstar Games",
+                officialUrl: "https://store.steampowered.com/app/1174180/Red_Dead_Redemption_2/",
+                specs: {
+                    cpu: "Intel Core i7-4770K / AMD Ryzen 5 1500X",
+                    gpu: "NVIDIA GeForce GTX 1060 / AMD Radeon RX 480",
+                    ram: "12 GB RAM"
+                }
+            },
+            {
+                id: "leagueoflegends",
+                title: "League of Legends",
+                category: "RPG",
+                rating: 4.6,
+                price: 0,
+                isFree: true,
+                image: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=800&q=80",
+                desc: "Najsłynniejsza gra MOBA 5v5 na świecie, gdzie strategia i szybkość decydują o zwycięstwie.",
+                developer: "Riot Games",
+                officialUrl: "https://www.leagueoflegends.com/",
+                specs: {
+                    cpu: "Intel Core i5-3300 / AMD FX-6300",
+                    gpu: "NVIDIA GeForce GTX 560 / AMD Radeon HD 6950",
+                    ram: "4 GB RAM"
+                }
+            },
+            {
+                id: "apexlegends",
+                title: "Apex Legends",
+                category: "Battle Royale",
+                rating: 4.7,
+                price: 0,
+                isFree: true,
+                image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+                desc: "Dynamiczny Battle Royale w świecie Titanfall, oparty na unikalnych Legendach i broniach.",
+                developer: "Respawn Entertainment",
+                officialUrl: "https://www.ea.com/games/apex-legends",
+                specs: {
+                    cpu: "Intel Core i5 3570K / AMD Ryzen 5",
+                    gpu: "NVIDIA GeForce GTX 970 / AMD Radeon R9 290",
+                    ram: "8 GB RAM"
+                }
+            }
+        ];
+
+        /* Ulubione Gry w LocalStorage */
+        let favoritesList = JSON.parse(localStorage.getItem('gamestudio_favs')) || [];
+
+        /* ================================================================= */
+        /* SPA ROUTING & NAVIGATION                                           */
+        /* ================================================================= */
+        function navigateTo(viewId) {
+            document.querySelectorAll('.spa-view').forEach(view => view.classList.add('hidden'));
+            
+            const targetView = document.getElementById('view-' + viewId);
+            if(targetView) {
+                targetView.classList.remove('hidden');
+            }
+
+            // Update Navigation Links Styling
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('text-neonGreen', 'border-neonGreen/30');
+                link.classList.add('text-slate-300', 'border-transparent');
+            });
+            const activeNav = document.getElementById('nav-' + viewId);
+            if(activeNav) {
+                activeNav.classList.remove('text-slate-300', 'border-transparent');
+                activeNav.classList.add('text-neonGreen', 'border-neonGreen/30');
+            }
+
+            // Close mobile menu if open
+            document.getElementById('mobileNav').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileNav() {
+            document.getElementById('mobileNav').classList.toggle('hidden');
+        }
+
+        /* ================================================================= */
+        /* RENDERING GAMES CATALOG & HOME FEATURED                           */
+        /* ================================================================= */
+        function renderGameCard(game) {
+            const isFav = favoritesList.includes(game.id);
+            return `
+                <div class="glass-panel rounded-2xl overflow-hidden border border-slate-800 card-neon-hover flex flex-col justify-between group">
+                    <div>
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="${game.image}" alt="${game.title}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            
+                            <div class="absolute top-3 left-3 flex gap-2">
+                                <span class="bg-slate-950/80 backdrop-blur-md text-neonBlue text-[10px] font-orbitron font-bold px-2.5 py-1 rounded-md border border-neonBlue/30 uppercase">
+                                    ${game.category}
+                                </span>
+                                ${game.isFree ? '<span class="bg-neonGreen text-black text-[10px] font-orbitron font-black px-2.5 py-1 rounded-md shadow-lg">DARMOWA</span>' : ''}
+                            </div>
+
+                            <button onclick="toggleFavorite('${game.id}', event)" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-950/80 backdrop-blur-md border border-slate-700 flex items-center justify-center text-xs transition ${isFav ? 'text-neonGreen border-neonGreen' : 'text-slate-400 hover:text-white'}">
+                                <i class="fa-solid fa-heart"></i>
+                            </button>
+                        </div>
+
+                        <div class="p-5">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="font-orbitron font-bold text-base text-white group-hover:text-neonGreen transition">${game.title}</h3>
+                                <span class="text-xs text-yellow-400 font-bold flex items-center gap-1 font-mono">
+                                    <i class="fa-solid fa-star"></i> ${game.rating}
+                                </span>
+                            </div>
+                            <p class="text-slate-400 text-xs mb-4 line-clamp-2">${game.desc}</p>
+                            <div class="text-[11px] text-slate-500 font-mono mb-2">Twórca: <span class="text-slate-300">${game.developer}</span></div>
+                        </div>
+                    </div>
+
+                    <div class="p-5 pt-0 border-t border-slate-800/50 mt-auto flex items-center justify-between pt-4">
+                        <div class="font-orbitron">
+                            ${game.isFree 
+                                ? '<span class="text-neonGreen font-extrabold text-sm">0.00 PLN</span>' 
+                                : `<span class="text-white font-extrabold text-sm">${game.price.toFixed(2)} PLN</span>`}
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <button onclick="openGameDetailsModal('${game.id}')" class="px-3 py-2 rounded-xl bg-slate-800 text-slate-300 font-orbitron font-bold text-xs hover:text-white transition">
+                                <i class="fa-solid fa-info-circle"></i>
+                            </button>
+
+                            <a href="${game.officialUrl}" target="_blank" onclick="playButtonClickSound()" class="px-3.5 py-2 rounded-xl bg-neonGreen/20 text-neonGreen font-orbitron font-bold text-xs hover:bg-neonGreen hover:text-black transition flex items-center gap-1.5">
+                                ${game.isFree ? '<i class="fa-solid fa-download"></i> Pobierz' : '<i class="fa-solid fa-cart-shopping"></i> Kup'}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function filterAndRenderGames() {
+            const query = document.getElementById('gameSearchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const sort = document.getElementById('sortFilter').value;
+
+            let filtered = gamesDatabase.filter(game => {
+                const matchesSearch = game.title.toLowerCase().includes(query) || game.desc.toLowerCase().includes(query) || game.developer.toLowerCase().includes(query);
+                const matchesCat = (category === 'ALL') || (game.category === category);
+                return matchesSearch && matchesCat;
+            });
+
+            if(sort === 'RATING_DESC') {
+                filtered.sort((a,b) => b.rating - a.rating);
+            } else if(sort === 'NAME_ASC') {
+                filtered.sort((a,b) => a.title.localeCompare(b.title));
+            } else if(sort === 'PRICE_ASC') {
+                filtered.sort((a,b) => a.price - b.price);
+            }
+
+            const grid = document.getElementById('gamesGrid');
+            grid.innerHTML = filtered.map(game => renderGameCard(game)).join('');
+        }
+
+        function renderHomeFeatured() {
+            const container = document.getElementById('homeFeaturedGamesGrid');
+            const top3 = gamesDatabase.slice(0, 3);
+            container.innerHTML = top3.map(game => renderGameCard(game)).join('');
+        }
+
+        /* ================================================================= */
+        /* FAVORITES & MODALS SYSTEM                                          */
+        /* ================================================================= */
+        function toggleFavorite(gameId, event) {
+            if(event) event.stopPropagation();
+            const index = favoritesList.indexOf(gameId);
+            if(index > -1) {
+                favoritesList.splice(index, 1);
+                showToast("Usunięto z ulubionych!");
+            } else {
+                favoritesList.push(gameId);
+                showToast("Dodano do Ulubionych!");
+            }
+            localStorage.setItem('gamestudio_favs', JSON.stringify(favoritesList));
+            updateFavoritesBadge();
+            filterAndRenderGames();
+            renderHomeFeatured();
+        }
+
+        function updateFavoritesBadge() {
+            document.getElementById('favCountBadge').innerText = favoritesList.length;
+        }
+
+        function openFavoritesModal() {
+            const modal = document.getElementById('favoritesModal');
+            const container = document.getElementById('favoritesListContainer');
+            
+            const favGames = gamesDatabase.filter(g => favoritesList.includes(g.id));
+
+            if(favGames.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-slate-500 font-mono text-xs">Brak zapisanych ulubionych gier.</div>`;
+            } else {
+                container.innerHTML = favGames.map(g => `
+                    <div class="flex items-center justify-between bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs">
+                        <div class="flex items-center space-x-3">
+                            <img src="${g.image}" class="w-10 h-10 rounded-lg object-cover">
+                            <div>
+                                <div class="font-orbitron font-bold text-white">${g.title}</div>
+                                <div class="text-[10px] text-slate-400 font-mono">${g.category}</div>
+                            </div>
+                        </div>
+                        <a href="${g.officialUrl}" target="_blank" class="px-3 py-1.5 bg-neonGreen/20 text-neonGreen font-orbitron text-[10px] rounded-lg font-bold">Otwórz</a>
+                    </div>
+                `).join('');
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeFavoritesModal() {
+            document.getElementById('favoritesModal').classList.add('hidden');
+        }
+
+        function openGameDetailsModal(gameId) {
+            const game = gamesDatabase.find(g => g.id === gameId);
+            if(!game) return;
+
+            const modal = document.getElementById('gameDetailsModal');
+            const container = document.getElementById('modalGameContent');
+
+            container.innerHTML = `
+                <div class="relative h-56 sm:h-72 rounded-2xl overflow-hidden mb-6">
+                    <img src="${game.image}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+                    <div class="absolute bottom-4 left-4">
+                        <span class="px-3 py-1 bg-neonBlue text-black font-orbitron font-black text-xs rounded-md uppercase mb-2 inline-block">${game.category}</span>
+                        <h2 class="font-orbitron font-black text-2xl sm:text-4xl text-white">${game.title}</h2>
+                    </div>
+                </div>
+
+                <div class="space-y-4 font-sans text-xs sm:text-sm text-slate-300">
+                    <p class="leading-relaxed">${game.desc}</p>
+
+                    <div class="grid grid-cols-2 gap-4 bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs">
+                        <div>
+                            <span class="text-slate-500 block">TWÓRCA:</span>
+                            <span class="text-white font-bold">${game.developer}</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block">OCENA GRACZY:</span>
+                            <span class="text-yellow-400 font-bold">${game.rating} / 5.0</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950/80 p-4 rounded-xl border border-neonBlue/20">
+                        <h4 class="font-orbitron font-bold text-white text-xs mb-2 text-neonBlue"><i class="fa-solid fa-microchip mr-1"></i> ZALECANE WYMAGANIA SPRZĘTOWE PC:</h4>
+                        <ul class="space-y-1 font-mono text-[11px] text-slate-400">
+                            <li>• CPU: ${game.specs.cpu}</li>
+                            <li>• GPU: ${game.specs.gpu}</li>
+                            <li>• RAM: ${game.specs.ram}</li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4 flex justify-between items-center">
+                        <span class="font-orbitron text-xl font-bold text-neonGreen">
+                            ${game.isFree ? 'DARMOWA GRA' : game.price.toFixed(2) + ' PLN'}
+                        </span>
+
+                        <a href="${game.officialUrl}" target="_blank" class="px-6 py-3 bg-neonGreen text-black font-orbitron font-extrabold rounded-xl hover:bg-white transition flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> PRZEJDŹ DO SKLEPU / POBIERZ
+                        </a>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeGameDetailsModal() {
+            document.getElementById('gameDetailsModal').classList.add('hidden');
+        }
+
+        /* ================================================================= */
+        /* LIVE FREE GAMES API (FreeToGame REST Feed)                         */
+        /* ================================================================= */
+        async function fetchFreeToGameAPI() {
+            const container = document.getElementById('apiGamesContainer');
+            try {
+                const res = await fetch('https://www.freetogame.com/api/games?category=shooter');
+                if(!res.ok) throw new Error("API Error");
+                const data = await res.json();
+                
+                container.innerHTML = data.slice(0, 3).map(game => `
+                    <div class="glass-panel rounded-2xl p-4 border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <img src="${game.thumbnail}" alt="${game.title}" class="rounded-xl w-full h-40 object-cover mb-3">
+                            <h3 class="font-orbitron font-bold text-white text-base mb-1">${game.title}</h3>
+                            <span class="text-[10px] text-neonGreen font-mono block mb-2">${game.genre} • ${game.platform}</span>
+                            <p class="text-slate-400 text-xs line-clamp-2">${game.short_description}</p>
+                        </div>
+                        <a href="${game.game_url}" target="_blank" class="mt-4 w-full py-2.5 text-center rounded-xl bg-neonGreen/20 text-neonGreen hover:bg-neonGreen hover:text-black font-orbitron text-xs font-bold transition block">
+                            ZAGRAJ BEZPOŚREDNIO <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
+                        </a>
+                    </div>
+                `).join('');
+            } catch(e) {
+                // Fallback display if CORS restricts API call
+                container.innerHTML = `
+                    <div class="col-span-full glass-panel p-8 rounded-2xl border border-neonGreen/30 text-center">
+                        <i class="fa-solid fa-gift text-neonGreen text-4xl mb-3"></i>
+                        <h3 class="font-orbitron text-lg font-bold text-white">Darmowe Gry Tygodnia (Tryb Dedykowany)</h3>
+                        <p class="text-xs text-slate-400 mt-1 max-w-md mx-auto">Zagraj w Counter-Strike 2, Valoranta oraz Fortnite za darmo prosto w oficjalnych sklepach producentów!</p>
+                        <button onclick="navigateTo('gry.html')" class="mt-4 px-6 py-2.5 bg-neonGreen text-black font-orbitron text-xs font-bold rounded-xl">Przejdź do Katalogu Gier</button>
+                    </div>
+                `;
+            }
+        }
+
+        /* ================================================================= */
+        /* HARDWARE CALCULATOR LOGIC                                         */
+        /* ================================================================= */
+        function calculateHardwareSpecs() {
+            const gpuVal = parseInt(document.getElementById('calcGpuSelect').value);
+            const ramVal = parseInt(document.getElementById('calcRamSelect').value);
+            const game = document.getElementById('calcGameSelect').value;
+
+            const display = document.getElementById('calcResultDisplay');
+
+            let pass = false;
+            if(game === 'CYBERPUNK' && gpuVal >= 2 && ramVal >= 16) pass = true;
+            else if(game === 'WITCHER3' && gpuVal >= 1 && ramVal >= 8) pass = true;
+            else if(game === 'CS2' && ramVal >= 8) pass = true;
+            else if(game === 'ELDEN' && gpuVal >= 2 && ramVal >= 12) pass = true;
+
+            if(pass) {
+                display.className = "font-orbitron text-xs text-neonGreen font-bold flex items-center gap-2";
+                display.innerHTML = `<i class="fa-solid fa-circle-check text-lg"></i> STRUKTURA SPRZĘTOWA ZDATNA! GRA PÓJDZIE W PŁYNNYCH FPS!`;
+            } else {
+                display.className = "font-orbitron text-xs text-red-400 font-bold flex items-center gap-2";
+                display.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-lg"></i> OSTRZEŻENIE: MOŻLIWE SPADKI FPS. ZALECANY UPGRADE GPU/RAM.`;
+            }
+        }
+
+        /* ================================================================= */
+        /* AVATAR GENERATOR & CHAT SIMULATOR                                 */
+        /* ================================================================= */
+        function generateNeonAvatar() {
+            const nick = document.getElementById('avatarNickInput').value.trim() || 'GameStudioPlayer';
+            document.getElementById('avatarNickDisplay').innerText = nick;
+            const img = document.getElementById('avatarPreviewImg');
+            img.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(nick)}`;
+            showToast("Wygenerowano avatar gracza!");
+        }
+
+        function downloadAvatar() {
+            const nick = document.getElementById('avatarNickDisplay').innerText;
+            window.open(`https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(nick)}`, '_blank');
+        }
+
+        /* Chat messages */
+        const chatMessages = [
+            { user: "NeonKnight", text: "Siemanko! Ktoś chętny na ranked w CS2?", color: "text-neonGreen" },
+            { user: "CyberV", text: "Cyberpunk na RTX 4070 wygląda po prostu obłędnie...", color: "text-neonBlue" },
+            { user: "GamerPro99", text: "Wiedźmin 3 to najlepszy RPG wszech czasów, zmieńcie moje zdanie!", color: "text-yellow-400" }
+        ];
+
+        function renderChatMessages() {
+            const box = document.getElementById('chatMessagesBox');
+            box.innerHTML = chatMessages.map(msg => `
+                <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+                    <span class="font-orbitron font-bold text-[11px] ${msg.color}">${msg.user}:</span> 
+                    <span class="text-slate-300 ml-1">${msg.text}</span>
+                </div>
+            `).join('');
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInputMessage');
+            const text = input.value.trim();
+            if(!text) return;
+
+            const nick = document.getElementById('avatarNickDisplay').innerText || "Gracz";
+            chatMessages.push({ user: nick, text: text, color: "text-neonGreen" });
+            input.value = '';
+            renderChatMessages();
+
+            // Auto Bot Reply Simulation
+            setTimeout(() => {
+                chatMessages.push({ user: "GameStudioBot", text: "Dzięki za wiadomość w sieci! Życzymy udanej rozgrywki!", color: "text-neonBlue" });
+                renderChatMessages();
+            }, 1200);
+        }
+
+        /* ================================================================= */
+        /* AUDIO SYNTHESIZER & SOUND EFFECTS (Web Audio API)                  */
+        /* ================================================================= */
+        let audioCtx = null;
+        let synthOsc = null;
+        let isAudioPlaying = false;
+
+        function playButtonClickSound() {
+            try {
+                if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.08);
+            } catch(e) {}
+        }
+
+        function toggleSynthAudio() {
+            const btn = document.getElementById('synthAudioBtn');
+            const icon = document.getElementById('audioIcon');
+            
+            if(!isAudioPlaying) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    synthOsc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    
+                    synthOsc.type = 'sawtooth';
+                    synthOsc.frequency.setValueAtTime(110, audioCtx.currentTime); // Low A2 Synth
+                    gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+
+                    synthOsc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    synthOsc.start();
+
+                    isAudioPlaying = true;
+                    icon.className = "fa-solid fa-pause text-neonGreen";
+                    drawVisualizer();
+                } catch(e) {}
+            } else {
+                if(synthOsc) synthOsc.stop();
+                isAudioPlaying = false;
+                icon.className = "fa-solid fa-play";
+            }
+        }
+
+        function drawVisualizer() {
+            const canvas = document.getElementById('audioVisualizer');
+            const ctx = canvas.getContext('2d');
+            
+            function animateVis() {
+                if(!isAudioPlaying) {
+                    ctx.clearRect(0,0,canvas.width,canvas.height);
+                    return;
+                }
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                ctx.fillStyle = '#00ff88';
+
+                for(let i=0; i<5; i++) {
+                    const h = Math.random() * 15 + 2;
+                    ctx.fillRect(i * 10 + 2, canvas.height - h, 6, h);
+                }
+                requestAnimationFrame(animateVis);
+            }
+            animateVis();
+        }
+
+        /* ================================================================= */
+        /* NEON PARTICLES BACKGROUND CANVAS                                  */
+        /* ================================================================= */
+        function initParticleBackground() {
+            const canvas = document.getElementById('particleCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const particles = Array.from({ length: 40 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 2 + 1,
+                color: Math.random() > 0.5 ? '#00ff88' : '#00d8ff',
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5
+            }));
+
+            function drawParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = p.color;
+                    ctx.fill();
+                });
+                requestAnimationFrame(drawParticles);
+            }
+            drawParticles();
+        }
+
+        /* ================================================================= */
+        /* WBUDOWANA MINIGRA: CYBER NEON SHOOTER                             */
+        /* ================================================================= */
+        let arcadeCanvas, arcadeCtx;
+        let shipX = 150;
+        let arcadeScore = 0;
+        let arcadeHighScore = localStorage.getItem('gamestudio_highscore') || 0;
+        let arcadeRunning = false;
+        let obstacles = [];
+        let bullets = [];
+
+        function startArcadeGame() {
+            document.getElementById('arcadeStartOverlay').classList.add('hidden');
+            arcadeCanvas = document.getElementById('arcadeCanvas');
+            arcadeCtx = arcadeCanvas.getContext('2d');
+
+            arcadeCanvas.width = arcadeCanvas.clientWidth;
+            arcadeCanvas.height = arcadeCanvas.clientHeight;
+
+            shipX = arcadeCanvas.width / 2;
+            arcadeScore = 0;
+            obstacles = [];
+            bullets = [];
+            arcadeRunning = true;
+
+            document.getElementById('miniGameScore').innerText = arcadeScore;
+
+            // Touch / Mouse controls
+            arcadeCanvas.onmousemove = (e) => {
+                const rect = arcadeCanvas.getBoundingClientRect();
+                shipX = e.clientX - rect.left;
+            };
+
+            arcadeCanvas.onclick = () => {
+                if(arcadeRunning) {
+                    bullets.push({ x: shipX, y: arcadeCanvas.height - 30 });
+                }
+            };
+
+            // Keyboard Controls
+            window.onkeydown = (e) => {
+                if(!arcadeRunning) return;
+                if(e.key === 'ArrowLeft' || e.key === 'a') shipX -= 25;
+                if(e.key === 'ArrowRight' || e.key === 'd') shipX += 25;
+                if(e.key === ' ' || e.key === 'ArrowUp') bullets.push({ x: shipX, y: arcadeCanvas.height - 30 });
+            };
+
+            requestAnimationFrame(arcadeGameLoop);
+        }
+
+        function arcadeGameLoop() {
+            if(!arcadeRunning) return;
+
+            arcadeCtx.fillStyle = '#050811';
+            arcadeCtx.fillRect(0, 0, arcadeCanvas.width, arcadeCanvas.height);
+
+            // Draw Player Ship
+            arcadeCtx.fillStyle = '#00ff88';
+            arcadeCtx.beginPath();
+            arcadeCtx.moveTo(shipX, arcadeCanvas.height - 35);
+            arcadeCtx.lineTo(shipX - 15, arcadeCanvas.height - 10);
+            arcadeCtx.lineTo(shipX + 15, arcadeCanvas.height - 10);
+            arcadeCtx.closePath();
+            arcadeCtx.fill();
+
+            // Spawn Obstacles
+            if(Math.random() < 0.04) {
+                obstacles.push({
+                    x: Math.random() * (arcadeCanvas.width - 30) + 15,
+                    y: -20,
+                    speed: Math.random() * 2 + 2
+                });
+            }
+
+            // Move Bullets
+            bullets.forEach((b, bi) => {
+                b.y -= 7;
+                arcadeCtx.fillStyle = '#00d8ff';
+                arcadeCtx.fillRect(b.x - 2, b.y, 4, 10);
+
+                if(b.y < 0) bullets.splice(bi, 1);
+            });
+
+            // Move Obstacles
+            obstacles.forEach((o, oi) => {
+                o.y += o.speed;
+                arcadeCtx.fillStyle = '#ff0055';
+                arcadeCtx.beginPath();
+                arcadeCtx.arc(o.x, o.y, 12, 0, Math.PI * 2);
+                arcadeCtx.fill();
+
+                // Bullet Collision
+                bullets.forEach((b, bi) => {
+                    const dist = Math.hypot(b.x - o.x, b.y - o.y);
+                    if(dist < 15) {
+                        obstacles.splice(oi, 1);
+                        bullets.splice(bi, 1);
+                        arcadeScore += 10;
+                        document.getElementById('miniGameScore').innerText = arcadeScore;
+                    }
+                });
+
+                // Ship Collision / Game Over
+                if(o.y > arcadeCanvas.height - 25 && Math.abs(o.x - shipX) < 25) {
+                    endArcadeGame();
+                }
+
+                if(o.y > arcadeCanvas.height) obstacles.splice(oi, 1);
+            });
+
+            requestAnimationFrame(arcadeGameLoop);
+        }
+
+        function endArcadeGame() {
+            arcadeRunning = false;
+            if(arcadeScore > arcadeHighScore) {
+                arcadeHighScore = arcadeScore;
+                localStorage.setItem('gamestudio_highscore', arcadeHighScore);
+                document.getElementById('miniGameHighScore').innerText = arcadeHighScore;
+            }
+
+            document.getElementById('arcadeStartOverlay').classList.remove('hidden');
+            document.getElementById('arcadeStartOverlay').innerHTML = `
+                <i class="fa-solid fa-skull-crossbones text-red-500 text-5xl mb-4"></i>
+                <h3 class="font-orbitron font-black text-2xl text-white mb-2">KONIEC GRY!</h3>
+                <p class="text-slate-300 text-sm mb-4">Twój Wynik: <span class="text-neonGreen font-bold">${arcadeScore}</span></p>
+                <button onclick="startArcadeGame()" class="px-8 py-3.5 bg-neonGreen text-black font-orbitron font-extrabold text-sm rounded-xl box-glow-green">
+                    ZAGRAJ PONOWNIE
+                </button>
+            `;
+        }
+
+        /* ================================================================= */
+        /* TOAST NOTIFICATION UTILITY                                        */
+        /* ================================================================= */
+        function showToast(msg) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = "bg-slate-900 border border-neonGreen text-white px-4 py-3 rounded-xl text-xs font-orbitron shadow-[0_0_15px_rgba(0,255,136,0.3)] transition transform translate-y-2";
+            toast.innerHTML = `<i class="fa-solid fa-bell text-neonGreen mr-2"></i> ${msg}`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        /* ================================================================= */
+        /* INITIALIZATION ON WINDOW LOAD                                     */
+        /* ================================================================= */
+        window.onload = function() {
+            initParticleBackground();
+            renderHomeFeatured();
+            filterAndRenderGames();
+            fetchFreeToGameAPI();
+            renderChatMessages();
+            updateFavoritesBadge();
+
+            document.getElementById('miniGameHighScore').innerText = arcadeHighScore;
+
+            // Online player count simulation fluctuation
+            setInterval(() => {
+                const count = 1480 + Math.floor(Math.random() * 30);
+                document.getElementById('onlineCounter').innerText = count.toLocaleString();
+            }, 4000);
+        };
+    </script>
+</body>
+</html>
