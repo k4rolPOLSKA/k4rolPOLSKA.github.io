@@ -3,206 +3,1117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KotGG 🐱</title>
-    <link rel="stylesheet" href="style.css">
+    <title>KotGG - Najsłodszy Portal o Kotach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pinky: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            soft: '#fff0f5',
+                            accent: '#ff69b4',
+                            deep: '#db2777'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                        heading: ['Fredoka', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fff5f7 0%, #fed6e3 100%);
+            min-height: 100vh;
+            color: #4a4a4a;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 182, 193, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(255, 105, 180, 0.1);
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border-bottom: 2px solid rgba(255, 182, 193, 0.4);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #fb7185 0%, #db2777 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .cat-badge {
+            background: #ffe4e6;
+            color: #e11d48;
+            font-weight: 600;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff0f5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #fda4af;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #fb7185;
+        }
+
+        @keyframes purrPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .purring-active {
+            animation: purrPulse 1.5s infinite ease-in-out;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            color: white !important;
+        }
+
+        .hide-tab {
+            display: none !important;
+        }
+    </style>
 </head>
+<body class="flex flex-col min-h-screen">
 
-<body>
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-nav shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-pink-400 to-rose-500 flex items-center justify-center text-white text-2xl shadow-lg transform hover:scale-110 transition">
+                        <i class="fa-solid font-bold fa-cat"></i>
+                    </div>
+                    <div>
+                        <span class="text-3xl font-bold bg-gradient-to-r from-pink-600 to-rose-500 bg-clip-text text-transparent font-heading">KotGG</span>
+                        <span class="block text-xs font-semibold text-rose-400 tracking-wider">KOCI RAJ ONLINE</span>
+                    </div>
+                </div>
 
-<header class="navbar">
-    <a href="index.html" class="logo">🐱 KotGG</a>
+                <!-- Desktop Menu Buttons -->
+                <nav class="hidden lg:flex items-center space-x-1 font-medium text-sm">
+                    <button onclick="switchTab('home')" id="nav-home" class="tab-btn active px-4 py-2.5 rounded-full transition flex items-center gap-2"><i class="fa-solid fa-house"></i> Główna</button>
+                    <button onclick="switchTab('ciekawostki')" id="nav-ciekawostki" class="tab-btn text-gray-700 hover:bg-pink-100 px-4 py-2.5 rounded-full transition flex items-center gap-2"><i class="fa-solid fa-lightbulb"></i> Ciekawostki</button>
+                    <button onclick="switchTab('galeria')" id="nav-galeria" class="tab-btn text-gray-700 hover:bg-pink-100 px-4 py-2.5 rounded-full transition flex items-center gap-2"><i class="fa-solid fa-images"></i> Galeria</button>
+                    <button onclick="switchTab('porady')" id="nav-porady" class="tab-btn text-gray-700 hover:bg-pink-100 px-4 py-2.5 rounded-full transition flex items-center gap-2"><i class="fa-solid fa-heart-pulse"></i> Porady</button>
+                    <button onclick="switchTab('rasy')" id="nav-rasy" class="tab-btn text-gray-700 hover:bg-pink-100 px-4 py-2.5 rounded-full transition flex items-center gap-2"><i class="fa-solid fa-paw"></i> Rasy Kotów</button>
+                    <button onclick="switchTab('gra')" id="nav-gra" class="tab-btn text-gray-700 hover:bg-pink-100 px-4 py-2.5 rounded-full transition flex items-center gap-2"><i class="fa-solid fa-gamepad"></i> Gra</button>
+                    <button onclick="switchTab('ekstra')" id="nav-ekstra" class="tab-btn text-gray-700 hover:bg-pink-100 px-4 py-2.5 rounded-full transition flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles"></i> Narzędzia</button>
+                </nav>
 
-    <nav class="nav">
-        <a href="index.html" class="active">Start</a>
-        <a href="koty.html">Koty</a>
-        <a href="ciekawostki.html">Ciekawostki</a>
-        <a href="galeria.html">Galeria</a>
-        <a href="quiz.html">Quiz</a>
-        <a href="kontakt.html">Kontakt</a>
-    </nav>
-</header>
-
-<section class="hero">
-    <div class="hero-content">
-        <div class="big-cat">🐱</div>
-
-        <h1>Witaj w KotGG!</h1>
-
-        <p>
-            Biało-różowy świat kotów 🐾
-            Ciekawostki, poradniki, quizy, galerie
-            i mnóstwo kociej zabawy!
-        </p>
-
-        <div class="hero-buttons">
-            <a href="ciekawostki.html" class="btn">
-                😺 Ciekawostki
-            </a>
-
-            <a href="quiz.html" class="btn btn-light">
-                🎮 Zagraj w quiz
-            </a>
+                <!-- Purr Button & Mobile Menu Toggle -->
+                <div class="flex items-center gap-3">
+                    <button id="purrBtn" onclick="togglePurrSound()" class="bg-pink-100 text-pink-700 border-2 border-pink-300 font-semibold px-4 py-2 rounded-full hover:bg-pink-200 transition text-xs sm:text-sm flex items-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-volume-high"></i> <span id="purrText">Mruczenie</span>
+                    </button>
+                    
+                    <button onclick="toggleMobileMenu()" class="lg:hidden text-2xl text-pink-600 p-2 rounded-lg hover:bg-pink-100 focus:outline-none">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-    </div>
-</section>
 
-<main>
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-white/95 backdrop-blur-md border-b border-pink-200 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('home')" class="w-full text-left px-4 py-2.5 rounded-xl font-medium text-gray-700 hover:bg-pink-100 flex items-center gap-3"><i class="fa-solid fa-house text-pink-500"></i> Strona Główna</button>
+            <button onclick="switchTab('ciekawostki')" class="w-full text-left px-4 py-2.5 rounded-xl font-medium text-gray-700 hover:bg-pink-100 flex items-center gap-3"><i class="fa-solid fa-lightbulb text-pink-500"></i> Ciekawostki</button>
+            <button onclick="switchTab('galeria')" class="w-full text-left px-4 py-2.5 rounded-xl font-medium text-gray-700 hover:bg-pink-100 flex items-center gap-3"><i class="fa-solid fa-images text-pink-500"></i> Galeria</button>
+            <button onclick="switchTab('porady')" class="w-full text-left px-4 py-2.5 rounded-xl font-medium text-gray-700 hover:bg-pink-100 flex items-center gap-3"><i class="fa-solid fa-heart-pulse text-pink-500"></i> Porady Opieki</button>
+            <button onclick="switchTab('rasy')" class="w-full text-left px-4 py-2.5 rounded-xl font-medium text-gray-700 hover:bg-pink-100 flex items-center gap-3"><i class="fa-solid fa-paw text-pink-500"></i> 25 Ras Kotów</button>
+            <button onclick="switchTab('gra')" class="w-full text-left px-4 py-2.5 rounded-xl font-medium text-gray-700 hover:bg-pink-100 flex items-center gap-3"><i class="fa-solid fa-gamepad text-pink-500"></i> Minigra</button>
+            <button onclick="switchTab('ekstra')" class="w-full text-left px-4 py-2.5 rounded-xl font-medium text-gray-700 hover:bg-pink-100 flex items-center gap-3"><i class="fa-solid fa-wand-magic-sparkles text-pink-500"></i> Narzędzia & Kalkulatory</button>
+        </div>
+    </header>
 
-<section class="container">
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-    <h2 class="title">🐾 Co znajdziesz na KotGG?</h2>
-
-    <div class="grid">
-
-        <article class="card">
-            <div class="card-icon">😺</div>
-            <h3>Ciekawostki</h3>
-            <p>
-                Poznaj interesujące fakty o kotach,
-                ich zachowaniu i zwyczajach.
-            </p>
-
-            <a href="ciekawostki.html" class="card-link">
-                Sprawdź →
-            </a>
-        </article>
-
-        <article class="card">
-            <div class="card-icon">📸</div>
-            <h3>Galeria</h3>
-            <p>
-                Zobacz kocią galerię w naszym
-                biało-różowym stylu.
-            </p>
-
-            <a href="galeria.html" class="card-link">
-                Zobacz →
-            </a>
-        </article>
-
-        <article class="card">
-            <div class="card-icon">🎮</div>
-            <h3>Quiz</h3>
-            <p>
-                Sprawdź, jak dobrze znasz koty
-                i zdobądź jak najlepszy wynik.
-            </p>
-
-            <a href="quiz.html" class="card-link">
-                Zagraj →
-            </a>
-        </article>
-
-        <article class="card">
-            <div class="card-icon">❤️</div>
-            <h3>Opieka</h3>
-            <p>
-                Dowiedz się więcej o podstawowej
-                opiece nad kotem.
-            </p>
-
-            <a href="opieka.html" class="card-link">
-                Czytaj →
-            </a>
-        </article>
-
-    </div>
-
-</section>
-
-<section class="pink-section">
-
-    <div class="container">
-
-        <h2 class="title">🌸 KotGG — coś więcej niż koty</h2>
-
-        <p class="center-text">
-            Znajdziesz tutaj poradniki, ciekawostki,
-            zabawy, memy, quizy i wiele innych
-            kocich rzeczy.
-        </p>
-
-        <div class="stats">
-
-            <div class="stat">
-                <strong>🐱</strong>
-                <span>Koty</span>
+        <!-- TAB 1: HOME (index.html) -->
+        <section id="tab-home" class="tab-content space-y-12">
+            <!-- Hero Banner -->
+            <div class="glass-card rounded-3xl p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="md:w-1/2 space-y-6 z-10">
+                    <span class="inline-block px-4 py-1.5 rounded-full cat-badge text-sm">✨ Witaj w świecie mruczków</span>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight">
+                        Wszystko co kochasz w <span class="bg-gradient-to-r from-pink-500 to-rose-600 bg-clip-text text-transparent">Kotach</span>
+                    </h1>
+                    <p class="text-gray-600 text-lg leading-relaxed">
+                        KotGG to Twoja słodka, biało-różowa oaza wiedzy o kotach. Poznaj 25 ras, ponad pół setki niezwykłych ciekawostek, porady weterynaryjne oraz przetestuj się w naszej minigrze!
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <button onclick="switchTab('rasy')" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold px-8 py-3.5 rounded-full shadow-lg hover:shadow-pink-300/50 hover:scale-105 transition flex items-center gap-2">
+                            <i class="fa-solid fa-paw"></i> Odkryj Rasy
+                        </button>
+                        <button onclick="switchTab('ciekawostki')" class="bg-white text-pink-600 font-semibold px-8 py-3.5 rounded-full border-2 border-pink-300 hover:bg-pink-50 transition flex items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-lightbulb"></i> Czytaj Ciekawostki
+                        </button>
+                    </div>
+                </div>
+                <div class="md:w-1/2 relative flex justify-center">
+                    <div class="w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-pink-300 to-rose-200 absolute -z-10 blur-2xl opacity-60"></div>
+                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=800&q=80" alt="Uroczy Kot" class="rounded-3xl shadow-2xl border-4 border-white object-cover w-full h-80 sm:h-96 max-w-md transform hover:rotate-1 transition duration-500">
+                </div>
             </div>
 
-            <div class="stat">
-                <strong>🎮</strong>
-                <span>Quizy</span>
+            <!-- Quote of the Day -->
+            <div class="glass-card rounded-2xl p-6 text-center border-l-8 border-pink-500 relative">
+                <i class="fa-solid fa-quote-left text-4xl text-pink-300 absolute top-4 left-6 opacity-40"></i>
+                <p class="text-xl font-medium text-gray-700 italic px-8" id="quoteText">
+                    "Czas spędzony z kotami nigdy nie jest czasem zmarnowanym." – Sigmund Freud
+                </p>
+                <button onclick="getNewQuote()" class="mt-4 text-xs font-semibold text-pink-600 hover:text-pink-800 transition flex items-center gap-1 mx-auto">
+                    <i class="fa-solid fa-rotate"></i> Losuj inny cytat
+                </button>
             </div>
 
-            <div class="stat">
-                <strong>📸</strong>
-                <span>Galeria</span>
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="glass-card rounded-2xl p-6 text-center hover:scale-105 transition">
+                    <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 text-xl"><i class="fa-solid fa-paw"></i></div>
+                    <h3 class="text-3xl font-bold text-pink-600">25</h3>
+                    <p class="text-sm text-gray-600 font-medium mt-1">Opisanych Ras</p>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center hover:scale-105 transition">
+                    <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 text-xl"><i class="fa-solid fa-brain"></i></div>
+                    <h3 class="text-3xl font-bold text-rose-600">30+</h3>
+                    <p class="text-sm text-gray-600 font-medium mt-1">Ciekawostek</p>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center hover:scale-105 transition">
+                    <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 text-xl"><i class="fa-solid fa-stethoscope"></i></div>
+                    <h3 class="text-3xl font-bold text-pink-600">100%</h3>
+                    <p class="text-sm text-gray-600 font-medium mt-1">Sprawdzonych Porad</p>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center hover:scale-105 transition">
+                    <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-rose-100 flex items-center justify-center text-rose-600 text-xl"><i class="fa-solid fa-face-smile-wink"></i></div>
+                    <h3 class="text-3xl font-bold text-rose-600">∞</h3>
+                    <p class="text-sm text-gray-600 font-medium mt-1">Słodyczy i Mruczenia</p>
+                </div>
             </div>
 
-            <div class="stat">
-                <strong>💗</strong>
-                <span>Zabawa</span>
+            <!-- Featured Highlights -->
+            <div class="space-y-6">
+                <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+                    <i class="fa-solid fa-star text-pink-500"></i> Polecane Sekcje
+                </h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div onclick="switchTab('porady')" class="glass-card rounded-2xl p-6 cursor-pointer hover:shadow-xl hover:border-pink-400 transition group">
+                        <div class="overflow-hidden rounded-xl h-48 mb-4">
+                            <img src="https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?auto=format&fit=crop&w=600&q=80" alt="Porady" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 group-hover:text-pink-600 transition">Poradnik Opiekuna</h3>
+                        <p class="text-gray-600 text-sm mt-2">Dowiedz się jak prawidłowo karmić kota, odczytywać ruchy jego ogona i dbać o zdrowie.</p>
+                    </div>
+                    <div onclick="switchTab('gra')" class="glass-card rounded-2xl p-6 cursor-pointer hover:shadow-xl hover:border-pink-400 transition group">
+                        <div class="overflow-hidden rounded-xl h-48 mb-4">
+                            <img src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=600&q=80" alt="Gra" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 group-hover:text-pink-600 transition">Gra: Łapacz Rybek</h3>
+                        <p class="text-gray-600 text-sm mt-2">Zagraj w zręcznościową minigrę, steruj miseczką i zbieraj smakołyki dla głodnego kotka!</p>
+                    </div>
+                    <div onclick="switchTab('ekstra')" class="glass-card rounded-2xl p-6 cursor-pointer hover:shadow-xl hover:border-pink-400 transition group">
+                        <div class="overflow-hidden rounded-xl h-48 mb-4">
+                            <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=600&q=80" alt="Kalkulator" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 group-hover:text-pink-600 transition">Generator Imion & Kalkulator</h3>
+                        <p class="text-gray-600 text-sm mt-2">Wylosuj idealne imię dla Twojego pupilka oraz przelicz jego wiek na ludzkie lata.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: CIEKAWOSTKI (ciekawostki.html) -->
+        <section id="tab-ciekawostki" class="tab-content space-y-8 hide-tab">
+            <div class="text-center space-y-3">
+                <span class="cat-badge px-4 py-1.5 rounded-full text-xs uppercase tracking-widest">Wiedza o Kotach</span>
+                <h2 class="text-4xl font-bold text-gray-800">Niesamowite Ciekawostki Kocia Anatomiczne i Behawioralne</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Przeglądaj ogromną bazę fascynujących faktów o Twoich ulubionych futrzakach. Użyj wyszukiwarki lub filtruj po kategoriach!</p>
             </div>
 
+            <!-- Search & Filters -->
+            <div class="glass-card rounded-2xl p-4 flex flex-col md:flex-row gap-4 justify-between items-center">
+                <div class="relative w-full md:w-96">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-pink-400"></i>
+                    <input type="text" id="triviaSearch" onkeyup="filterTrivia()" placeholder="Szukaj ciekawostki (np. mruczenie, spanie, zmysły)..." class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white">
+                </div>
+                <div class="flex flex-wrap gap-2 w-full md:w-auto justify-center">
+                    <button onclick="filterTriviaCategory('all')" class="trivia-cat-btn active bg-pink-500 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow transition">Wszystkie</button>
+                    <button onclick="filterTriviaCategory('anatomia')" class="trivia-cat-btn bg-white text-gray-700 hover:bg-pink-100 px-4 py-2 rounded-xl text-xs font-semibold transition">Anatomia</button>
+                    <button onclick="filterTriviaCategory('zmysly')" class="trivia-cat-btn bg-white text-gray-700 hover:bg-pink-100 px-4 py-2 rounded-xl text-xs font-semibold transition">Zmysły</button>
+                    <button onclick="filterTriviaCategory('zachowanie')" class="trivia-cat-btn bg-white text-gray-700 hover:bg-pink-100 px-4 py-2 rounded-xl text-xs font-semibold transition">Zachowanie</button>
+                    <button onclick="filterTriviaCategory('historia')" class="trivia-cat-btn bg-white text-gray-700 hover:bg-pink-100 px-4 py-2 rounded-xl text-xs font-semibold transition">Historia</button>
+                </div>
+            </div>
+
+            <!-- Trivia Grid -->
+            <div id="triviaGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Trivia items inserted via JavaScript -->
+            </div>
+        </section>
+
+        <!-- TAB 3: GALERIA (galeria.html) -->
+        <section id="tab-galeria" class="tab-content space-y-8 hide-tab">
+            <div class="text-center space-y-3">
+                <span class="cat-badge px-4 py-1.5 rounded-full text-xs uppercase tracking-widest">Słodziaki na Zdjęciach</span>
+                <h2 class="text-4xl font-bold text-gray-800">Galeria Kotków</h2>
+                <p class="text-gray-600 max-w-xl mx-auto">Oglądaj i zachwycaj się najpiękniejszymi fotografiami kotów w wysokiej rozdzielczości!</p>
+            </div>
+
+            <!-- Gallery Filters -->
+            <div class="flex justify-center flex-wrap gap-3">
+                <button onclick="filterGallery('all')" class="gal-btn bg-pink-500 text-white px-5 py-2 rounded-full text-sm font-semibold shadow">Wszystkie</button>
+                <button onclick="filterGallery('maluchy')" class="gal-btn bg-white text-gray-700 hover:bg-pink-100 px-5 py-2 rounded-full text-sm font-semibold">Małe Kotki</button>
+                <button onclick="filterGallery('smieszne')" class="gal-btn bg-white text-gray-700 hover:bg-pink-100 px-5 py-2 rounded-full text-sm font-semibold">Śmieszne Miny</button>
+                <button onclick="filterGallery('puszyste')" class="gal-btn bg-white text-gray-700 hover:bg-pink-100 px-5 py-2 rounded-full text-sm font-semibold">Puszyste</button>
+                <button onclick="filterGallery('spiochy')" class="gal-btn bg-white text-gray-700 hover:bg-pink-100 px-5 py-2 rounded-full text-sm font-semibold">Śpiochy</button>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Dynamic gallery images -->
+            </div>
+
+            <!-- Lightbox Modal -->
+            <div id="lightbox" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4" onclick="closeLightbox()">
+                <div class="relative max-w-4xl w-full" onclick="event.stopPropagation()">
+                    <button onclick="closeLightbox()" class="absolute -top-12 right-0 text-white text-3xl font-bold hover:text-pink-400 transition">&times;</button>
+                    <img id="lightboxImg" src="" alt="Enlarged Cat" class="w-full max-h-[80vh] object-contain rounded-2xl border-2 border-white shadow-2xl">
+                    <p id="lightboxCaption" class="text-center text-white mt-4 font-semibold text-lg"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: PORADY (porady.html) -->
+        <section id="tab-porady" class="tab-content space-y-8 hide-tab">
+            <div class="text-center space-y-3">
+                <span class="cat-badge px-4 py-1.5 rounded-full text-xs uppercase tracking-widest">Edukacja i Zdrowie</span>
+                <h2 class="text-4xl font-bold text-gray-800">Kompleksowy Poradnik Opiekuna</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Wszystko, co musisz wiedzieć o prawidłowym karmieniu, pielęgnacji i odczytywaniu mowy ciała kota.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Left Side Navigation for Advice -->
+                <div class="space-y-3">
+                    <button onclick="showAdviceTopic('zywienie')" class="advice-nav-btn w-full text-left p-4 rounded-2xl glass-card flex items-center gap-4 hover:border-pink-400 transition active border-l-4 border-pink-500">
+                        <div class="w-10 h-10 rounded-xl bg-pink-100 flex items-center justify-center text-pink-600 font-bold"><i class="fa-solid fa-bowl-food"></i></div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">1. Prawidłowe Żywienie</h4>
+                            <p class="text-xs text-gray-500">Co kot powinien jeść?</p>
+                        </div>
+                    </button>
+
+                    <button onclick="showAdviceTopic('kuweta')" class="advice-nav-btn w-full text-left p-4 rounded-2xl glass-card flex items-center gap-4 hover:border-pink-400 transition">
+                        <div class="w-10 h-10 rounded-xl bg-pink-100 flex items-center justify-center text-pink-600 font-bold"><i class="fa-solid fa-box-open"></i></div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">2. Higiena i Kuweta</h4>
+                            <p class="text-xs text-gray-500">Zasady idealnej kuwety</p>
+                        </div>
+                    </button>
+
+                    <button onclick="showAdviceTopic('weterynarz')" class="advice-nav-btn w-full text-left p-4 rounded-2xl glass-card flex items-center gap-4 hover:border-pink-400 transition">
+                        <div class="w-10 h-10 rounded-xl bg-pink-100 flex items-center justify-center text-pink-600 font-bold"><i class="fa-solid fa-user-doctor"></i></div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">3. Profilaktyka Weterynaryjna</h4>
+                            <p class="text-xs text-gray-500">Szczepienia i profilaktyka</p>
+                        </div>
+                    </button>
+
+                    <button onclick="showAdviceTopic('mowa-ciala')" class="advice-nav-btn w-full text-left p-4 rounded-2xl glass-card flex items-center gap-4 hover:border-pink-400 transition">
+                        <div class="w-10 h-10 rounded-xl bg-pink-100 flex items-center justify-center text-pink-600 font-bold"><i class="fa-solid fa-comments"></i></div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">4. Mowa Ciała Kota</h4>
+                            <p class="text-xs text-gray-500">Co mówi ogon i uszy?</p>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Right Side Content -->
+                <div class="lg:col-span-2">
+                    <!-- Advice Topic 1 -->
+                    <div id="advice-zywienie" class="advice-content glass-card rounded-3xl p-8 space-y-6">
+                        <div class="flex items-center gap-4">
+                            <span class="text-4xl text-pink-500"><i class="fa-solid fa-bowl-food"></i></span>
+                            <h3 class="text-2xl font-bold text-gray-800">Zdrowe Żywienie Kota</h3>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">
+                            Kot jest bezwzględnym mięsożercą (mięsożercą obligatoryjnym). Oznacza to, że jego układ pokarmowy jest dostosowany do trawienia białka i tłuszczów zwierzęcych.
+                        </p>
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-xl bg-pink-50 border border-pink-200">
+                                <h4 class="font-bold text-pink-700 mb-1"><i class="fa-solid fa-check text-green-500"></i> Podstawa diety:</h4>
+                                <p class="text-sm text-gray-600">Wysokomięsna mokra karma (min. 70% mięsa mięśniowego, podrobów) bez zbóż, cukrów i zbędnych zapychaczy. Pamiętaj o taurynie – niezbędnym aminokwasie dla wzroku i serca.</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-rose-50 border border-rose-200">
+                                <h4 class="font-bold text-rose-700 mb-1"><i class="fa-solid fa-triangle-exclamation text-red-500"></i> Czemu unikać suchej karmy?</h4>
+                                <p class="text-sm text-gray-600">Suche chrupki zawierają bardzo mało wody (ok. 10%), co w długiej perspektywie prowadzi do problemów z nerkami oraz układem moczowym. Koty czerpią wodę głównie z pożywienia.</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-yellow-50 border border-yellow-200">
+                                <h4 class="font-bold text-yellow-800 mb-1"><i class="fa-solid fa-ban text-red-500"></i> Produkty Zakazane:</h4>
+                                <p class="text-sm text-gray-600">Mleko krowie (laktoza powoduje biegunki), cebula, czosnek, czekolada, winogrona, rodzynki, kości poddawane obróbce termicznej.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advice Topic 2 -->
+                    <div id="advice-kuweta" class="advice-content glass-card rounded-3xl p-8 space-y-6 hidden">
+                        <div class="flex items-center gap-4">
+                            <span class="text-4xl text-pink-500"><i class="fa-solid fa-box-open"></i></span>
+                            <h3 class="text-2xl font-bold text-gray-800">Wszystko o Kuwecie</h3>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">
+                            Kuweta to kluczowy element kociego terytorium. Złe nawyki lub nieodpowiednie miejsce mogą prowadzić do załatwiania potrzeb poza nią.
+                        </p>
+                        <ul class="space-y-3 text-gray-600 text-sm">
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-pink-500 mt-1"></i> <strong>Zasada n+1:</strong> Liczba kuwet w domu powinna wynosić: liczba kotów + 1 dodatkowa.</li>
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-pink-500 mt-1"></i> <strong>Lokalizacja:</strong> Ciche, spokojne miejsce, z dala od miski z jedzeniem i wodą.</li>
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-pink-500 mt-1"></i> <strong>Żwirek:</strong> Najlepiej sprawdza się drobny, bezzapachowy żwirek bentonitowy lub drobny roślinny.</li>
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-circle-check text-pink-500 mt-1"></i> <strong>Czyszczenie:</strong> Sprzątaj nieczystości minimum 2 razy dziennie. Rozpoczynaj pełną wymianę żwirku raz w miesiącu.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Advice Topic 3 -->
+                    <div id="advice-weterynarz" class="advice-content glass-card rounded-3xl p-8 space-y-6 hidden">
+                        <div class="flex items-center gap-4">
+                            <span class="text-4xl text-pink-500"><i class="fa-solid fa-user-doctor"></i></span>
+                            <h3 class="text-2xl font-bold text-gray-800">Zdrowie i Weterynaria</h3>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">
+                            Koty doskonale ukrywają ból i choroby. Z tego względu niezwykle ważna jest profilaktyka oraz czujność opiekuna.
+                        </p>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="p-4 rounded-xl bg-white border border-pink-200">
+                                <h4 class="font-bold text-gray-800 mb-1"><i class="fa-solid fa-syringe text-pink-500"></i> Szczepienia</h4>
+                                <p class="text-xs text-gray-600">Regularne szczepienia przeciwko panleukopenii, kaliciwirozie i herpeswirozie (tzw. koci katar).</p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-white border border-pink-200">
+                                <h4 class="font-bold text-gray-800 mb-1"><i class="fa-solid fa-droplet text-pink-500"></i> Badania Krwi</h4>
+                                <p class="text-xs text-gray-600">U kotów dorosłych raz w roku warto zrobić profil morfologiczny i biochemiczny (oraz badanie moczu).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advice Topic 4 -->
+                    <div id="advice-mowa-ciala" class="advice-content glass-card rounded-3xl p-8 space-y-6 hidden">
+                        <div class="flex items-center gap-4">
+                            <span class="text-4xl text-pink-500"><i class="fa-solid fa-comments"></i></span>
+                            <h3 class="text-2xl font-bold text-gray-800">Jak Odczytywać Mowę Ciała Kota?</h3>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">Poznaj najważniejsze sygnały wysyłane przez kocie ciało:</p>
+                        <div class="space-y-3">
+                            <div class="p-3.5 bg-white rounded-xl border border-pink-100 flex justify-between items-center">
+                                <div>
+                                    <span class="font-bold text-gray-800">Ogon podniesiony pionowo z lekko zagiętą końcówką</span>
+                                    <p class="text-xs text-gray-500">Kot jest pewny siebie, radosny i wita Cię przyjaźnie!</p>
+                                </div>
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full font-bold">Szczęście</span>
+                            </div>
+                            <div class="p-3.5 bg-white rounded-xl border border-pink-100 flex justify-between items-center">
+                                <div>
+                                    <span class="font-bold text-gray-800">Ogon szybko machający na boki</span>
+                                    <p class="text-xs text-gray-500">Ostrzeżenie! Kot jest poirytowany lub silnie podekscytowany.</p>
+                                </div>
+                                <span class="px-3 py-1 bg-red-100 text-red-700 text-xs rounded-full font-bold">Irytacja</span>
+                            </div>
+                            <div class="p-3.5 bg-white rounded-xl border border-pink-100 flex justify-between items-center">
+                                <div>
+                                    <span class="font-bold text-gray-800">Mrużenie oczu i powolne mruganie</span>
+                                    <p class="text-xs text-gray-500">To koci odpowiednik uśmiechu oraz wyraz głębokiego zaufania.</p>
+                                </div>
+                                <span class="px-3 py-1 bg-pink-100 text-pink-700 text-xs rounded-full font-bold">Miłość</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: RASY KOTÓW (rasykotow.html) -->
+        <section id="tab-rasy" class="tab-content space-y-8 hide-tab">
+            <div class="text-center space-y-3">
+                <span class="cat-badge px-4 py-1.5 rounded-full text-xs uppercase tracking-widest">Encyklopedia Ras</span>
+                <h2 class="text-4xl font-bold text-gray-800">Poznaj 25 Wyjątkowych Ras Kotów</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Przeglądaj profile ras, porównuj charakter, wskaźniki energii oraz puszystości!</p>
+            </div>
+
+            <!-- Breeds Search -->
+            <div class="glass-card rounded-2xl p-4 max-w-md mx-auto relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-pink-400"></i>
+                <input type="text" id="breedSearch" onkeyup="filterBreeds()" placeholder="Szukaj rasy (np. Maine Coon, Sfinks)..." class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400 bg-white">
+            </div>
+
+            <!-- Breeds Grid -->
+            <div id="breedsGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 25 Breeds dynamically populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- TAB 6: GRA O KOTACH (gra.html) -->
+        <section id="tab-gra" class="tab-content space-y-8 hide-tab">
+            <div class="text-center space-y-3">
+                <span class="cat-badge px-4 py-1.5 rounded-full text-xs uppercase tracking-widest">Kocia Zabawa</span>
+                <h2 class="text-4xl font-bold text-gray-800">Gra: Łapacz Przysmaków 🐟</h2>
+                <p class="text-gray-600 max-w-xl mx-auto">Przesuwaj miseczkę myszką lub strzałkami i łap spadające rybki oraz przysmaki! Unikaj złych kulek!</p>
+            </div>
+
+            <div class="glass-card rounded-3xl p-6 max-w-3xl mx-auto text-center space-y-4 relative overflow-hidden">
+                <!-- Score Header -->
+                <div class="flex justify-between items-center bg-white/90 p-4 rounded-2xl border border-pink-200 shadow-sm">
+                    <div>
+                        <span class="text-xs uppercase text-gray-500 font-bold block">Punkty</span>
+                        <span id="gameScore" class="text-3xl font-bold text-pink-600">0</span>
+                    </div>
+                    <div>
+                        <span class="text-xs uppercase text-gray-500 font-bold block">Najlepszy Wynik</span>
+                        <span id="gameHighScore" class="text-3xl font-bold text-rose-500">0</span>
+                    </div>
+                    <div>
+                        <span class="text-xs uppercase text-gray-500 font-bold block">Życia</span>
+                        <div id="gameLives" class="text-xl text-red-500 font-bold">❤️❤️❤️</div>
+                    </div>
+                </div>
+
+                <!-- Game Canvas -->
+                <div class="relative w-full aspect-[4/3] bg-gradient-to-b from-pink-50 to-rose-100 rounded-2xl border-4 border-white shadow-inner overflow-hidden cursor-none" id="canvasContainer">
+                    <canvas id="gameCanvas" class="w-full h-full block"></canvas>
+
+                    <!-- Start Overlay -->
+                    <div id="gameStartOverlay" class="absolute inset-0 bg-black/40 backdrop-blur-sm flex flex-col items-center justify-center text-white space-y-4 p-6">
+                        <i class="fa-solid fa-fish text-6xl text-pink-300 animate-bounce"></i>
+                        <h3 class="text-3xl font-bold">Łapacz Przysmaków KotGG</h3>
+                        <p class="text-sm text-pink-100 max-w-md text-center">Ruszaj miseczką w lewo i prawo. Zbieraj rybki (+10) i serki (+20). Uważaj na buty (-1 życie)!</p>
+                        <button onclick="startGame()" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold px-8 py-3.5 rounded-full text-lg shadow-xl hover:scale-105 transition">Rozpocznij Grę</button>
+                    </div>
+
+                    <!-- Game Over Overlay -->
+                    <div id="gameOverOverlay" class="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center text-white space-y-4 p-6 hidden">
+                        <h3 class="text-4xl font-bold text-rose-400">Koniec Gry! 😿</h3>
+                        <p class="text-xl">Twój wynik: <span id="finalScore" class="font-bold text-yellow-300">0</span></p>
+                        <button onclick="startGame()" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold px-8 py-3.5 rounded-full text-lg shadow-xl hover:scale-105 transition">Zagraj Ponownie</button>
+                    </div>
+                </div>
+
+                <!-- Touch & Mobile Controls -->
+                <div class="flex justify-center gap-4 md:hidden">
+                    <button id="btnLeft" class="bg-pink-500 text-white p-4 rounded-full text-2xl w-16 h-16 active:bg-pink-700 shadow-lg"><i class="fa-solid fa-arrow-left"></i></button>
+                    <button id="btnRight" class="bg-pink-500 text-white p-4 rounded-full text-2xl w-16 h-16 active:bg-pink-700 shadow-lg"><i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 7: EKSTRA / NARZĘDZIA (ekstra) -->
+        <section id="tab-ekstra" class="tab-content space-y-8 hide-tab">
+            <div class="text-center space-y-3">
+                <span class="cat-badge px-4 py-1.5 rounded-full text-xs uppercase tracking-widest">Interaktywne Narzędzia</span>
+                <h2 class="text-4xl font-bold text-gray-800">Generator Imion & Kalkulator Wieku</h2>
+                <p class="text-gray-600 max-w-xl mx-auto">Skorzystaj z naszych autorskich i zabawnych kocich narzędzi!</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Name Generator -->
+                <div class="glass-card rounded-3xl p-8 space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-pink-100 flex items-center justify-center text-pink-600 text-2xl"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-800">Generator Kocich Imion</h3>
+                            <p class="text-xs text-gray-500">Znajdź idealne imię dla swojego mruczka!</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Płeć Kota:</label>
+                            <select id="genGender" class="w-full p-3 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-400">
+                                <option value="female">Samiczka (KOTKA)</option>
+                                <option value="male">Samiec (KOT)</option>
+                                <option value="any">Dowolna / Uniwersalne</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Charakter / Wygląd:</label>
+                            <select id="genType" class="w-full p-3 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-400">
+                                <option value="sweet">Słodki i puszysty</option>
+                                <option value="royal">Królewski i elegancki</option>
+                                <option value="funny">Śmieszny i zakręcony</option>
+                                <option value="mystic">Tajemniczy i czarny</option>
+                            </select>
+                        </div>
+
+                        <button onclick="generateCatName()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-3.5 rounded-xl shadow-md hover:scale-[1.02] transition">
+                            ✨ Wylosuj Imię!
+                        </button>
+
+                        <div id="generatedNameBox" class="p-6 bg-pink-50 rounded-2xl text-center border-2 border-dashed border-pink-300 hidden">
+                            <span class="text-xs text-gray-500 block uppercase font-bold">Twoje idealne imię to:</span>
+                            <h4 id="generatedName" class="text-3xl font-extrabold text-pink-600 my-1">Pusia</h4>
+                            <p id="generatedDesc" class="text-xs text-gray-600 italic">Słodkie imię dla małej kuleczki!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Age Calculator -->
+                <div class="glass-card rounded-3xl p-8 space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-100 flex items-center justify-center text-rose-600 text-2xl"><i class="fa-solid fa-calculator"></i></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-800">Kalkulator Kocich Lat</h3>
+                            <p class="text-xs text-gray-500">Ile lat miałby Twój kot, gdyby był człowiekiem?</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Wiek kota (w latach):</label>
+                            <input type="number" id="catAgeInput" min="0" max="30" value="3" class="w-full p-3 rounded-xl border border-pink-200 bg-white focus:outline-none focus:ring-2 focus:ring-pink-400">
+                        </div>
+
+                        <button onclick="calculateCatAge()" class="w-full bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold py-3.5 rounded-xl shadow-md hover:scale-[1.02] transition">
+                            🧮 Oblicz Wiek
+                        </button>
+
+                        <div id="catAgeResult" class="p-6 bg-rose-50 rounded-2xl text-center border-2 border-dashed border-rose-300">
+                            <span class="text-xs text-gray-500 block uppercase font-bold">W przeliczeniu na lata ludzkie:</span>
+                            <h4 id="humanAgeText" class="text-4xl font-extrabold text-rose-600 my-1">28 lat</h4>
+                            <p id="ageStageText" class="text-xs text-gray-600">Twój kot jest młodym, pełnym energii dorosłym!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-nav mt-auto border-t border-pink-200 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-4">
+            <div class="flex items-center justify-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center text-white text-sm">
+                    <i class="fa-solid fa-cat"></i>
+                </div>
+                <span class="text-2xl font-bold font-heading text-pink-600">KotGG</span>
+            </div>
+            <p class="text-xs text-gray-500">Stworzono z miłością do wszystkich kotów świata. Biało-różowy rajski portal kocio-fanów.</p>
+            <p class="text-xs text-pink-400">© 2026 KotGG. Wszystkie mruczenia zastrzeżone.</p>
         </div>
+    </footer>
 
-    </div>
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Data Store: Trivia
+        const triviaData = [
+            { cat: 'anatomia', text: "Kot posiada aż 32 mięśnie sterujące każdym uchem zewnętrznym, co pozwala mu obracać uszy o 180 stopni!" },
+            { cat: 'anatomia', text: "Węso-wąsy (wibrysy) kota są tak czułe, że potrafią wykryć nawet najmniejszą zmianę prądów powietrza." },
+            { cat: 'anatomia', text: "Koty nie mają obojczyka, dzięki czemu potrafią przecisnąć się przez każdą szczelinę, w której mieści się ich głowa." },
+            { cat: 'zmysly', text: "Koci wzrok w ciemności jest od 6 do 8 razy lepszy niż ludzki dzięki warstwie odblaskowej (tapetum lucidum)." },
+            { cat: 'zmysly', text: "Koty nie odczuwają słodkiego smaku – brakuje im odpowiednich receptorów smakowych na języku!" },
+            { cat: 'zachowanie', text: "Mruczenie kota ma częstotliwość około 20-140 Hz, co stymuluje regenerację kości i tkanek miękkich." },
+            { cat: 'zachowanie', text: "Koty spędzają około 70% swojego życia na śpiewaniu i drzemkach – to aż 13-16 godzin dziennie!" },
+            { cat: 'zachowanie', text: "Ocieranie się pyszczkiem o Twoje nogi to znak, że kot oznacza Cię swoimi gruczołami zapachowymi jako rodzinę." },
+            { cat: 'historia', text: "W starożytnym Egipcie skrzywdzenie kota było karane śmiercią, a zmarłe koty mummifikowano z honorami." },
+            { cat: 'historia', text: "Najstarszy znany kot domowy żył aż 38 lat i 3 dni! Nazywał się Creme Puff z Teksasu." },
+            { cat: 'anatomia', text: "Koci język pokryty jest tysiącami małych haczyków z keratyny (tzw. brodawek), działających jak idealna szczotka." },
+            { cat: 'zmysly', text: "Pole widzenia kota wynosi około 200 stopni, w porównaniu do 180 stopni u człowieka." },
+            { cat: 'zachowanie', text: "Kiedy kot ugniata Cię łapkami ('robi ciasto'), odtwarza zachowanie z dzieciństwa, gdy stymulował mleko matki." },
+            { cat: 'anatomia', text: "Odcisk nosa u każdego kota jest unikalny – nie ma dwóch kotów o identycznym wzorze noska, zupełnie jak ludzkie linie papilarne!" },
+            { cat: 'zachowanie', text: "Koty miauczą prawie wyłącznie po to, aby porozumiewać się z ludźmi. Między sobą używają sygnałów zapachowych i mowy ciała." }
+        ];
 
-</section>
+        // Data Store: 25 Breeds
+        const breedsData = [
+            { name: "Maine Coon", img: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80", desc: "Największa rasa kotów domowych. Nazywane łagodnymi olbrzymami o puszystym ogonie.", energy: 4, fluff: 5, friendly: 5 },
+            { name: "Ragdoll", img: "https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80", desc: "Niezwykle łagodne i wisi w rękach jak szmaciana lalka gdy się go podnosi.", energy: 2, fluff: 5, friendly: 5 },
+            { name: "Brytyjski Krótkowłosy", img: "https://images.unsplash.com/photo-1592194996308-7b43878e84a6?auto=format&fit=crop&w=600&q=80", desc: "Przypomina pluszowego niedźwiadka. Zrównoważony, spokojny i dostojny.", energy: 3, fluff: 3, friendly: 4 },
+            { name: "Sfinks", img: "https://images.unsplash.com/photo-1520315342629-6ea920342047?auto=format&fit=crop&w=600&q=80", desc: "Bezostry i bardzo ciepły w dotyku. Niezwykle towarzyski, pieszczoch i wesołek.", energy: 5, fluff: 1, friendly: 5 },
+            { name: "Syjamski", img: "https://images.unsplash.com/photo-1513245543132-31f507417b26?auto=format&fit=crop&w=600&q=80", desc: "Głośny i bardzo komunikatywny kot z niebieskimi oczami i ciemnymi znaczeniami.", energy: 5, fluff: 2, friendly: 4 },
+            { name: "Perski", img: "https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=600&q=80", desc: "Długowłosy, spokojny kot o spłaszczonym pyszczku i królewskim usposobieniu.", energy: 1, fluff: 5, friendly: 4 },
+            { name: "Bengalski", img: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=600&q=80", desc: "Przypomina małego lamparta. Bardzo aktywny, uwielbia wodę i skakanie.", energy: 5, fluff: 2, friendly: 4 },
+            { name: "Szkocki Zwisłouchy", img: "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=600&q=80", desc: "Słynie z charakterystycznych załamanych uszu i dużych, okrągłych oczu.", energy: 3, fluff: 3, friendly: 5 },
+            { name: "Norweski Leśny", img: "https://images.unsplash.com/photo-1568152950566-c1bf43f4ab28?auto=format&fit=crop&w=600&q=80", desc: "Duży, odporny na mrozy kot o gęstym futrze i doskonałym zacięciu wspinaczkowym.", energy: 4, fluff: 5, friendly: 4 },
+            { name: "Abisyński", img: "https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80", desc: "Smyukły kot o wyglądzie małego pumy. Bardzo inteligenty i ruchliwy.", energy: 5, fluff: 2, friendly: 4 },
+            { name: "Święty Kot Birmański", img: "https://images.unsplash.com/photo-1543852786-1cf6624b9987?auto=format&fit=crop&w=600&q=80", desc: "Aksamitne futerko, ciemne znaczenia i śnieżnobiałe 'skarpetki' na łapkach.", energy: 3, fluff: 4, friendly: 5 },
+            { name: "Devon Rex", img: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80", desc: "Wygląda jak elf z falowanym futerkiem i wielkimi uszami. Skory do psot.", energy: 5, fluff: 2, friendly: 5 },
+            { name: "Rosyjski Niebieski", img: "https://images.unsplash.com/photo-1511044568932-338cba0ad803?auto=format&fit=crop&w=600&q=80", desc: "Srebrzysto-niebieska sierść i szmaragdowozielone oczy. Elegancki i cichy.", energy: 3, fluff: 2, friendly: 4 },
+            { name: "Syberyjski", img: "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=600&q=80", desc: "Naturalna rasa z Rosji o hipoalergicznych właściwościach śliny i gęstym futrze.", energy: 4, fluff: 5, friendly: 5 },
+            { name: "Kartuski (Chartreux)", img: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=600&q=80", desc: "Francuski kot o miedzianych oczach i gęstym, niebieskawym futerku.", energy: 3, fluff: 3, friendly: 4 },
+            { name: "Neva Masquerade", img: "https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?auto=format&fit=crop&w=600&q=80", desc: "Siostrzana rasa kota syberyjskiego ze znaczeniami typu point i niebieskimi oczami.", energy: 4, fluff: 5, friendly: 5 },
+            { name: "Orientalny Krótkowłosy", img: "https://images.unsplash.com/photo-1513245543132-31f507417b26?auto=format&fit=crop&w=600&q=80", desc: "Bardzo smukły o wielkich uszach, niesamowicie wierny swojemu człowiekowi.", energy: 5, fluff: 1, friendly: 4 },
+            { name: "Somalijski", img: "https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80", desc: "Długowłosa odmiana kota abisyńskiego o puszystym ogonie przypominającym lisa.", energy: 5, fluff: 4, friendly: 4 },
+            { name: "Cornish Rex", img: "https://images.unsplash.com/photo-1520315342629-6ea920342047?auto=format&fit=crop&w=600&q=80", desc: "Kot o miękkiej, kędzierzawej sierści bez włosów okrywowych.", energy: 5, fluff: 1, friendly: 5 },
+            { name: "Burmański", img: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=600&q=80", desc: "Muskularny 'cegiełka owinięta w jedwab'. Bardzo ciepły i uczuciowy.", energy: 4, fluff: 2, friendly: 5 },
+            { name: "Turecki Angora", img: "https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=600&q=80", desc: "Arystokratyczny kot z Turcji o długim, jedwabistym futrze bez podszerstka.", energy: 4, fluff: 4, friendly: 4 },
+            { name: "Turecki Van", img: "https://images.unsplash.com/photo-1568152950566-c1bf43f4ab28?auto=format&fit=crop&w=600&q=80", desc: "Znany jako 'pływający kot' z racji zamiłowania do kąpieli wodnych.", energy: 4, fluff: 4, friendly: 4 },
+            { name: "Egipski Mau", img: "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=600&q=80", desc: "Jedyna naturalnie cętkowana rasa domowa. Potrafi biegać niemal 50 km/h!", energy: 5, fluff: 2, friendly: 4 },
+            { name: "Manx", img: "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=600&q=80", desc: "Słynie z naturalnego braku ogona lub krótkiego kikuta pochodzący z wyspy Man.", energy: 3, fluff: 3, friendly: 4 },
+            { name: "Singapurski", img: "https://images.unsplash.com/photo-1511044568932-338cba0ad803?auto=format&fit=crop&w=600&q=80", desc: "Najmniejsza uznana rasa kota na świecie o wielkich orzechowych oczach.", energy: 4, fluff: 2, friendly: 5 }
+        ];
 
-<section class="container">
+        // Data Store: Gallery
+        const galleryData = [
+            { cat: 'maluchy', img: 'https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=600&q=80', title: 'Malutki Puszysty Słodziak' },
+            { cat: 'smieszne', img: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80', title: 'Zdziwiony Kotek' },
+            { cat: 'puszyste', img: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80', title: 'Królewski Fluff' },
+            { cat: 'spiochy', img: 'https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?auto=format&fit=crop&w=600&q=80', title: 'Słodka Drzemka' },
+            { cat: 'maluchy', img: 'https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=600&q=80', title: 'Rudy Maluszek' },
+            { cat: 'smieszne', img: 'https://images.unsplash.com/photo-1520315342629-6ea920342047?auto=format&fit=crop&w=600&q=80', title: 'Kot Ciekawski' },
+            { cat: 'puszyste', img: 'https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=80', title: 'Puchaty Ragdoll' },
+            { cat: 'spiochy', img: 'https://images.unsplash.com/photo-1511044568932-338cba0ad803?auto=format&fit=crop&w=600&q=80', title: 'Śpiący w Słońcu' }
+        ];
 
-    <div class="welcome-card">
+        // Quotes
+        const quotes = [
+            '"Czas spędzony z kotami nigdy nie jest czasem zmarnowanym." – Sigmund Freud',
+            '"Kot jest jedynym zwierzęciem, które zdołało oswoić człowieka." – Marcel Mauss',
+            '"Gdyby człowieka można było skrzyżować z kotem, podniosłoby to człowieka, a pogorszyło kota." – Mark Twain',
+            '"Koty wiedzą co robią. Nic nie robią, po prostu są i królują." – Anonim'
+        ];
 
-        <div class="welcome-cat">😻</div>
+        // Web Audio Purr Sound Generator
+        let audioCtx = null;
+        let purrOsc = null;
+        let purrGain = null;
+        let isPurring = false;
 
-        <div>
-            <h2>Miło Cię widzieć!</h2>
+        function togglePurrSound() {
+            const btn = document.getElementById('purrBtn');
+            const txt = document.getElementById('purrText');
 
-            <p>
-                Wybierz coś z menu i rozpocznij
-                swoją kocią przygodę.
-            </p>
+            if (!isPurring) {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                
+                // Create low frequency purring vibration sound
+                purrOsc = audioCtx.createOscillator();
+                purrGain = audioCtx.createGain();
 
-            <a href="koty.html" class="btn">
-                Poznaj koty 🐾
-            </a>
-        </div>
+                purrOsc.type = 'sawtooth';
+                purrOsc.frequency.setValueAtTime(25, audioCtx.currentTime); // 25Hz low purr
 
-    </div>
+                // AM Modulation for purr rhythm
+                let lfo = audioCtx.createOscillator();
+                lfo.frequency.setValueAtTime(22, audioCtx.currentTime); // Purr rate
+                let lfoGain = audioCtx.createGain();
+                lfoGain.gain.setValueAtTime(0.3, audioCtx.currentTime);
 
-</section>
+                lfo.connect(purrGain.gain);
+                purrOsc.connect(purrGain);
+                purrGain.connect(audioCtx.destination);
 
-</main>
+                purrGain.gain.setValueAtTime(0.15, audioCtx.currentTime);
 
-<footer class="footer">
+                purrOsc.start();
+                lfo.start();
 
-    <div class="footer-content">
+                btn.classList.add('purring-active');
+                txt.innerText = 'Wyłącz Mruczenie';
+                isPurring = true;
+            } else {
+                if (purrOsc) {
+                    purrOsc.stop();
+                }
+                btn.classList.remove('purring-active');
+                txt.innerText = 'Mruczenie';
+                isPurring = false;
+            }
+        }
 
-        <div>
-            <h2>🐱 KotGG</h2>
-            <p>
-                Twój koci internetowy świat 💗
-            </p>
-        </div>
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hide-tab'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
 
-        <div class="footer-links">
-            <a href="index.html">Start</a>
-            <a href="koty.html">Koty</a>
-            <a href="ciekawostki.html">Ciekawostki</a>
-            <a href="galeria.html">Galeria</a>
-            <a href="kontakt.html">Kontakt</a>
-        </div>
+            document.getElementById(`tab-${tabId}`).classList.remove('hide-tab');
+            const navBtn = document.getElementById(`nav-${tabId}`);
+            if(navBtn) navBtn.classList.add('active');
 
-    </div>
+            // Close mobile menu if open
+            document.getElementById('mobileMenu').classList.add('hidden');
 
-    <div class="copyright">
-        © <span class="year"></span> KotGG. Wszystkie prawa zastrzeżone.
-    </div>
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
 
-</footer>
+            if (tabId === 'gra') {
+                initGameCanvas();
+            }
+        }
 
-<script src="script.js"></script>
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
 
+        function getNewQuote() {
+            const random = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('quoteText').innerText = random;
+        }
+
+        // Render Trivia
+        function renderTrivia(items) {
+            const container = document.getElementById('triviaGrid');
+            container.innerHTML = items.map(t => `
+                <div class="glass-card rounded-2xl p-6 hover:shadow-lg transition space-y-3 flex flex-col justify-between">
+                    <div class="space-y-2">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase ${getCatBadgeClass(t.cat)}">${t.cat}</span>
+                        <p class="text-gray-700 text-sm leading-relaxed">${t.text}</p>
+                    </div>
+                    <div class="text-right">
+                        <i class="fa-solid fa-paw text-pink-300 text-xl"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getCatBadgeClass(cat) {
+            switch(cat) {
+                case 'anatomia': return 'bg-pink-100 text-pink-700';
+                case 'zmysly': return 'bg-purple-100 text-purple-700';
+                case 'zachowanie': return 'bg-rose-100 text-rose-700';
+                default: return 'bg-amber-100 text-amber-700';
+            }
+        }
+
+        function filterTrivia() {
+            const query = document.getElementById('triviaSearch').value.toLowerCase();
+            const filtered = triviaData.filter(t => t.text.toLowerCase().includes(query));
+            renderTrivia(filtered);
+        }
+
+        function filterTriviaCategory(cat) {
+            document.querySelectorAll('.trivia-cat-btn').forEach(b => b.classList.replace('bg-pink-500', 'bg-white'));
+            document.querySelectorAll('.trivia-cat-btn').forEach(b => b.classList.replace('text-white', 'text-gray-700'));
+            event.target.classList.replace('bg-white', 'bg-pink-500');
+            event.target.classList.replace('text-gray-700', 'text-white');
+
+            if (cat === 'all') {
+                renderTrivia(triviaData);
+            } else {
+                renderTrivia(triviaData.filter(t => t.cat === cat));
+            }
+        }
+
+        // Render Breeds
+        function renderBreeds(items) {
+            const container = document.getElementById('breedsGrid');
+            container.innerHTML = items.map(b => `
+                <div class="glass-card rounded-3xl overflow-hidden hover:shadow-xl transition group flex flex-col justify-between">
+                    <div>
+                        <div class="h-52 overflow-hidden relative">
+                            <img src="${b.img}" alt="${b.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                            <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-md text-pink-600 font-bold text-xs px-3 py-1 rounded-full shadow">${b.name}</span>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <h3 class="text-2xl font-bold text-gray-800">${b.name}</h3>
+                            <p class="text-xs text-gray-600 leading-relaxed">${b.desc}</p>
+                        </div>
+                    </div>
+                    <div class="px-6 pb-6 pt-2 border-t border-pink-100 space-y-2 text-xs font-semibold text-gray-600">
+                        <div class="flex items-center justify-between">
+                            <span>Energia:</span>
+                            <span class="text-pink-500">${'⚡'.repeat(b.energy)}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span>Puszystość:</span>
+                            <span class="text-rose-500">${'☁️'.repeat(b.fluff)}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span>Przyjacielskość:</span>
+                            <span class="text-red-500">${'❤️'.repeat(b.friendly)}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterBreeds() {
+            const q = document.getElementById('breedSearch').value.toLowerCase();
+            const filtered = breedsData.filter(b => b.name.toLowerCase().includes(q) || b.desc.toLowerCase().includes(q));
+            renderBreeds(filtered);
+        }
+
+        // Render Gallery
+        function renderGallery(items) {
+            const container = document.getElementById('galleryGrid');
+            container.innerHTML = items.map(g => `
+                <div onclick="openLightbox('${g.img}', '${g.title}')" class="glass-card rounded-2xl overflow-hidden cursor-pointer hover:shadow-lg transition group relative">
+                    <div class="aspect-square overflow-hidden">
+                        <img src="${g.img}" alt="${g.title}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-4">
+                        <span class="text-white text-sm font-semibold">${g.title}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterGallery(cat) {
+            if (cat === 'all') renderGallery(galleryData);
+            else renderGallery(galleryData.filter(g => g.cat === cat));
+        }
+
+        function openLightbox(img, title) {
+            document.getElementById('lightboxImg').src = img;
+            document.getElementById('lightboxCaption').innerText = title;
+            document.getElementById('lightbox').classList.remove('hidden');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.add('hidden');
+        }
+
+        // Advice Tabs
+        function showAdviceTopic(topic) {
+            document.querySelectorAll('.advice-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.advice-nav-btn').forEach(el => el.classList.remove('border-l-4', 'border-pink-500', 'active'));
+
+            document.getElementById(`advice-${topic}`).classList.remove('hidden');
+            event.currentTarget.classList.add('border-l-4', 'border-pink-500', 'active');
+        }
+
+        // Extra Tools Logic
+        const namesData = {
+            female: {
+                sweet: ["Maja", "Pusia", "Słodka", "Chmurka", "Kulka"],
+                royal: ["Księżniczka", "Cleo", "Victoria", "Duchess", "Aria"],
+                funny: ["Puszka", "Kiełbasa", "Kluska", "Placka", "Fretka"],
+                mystic: ["Luna", "Shadow", "Nox", "Sombra", "Magia"]
+            },
+            male: {
+                sweet: ["Mruczek", "Puchatek", "Pączek", "Bąbel", "Gucio"],
+                royal: ["Hrabia", "Królewicz", "Simba", "Cezar", "Ares"],
+                funny: ["Schabik", "Karton", "Baton", "Kefir", "Kumpel"],
+                mystic: ["Kuro", "Fantom", "Demon", "Ragnar", "Omen"]
+            }
+        };
+
+        function generateCatName() {
+            const gender = document.getElementById('genGender').value;
+            const type = document.getElementById('genType').value;
+            
+            let pool = [];
+            if (gender === 'any') {
+                pool = [...namesData.female[type], ...namesData.male[type]];
+            } else {
+                pool = namesData[gender][type];
+            }
+
+            const chosen = pool[Math.floor(Math.random() * pool.length)];
+            
+            document.getElementById('generatedName').innerText = chosen;
+            document.getElementById('generatedNameBox').classList.remove('hidden');
+        }
+
+        function calculateCatAge() {
+            const catAge = parseFloat(document.getElementById('catAgeInput').value) || 0;
+            let humanAge = 0;
+            let stage = "";
+
+            if (catAge <= 1) {
+                humanAge = catAge * 15;
+                stage = "Kociak / Młodzieniec 🐱";
+            } else if (catAge <= 2) {
+                humanAge = 15 + (catAge - 1) * 9;
+                stage = "Młody Dorosły Kot 🐾";
+            } else {
+                humanAge = 24 + (catAge - 2) * 4;
+                if (catAge < 11) stage = "Dojrzały, Pełen Wdzięku Kot 👑";
+                else stage = "Szanowny Koci Senior 👴🐱";
+            }
+
+            document.getElementById('humanAgeText').innerText = `${Math.round(humanAge)} lat`;
+            document.getElementById('ageStageText').innerText = stage;
+        }
+
+        // Minigame Code ("Łapacz Przysmaków")
+        let canvas, ctx;
+        let gameActive = false;
+        let score = 0;
+        let highScore = 0;
+        let lives = 3;
+        let basketX = 0;
+        const basketWidth = 80;
+        const basketHeight = 25;
+        let items = [];
+
+        function initGameCanvas() {
+            canvas = document.getElementById('gameCanvas');
+            ctx = canvas.getContext('2d');
+            
+            // Set internal resolution matching display
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+
+            basketX = canvas.width / 2 - basketWidth / 2;
+
+            // Mouse / Touch Event Listeners
+            canvas.addEventListener('mousemove', (e) => {
+                const cRect = canvas.getBoundingClientRect();
+                basketX = e.clientX - cRect.left - basketWidth / 2;
+            });
+
+            canvas.addEventListener('touchmove', (e) => {
+                const cRect = canvas.getBoundingClientRect();
+                if(e.touches.length > 0) {
+                    basketX = e.touches[0].clientX - cRect.left - basketWidth / 2;
+                }
+            });
+
+            // Touch buttons
+            document.getElementById('btnLeft').onclick = () => { basketX -= 30; };
+            document.getElementById('btnRight').onclick = () => { basketX += 30; };
+        }
+
+        function startGame() {
+            document.getElementById('gameStartOverlay').classList.add('hidden');
+            document.getElementById('gameOverOverlay').classList.add('hidden');
+            score = 0;
+            lives = 3;
+            items = [];
+            gameActive = true;
+            updateGameUI();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function updateGameUI() {
+            document.getElementById('gameScore').innerText = score;
+            document.getElementById('gameHighScore').innerText = highScore;
+            document.getElementById('gameLives').innerText = '❤️'.repeat(lives);
+        }
+
+        function spawnItem() {
+            if (Math.random() < 0.04) {
+                const types = ['fish', 'cheese', 'boot'];
+                const rand = Math.random();
+                let type = 'fish';
+                if (rand > 0.8) type = 'cheese';
+                else if (rand > 0.6) type = 'boot';
+
+                items.push({
+                    x: Math.random() * (canvas.width - 30),
+                    y: -30,
+                    type: type,
+                    speed: 2 + Math.random() * 3
+                });
+            }
+        }
+
+        function gameLoop() {
+            if (!gameActive) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Restrain basket inside canvas
+            if (basketX < 0) basketX = 0;
+            if (basketX + basketWidth > canvas.width) basketX = canvas.width - basketWidth;
+
+            // Draw Basket (Pink Cat Bowl)
+            ctx.fillStyle = '#f43f5e';
+            ctx.beginPath();
+            ctx.roundRect(basketX, canvas.height - basketHeight - 10, basketWidth, basketHeight, 10);
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Bowl Label
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 12px Quicksand';
+            ctx.fillText('MISKA', basketX + 22, canvas.height - 18);
+
+            // Spawn & Update Items
+            spawnItem();
+
+            for (let i = items.length - 1; i >= 0; i--) {
+                let item = items[i];
+                item.y += item.speed;
+
+                // Draw Item Icon
+                ctx.font = '24px sans-serif';
+                if (item.type === 'fish') ctx.fillText('🐟', item.x, item.y);
+                else if (item.type === 'cheese') ctx.fillText('🧀', item.x, item.y);
+                else if (item.type === 'boot') ctx.fillText('👞', item.x, item.y);
+
+                // Collision Detection with Basket
+                if (
+                    item.y >= canvas.height - basketHeight - 25 &&
+                    item.y <= canvas.height - 10 &&
+                    item.x + 20 >= basketX &&
+                    item.x <= basketX + basketWidth
+                ) {
+                    if (item.type === 'fish') score += 10;
+                    else if (item.type === 'cheese') score += 20;
+                    else if (item.type === 'boot') {
+                        lives -= 1;
+                        if (lives <= 0) {
+                            gameOver();
+                        }
+                    }
+                    if (score > highScore) highScore = score;
+                    updateGameUI();
+                    items.splice(i, 1);
+                    continue;
+                }
+
+                // Missed item bottom
+                if (item.y > canvas.height) {
+                    items.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        function gameOver() {
+            gameActive = false;
+            document.getElementById('finalScore').innerText = score;
+            document.getElementById('gameOverOverlay').classList.remove('hidden');
+        }
+
+        // Initialize On Window Load
+        window.onload = function() {
+            renderTrivia(triviaData);
+            renderBreeds(breedsData);
+            renderGallery(galleryData);
+            calculateCatAge();
+            initGameCanvas();
+        };
+
+        window.onresize = function() {
+            if (canvas) {
+                const rect = canvas.getBoundingClientRect();
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+            }
+        };
+    </script>
 </body>
-              </html>
+</html>
