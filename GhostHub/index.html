@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GhostHUB — Tajemnica 2026</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background:
+        radial-gradient(circle at 50% 0%, #35105f 0%, #12091d 35%, #050208 75%);
+    color: #f7f2ff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        radial-gradient(circle, rgba(168,85,247,.15) 1px, transparent 1px);
+    background-size: 35px 35px;
+    opacity: .35;
+}
+
+header {
+    text-align: center;
+    padding: 55px 20px 30px;
+}
+
+.logo {
+    font-size: clamp(42px, 10vw, 80px);
+    font-weight: 900;
+    letter-spacing: 5px;
+    color: #c084fc;
+    text-shadow:
+        0 0 10px #a855f7,
+        0 0 30px #7e22ce,
+        0 0 60px #6b21a8;
+}
+
+.subtitle {
+    margin-top: 10px;
+    color: #c4b5fd;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.status {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 8px 16px;
+    border: 1px solid #a855f7;
+    border-radius: 999px;
+    color: #d8b4fe;
+    background: rgba(168,85,247,.08);
+    box-shadow: 0 0 20px rgba(168,85,247,.25);
+}
+
+main {
+    width: min(950px, 92%);
+    margin: auto;
+}
+
+.panel {
+    background: rgba(20, 10, 32, .82);
+    border: 1px solid rgba(168,85,247,.35);
+    border-radius: 22px;
+    padding: 28px;
+    margin: 20px 0;
+    box-shadow: 0 0 35px rgba(126,34,206,.12);
+    backdrop-filter: blur(8px);
+}
+
+.panel h2 {
+    color: #c084fc;
+    margin-bottom: 12px;
+}
+
+.countdown {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.time {
+    background: #100819;
+    border: 1px solid #6b21a8;
+    border-radius: 15px;
+    padding: 18px 8px;
+    text-align: center;
+}
+
+.time strong {
+    display: block;
+    font-size: 30px;
+    color: #d8b4fe;
+}
+
+.time span {
+    color: #8f849d;
+    font-size: 12px;
+}
+
+.case {
+    position: relative;
+    overflow: hidden;
+}
+
+.case::after {
+    content: "CLASSIFIED";
+    position: absolute;
+    right: -35px;
+    top: 25px;
+    transform: rotate(25deg);
+    color: rgba(192,132,252,.08);
+    font-size: 35px;
+    font-weight: 900;
+}
+
+.case-code {
+    color: #a855f7;
+    font-family: monospace;
+    margin-bottom: 12px;
+}
+
+.message {
+    line-height: 1.7;
+    color: #ddd3e8;
+}
+
+.clue {
+    margin-top: 20px;
+    padding: 18px;
+    border-left: 3px solid #a855f7;
+    background: rgba(168,85,247,.07);
+    border-radius: 8px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    margin-top: 15px;
+    background: #09040e;
+    border: 1px solid #6b21a8;
+    border-radius: 10px;
+    color: white;
+    outline: none;
+}
+
+input:focus {
+    border-color: #c084fc;
+    box-shadow: 0 0 15px rgba(168,85,247,.25);
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #7e22ce, #a855f7);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(168,85,247,.25);
+}
+
+button:hover {
+    filter: brightness(1.15);
+}
+
+#result {
+    margin-top: 15px;
+    min-height: 25px;
+}
+
+.locked {
+    opacity: .65;
+}
+
+footer {
+    text-align: center;
+    padding: 35px 20px;
+    color: #75697f;
+    font-size: 13px;
+}
+
+@media(max-width: 600px) {
+    .countdown {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .panel {
+        padding: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">GHOSTHUB</div>
+    <div class="subtitle">Tajemnica • Październik 2026</div>
+    <div class="status">● SYSTEM ONLINE</div>
+</header>
+
+<main>
+
+<section class="panel">
+    <h2>👻 Do rozpoczęcia GhostHUB</h2>
+    <p class="message">
+        1 października rozpocznie się sprawa, której rozwiązanie
+        poznasz dopiero 31 października.
+    </p>
+
+    <div class="countdown">
+        <div class="time">
+            <strong id="days">--</strong>
+            <span>DNI</span>
+        </div>
+        <div class="time">
+            <strong id="hours">--</strong>
+            <span>GODZIN</span>
+        </div>
+        <div class="time">
+            <strong id="minutes">--</strong>
+            <span>MINUT</span>
+        </div>
+        <div class="time">
+            <strong id="seconds">--</strong>
+            <span>SEKUND</span>
+        </div>
+    </div>
+</section>
+
+<section class="panel case">
+    <div class="case-code">CASE #001 // CLASSIFIED</div>
+
+    <h2>🔐 Pierwszy ślad</h2>
+
+    <p class="message">
+        W systemie GhostHUB znaleziono tajemniczą wiadomość.
+        Nikt nie wie, kto ją zostawił.
+    </p>
+
+    <div class="clue">
+        <b>WIADOMOŚĆ:</b><br><br>
+        „Nie szukaj mnie tam, gdzie jest światło.
+        Pierwszy ślad znajduje się tam,
+        gdzie wszystko zaczyna się od zera.”
+    </div>
+
+    <input id="answer" placeholder="Wpisz rozwiązanie pierwszej zagadki...">
+    <button onclick="checkAnswer()">ODPOWIEDŹ</button>
+
+    <div id="result"></div>
+</section>
+
+<section class="panel locked">
+    <h2>📁 Tajne akta</h2>
+    <p class="message">
+        Kolejne akta zostaną odblokowane w trakcie wydarzenia.
+    </p>
+</section>
+
+</main>
+
+<footer>
+    GHOSTHUB © 2026 • CASE #2026
+</footer>
+
+<script>
+const start = new Date("2026-10-01T00:00:00");
+const end = new Date("2026-10-31T23:59:59");
+
+function updateCountdown() {
+    const now = new Date();
+    let target;
+
+    if (now < start) {
+        target = start;
+    } else if (now <= end) {
+        target = end;
+    } else {
+        document.querySelector(".countdown").innerHTML =
+            "<div style='grid-column:1/-1;text-align:center;font-size:22px;color:#c084fc;'>👻 GHOSTHUB ZAKOŃCZONY</div>";
+        return;
+    }
+
+    const diff = target - now;
+
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor(diff / 3600000) % 24;
+    const minutes = Math.floor(diff / 60000) % 60;
+    const seconds = Math.floor(diff / 1000) % 60;
+
+    document.getElementById("days").textContent = days;
+    document.getElementById("hours").textContent = hours;
+    document.getElementById("minutes").textContent = minutes;
+    document.getElementById("seconds").textContent = seconds;
+}
+
+function checkAnswer() {
+    const answer = document.getElementById("answer").value
+        .trim()
+        .toLowerCase();
+
+    const result = document.getElementById("result");
+
+    if (answer === "zero" || answer === "0") {
+        result.innerHTML =
+            "🔓 <span style='color:#c084fc'>ŚLAD ODNALEZIONY.</span><br>System zapisał Twoją odpowiedź.";
+    } else {
+        result.innerHTML =
+            "❌ <span style='color:#f0abfc'>Nieprawidłowa odpowiedź.</span>";
+    }
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
+</script>
+
+</body>
+                               </html>
