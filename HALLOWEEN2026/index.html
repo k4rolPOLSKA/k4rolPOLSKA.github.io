@@ -3,382 +3,173 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>HALLOWEEN × GhostHUB — 1.2</title>
+<title>HALLOWEEN × GhostHUB 1.3</title>
 
 <style>
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --purple: #9b4dff;
-    --purple2: #c58aff;
-    --orange: #ff7200;
-    --orange2: #ffad5c;
-    --bg: #050508;
 }
 
 body {
     min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, sans-serif;
     color: white;
     background:
-        radial-gradient(circle at 15% 15%, rgba(155,77,255,.18), transparent 30%),
-        radial-gradient(circle at 85% 80%, rgba(255,114,0,.15), transparent 30%),
-        var(--bg);
-    overflow-x: hidden;
+        radial-gradient(circle at 20% 20%, #35115f 0%, transparent 30%),
+        radial-gradient(circle at 80% 80%, #5a2500 0%, transparent 30%),
+        #050509;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
 }
 
-/* TŁO */
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    opacity: .14;
-    background-image: radial-gradient(#fff 1px, transparent 1px);
-    background-size: 34px 34px;
-}
-
-.fog {
-    position: fixed;
-    width: 450px;
-    height: 450px;
-    border-radius: 50%;
-    filter: blur(120px);
-    opacity: .08;
-    pointer-events: none;
-}
-
-.fog1 {
-    background: var(--purple);
-    left: -180px;
-    top: -150px;
-}
-
-.fog2 {
-    background: var(--orange);
-    right: -180px;
-    bottom: -150px;
-}
-
-/* HEADER */
-
-header {
+.container {
+    width: min(1000px, 100%);
     text-align: center;
-    padding: 55px 20px 35px;
 }
 
 .version {
     display: inline-block;
-    padding: 8px 16px;
-    border-radius: 50px;
-    border: 1px solid #6933a8;
-    background: rgba(30,10,45,.7);
-    color: #d7b8ff;
+    padding: 7px 14px;
+    border: 1px solid #7137a8;
+    border-radius: 30px;
+    color: #cda5ff;
     font-size: 12px;
     letter-spacing: 2px;
+    margin-bottom: 18px;
 }
 
 h1 {
-    margin-top: 20px;
-    font-size: clamp(42px, 9vw, 82px);
-    letter-spacing: -4px;
-    text-shadow: 0 0 35px rgba(155,77,255,.35);
+    font-size: clamp(40px, 9vw, 78px);
+    letter-spacing: -3px;
+    margin-bottom: 10px;
 }
 
 h1 span {
-    color: var(--orange);
+    color: #ff7615;
 }
 
 .subtitle {
-    margin-top: 12px;
-    color: #aaa;
-    font-size: 17px;
+    color: #999;
+    margin-bottom: 35px;
 }
-
-/* MAIN */
-
-main {
-    width: min(1100px, 92%);
-    margin: auto;
-    padding-bottom: 60px;
-}
-
-/* KARTY */
 
 .events {
     display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 24px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
 }
 
 .card {
-    position: relative;
-    overflow: hidden;
-    padding: 30px;
-    min-height: 350px;
-    border-radius: 25px;
-    background: rgba(15,15,24,.84);
-    backdrop-filter: blur(15px);
-    border: 1px solid #292934;
-    box-shadow: 0 20px 70px rgba(0,0,0,.35);
+    padding: 32px 25px;
+    border-radius: 24px;
+    background: rgba(13, 13, 21, .9);
+    border: 1px solid #292936;
 }
 
 .ghost {
-    border-color: rgba(155,77,255,.55);
+    border-color: #783bb0;
 }
 
 .halloween {
-    border-color: rgba(255,114,0,.5);
+    border-color: #a34e0b;
 }
 
 .icon {
-    font-size: 52px;
+    font-size: 50px;
 }
 
-.card h2 {
-    margin-top: 14px;
-    font-size: 30px;
+h2 {
+    margin-top: 12px;
+    font-size: 29px;
 }
 
 .ghost h2 {
-    color: var(--purple2);
+    color: #c18aff;
 }
 
 .halloween h2 {
-    color: var(--orange2);
+    color: #ff9345;
 }
 
 .date {
-    margin-top: 6px;
-    color: #888;
-    font-size: 14px;
+    color: #777;
+    font-size: 13px;
+    margin-top: 7px;
 }
-
-/* COUNTDOWN */
 
 .countdown {
     display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 8px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7px;
     margin-top: 28px;
 }
 
 .time {
-    padding: 14px 5px;
-    text-align: center;
     background: #09090e;
-    border: 1px solid #252532;
-    border-radius: 14px;
+    border: 1px solid #24242f;
+    border-radius: 13px;
+    padding: 13px 4px;
 }
 
 .number {
-    font-size: clamp(22px,5vw,34px);
-    font-weight: 800;
+    font-size: 27px;
+    font-weight: bold;
 }
 
 .label {
-    margin-top: 5px;
-    color: #777;
+    color: #666;
     font-size: 9px;
-    letter-spacing: 1px;
+    margin-top: 5px;
+}
+
+.ghost-button {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 13px 22px;
+    border-radius: 12px;
+    background: #7b3fc0;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: .25s;
+}
+
+.ghost-button:hover {
+    background: #9652df;
+    transform: translateY(-2px);
 }
 
 .status {
     margin-top: 18px;
-    padding: 12px;
-    text-align: center;
-    border-radius: 12px;
-    background: #09090e;
-    color: #aaa;
+    color: #777;
     font-size: 13px;
-}
-
-/* GHOST SIGNAL */
-
-.signal {
-    margin-top: 25px;
-    padding: 22px;
-    border-radius: 20px;
-    background: rgba(12,12,18,.85);
-    border: 1px solid #342442;
-    text-align: center;
-}
-
-.signal-title {
-    color: #c58aff;
-    font-weight: bold;
-    letter-spacing: 2px;
-}
-
-.signal-text {
-    margin-top: 10px;
-    color: #777;
-    font-family: monospace;
-    min-height: 20px;
-}
-
-.signal.active {
-    animation: signalGlow 1.2s infinite alternate;
-}
-
-@keyframes signalGlow {
-    from {
-        box-shadow: 0 0 5px rgba(155,77,255,.1);
-    }
-    to {
-        box-shadow: 0 0 30px rgba(155,77,255,.35);
-    }
-}
-
-/* TAJEMNICA */
-
-.mystery {
-    margin-top: 25px;
-    padding: 30px;
-    text-align: center;
-    border-radius: 22px;
-    background: rgba(12,12,18,.85);
-    border: 1px solid #292934;
-}
-
-.mystery h2 {
-    font-size: 24px;
-}
-
-.mystery p {
-    margin-top: 10px;
-    color: #777;
-}
-
-.secret-button {
-    margin-top: 18px;
-    padding: 11px 20px;
-    border: 1px solid #5c3b78;
-    border-radius: 12px;
-    background: #100c16;
-    color: #c58aff;
-    cursor: pointer;
-    transition: .25s;
-}
-
-.secret-button:hover {
-    background: #1b1025;
-    transform: scale(1.04);
-}
-
-#secretMessage {
-    display: none;
-    margin-top: 18px;
-    color: #aaa;
-}
-
-/* POSTĘP */
-
-.progress-section {
-    margin-top: 25px;
-    padding: 25px;
-    border-radius: 20px;
-    background: rgba(12,12,18,.8);
-    border: 1px solid #292934;
-}
-
-.progress-title {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    color: #aaa;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 13px;
-    overflow: hidden;
-    border-radius: 20px;
-    background: #111118;
-}
-
-.progress-fill {
-    height: 100%;
-    width: 0%;
-    border-radius: 20px;
-    background: linear-gradient(90deg,var(--purple),var(--orange));
-    box-shadow: 0 0 15px rgba(155,77,255,.4);
-    transition: width 1s;
-}
-
-/* HISTORIA */
-
-.history {
-    margin-top: 25px;
-    padding: 28px;
-    border-radius: 20px;
-    background: rgba(12,12,18,.8);
-    border: 1px solid #292934;
-}
-
-.history h2 {
-    margin-bottom: 18px;
-}
-
-.timeline {
-    display: grid;
-    gap: 10px;
-}
-
-.event {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 13px 15px;
-    border-radius: 12px;
-    background: #09090e;
-    color: #aaa;
-}
-
-.event strong {
-    color: white;
-}
-
-.event.future strong {
-    color: #555;
 }
 
 footer {
-    padding: 30px 15px 45px;
-    text-align: center;
+    margin-top: 28px;
     color: #555;
-    font-size: 13px;
+    font-size: 12px;
 }
 
-/* MOBILE */
-
-@media(max-width:700px) {
-
-    header {
-        padding-top: 40px;
-    }
-
-    h1 {
-        letter-spacing: -2px;
-    }
-
+@media (max-width: 700px) {
     .events {
         grid-template-columns: 1fr;
     }
 
     .card {
-        padding: 25px;
+        padding: 28px 20px;
     }
 
-    .event {
-        flex-direction: column;
-        gap: 4px;
+    .countdown {
+        gap: 5px;
+    }
+
+    .number {
+        font-size: 23px;
     }
 }
 </style>
@@ -386,35 +177,25 @@ footer {
 
 <body>
 
-<div class="fog fog1"></div>
-<div class="fog fog2"></div>
-
-<header>
+<div class="container">
 
     <div class="version">
-        UPDATE 1.2 • 2026
+        VERSION 1.3 • 2026
     </div>
 
     <h1>
-        HALLOWEEN
-        <span>×</span>
-        GhostHUB
+        HALLOWEEN <span>×</span> GhostHUB
     </h1>
 
     <p class="subtitle">
-        Dwa wydarzenia. Jedna tajemnica. 👻🎃
+        Nadchodzą dwa wydarzenia 👻🎃
     </p>
-
-</header>
-
-
-<main>
-
-    <!-- LICZNIKI -->
 
     <section class="events">
 
-        <article class="card ghost">
+        <!-- GHOSTHUB -->
+
+        <div class="card ghost">
 
             <div class="icon">👻</div>
 
@@ -429,16 +210,24 @@ footer {
                 id="ghostCountdown">
             </div>
 
+            <a
+                class="ghost-button"
+                href="https://k4rolpolska.github.io/GhostHub">
+                👻 PRZEJDŹ DO GHOSTHUB
+            </a>
+
             <div
                 class="status"
                 id="ghostStatus">
-                ⏳ Odliczanie trwa...
+                Odliczanie do startu...
             </div>
 
-        </article>
+        </div>
 
 
-        <article class="card halloween">
+        <!-- HALLOWEEN -->
+
+        <div class="card halloween">
 
             <div class="icon">🎃</div>
 
@@ -456,167 +245,70 @@ footer {
             <div
                 class="status"
                 id="halloweenStatus">
-                ⏳ Odliczanie trwa...
-            </div>
-
-        </article>
-
-    </section>
-
-
-    <!-- GHOST SIGNAL -->
-
-    <section class="signal" id="signal">
-
-        <div class="signal-title">
-            👻 GHOST SIGNAL
-        </div>
-
-        <div
-            class="signal-text"
-            id="signalText">
-            Skanowanie sygnału...
-        </div>
-
-    </section>
-
-
-    <!-- POSTĘP -->
-
-    <section class="progress-section">
-
-        <div class="progress-title">
-            <span>🎃 Droga do Halloween</span>
-            <span id="progressPercent">0%</span>
-        </div>
-
-        <div class="progress-bar">
-            <div
-                class="progress-fill"
-                id="progressFill">
-            </div>
-        </div>
-
-    </section>
-
-
-    <!-- TAJEMNICA -->
-
-    <section class="mystery">
-
-        <h2>
-            🔮 TAJEMNICA 1.2
-        </h2>
-
-        <p>
-            Coś zostało ukryte...
-        </p>
-
-        <button
-            class="secret-button"
-            onclick="revealSecret()">
-            ODKRYJ
-        </button>
-
-        <div id="secretMessage">
-            👀 Jeszcze nie teraz...<br><br>
-            <strong>
-                Sygnał został wykryty.
-            </strong>
-        </div>
-
-    </section>
-
-
-    <!-- HISTORIA -->
-
-    <section class="history">
-
-        <h2>📜 Historia wydarzenia</h2>
-
-        <div class="timeline">
-
-            <div class="event">
-                <strong>22.09.2026</strong>
-                <span>HALLOWEEN × GhostHUB 1.0</span>
-            </div>
-
-            <div class="event">
-                <strong>01.10.2026</strong>
-                <span>UPDATE 1.2 👻</span>
-            </div>
-
-            <div class="event future">
-                <strong>15.10.2026</strong>
-                <span>🔒 GhostHUB START</span>
-            </div>
-
-            <div class="event future">
-                <strong>30.10.2026</strong>
-                <span>🔒 HALLOWEEN START</span>
+                Odliczanie do startu...
             </div>
 
         </div>
 
     </section>
 
-</main>
+    <footer>
+        HALLOWEEN × GhostHUB • 1.3
+    </footer>
 
-
-<footer>
-
-    HALLOWEEN × GhostHUB<br>
-    UPDATE 1.2 • 2026
-
-</footer>
+</div>
 
 
 <script>
 
-/* DATY */
-
-const ghostHubStart =
+const ghostDate =
     new Date("2026-10-15T00:00:00");
 
-const halloweenStart =
+const halloweenDate =
     new Date("2026-10-30T00:00:00");
 
 
-/* LICZNIK */
+function updateCountdown(date, elementId, statusId, name) {
 
-function countdown(target, element, status, name) {
+    const element =
+        document.getElementById(elementId);
 
-    const diff = target - new Date();
+    const status =
+        document.getElementById(statusId);
 
-    if (diff <= 0) {
+    const difference =
+        date.getTime() - Date.now();
+
+    if (difference <= 0) {
 
         element.innerHTML = `
-            <div class="time" style="grid-column:1/-1">
+            <div
+                class="time"
+                style="grid-column: 1 / -1;">
                 <div class="number">START!</div>
                 <div class="label">${name}</div>
             </div>
         `;
 
-        status.innerHTML =
-            "🚀 Wydarzenie jest już aktywne!";
+        status.textContent =
+            "🚀 Wydarzenie już się rozpoczęło!";
 
         return;
     }
 
     const days =
-        Math.floor(diff / 86400000);
+        Math.floor(difference / 86400000);
 
     const hours =
-        Math.floor(diff / 3600000) % 24;
+        Math.floor(difference / 3600000) % 24;
 
     const minutes =
-        Math.floor(diff / 60000) % 60;
+        Math.floor(difference / 60000) % 60;
 
     const seconds =
-        Math.floor(diff / 1000) % 60;
+        Math.floor(difference / 1000) % 60;
 
     element.innerHTML = `
-
         <div class="time">
             <div class="number">${days}</div>
             <div class="label">DNI</div>
@@ -624,21 +316,21 @@ function countdown(target, element, status, name) {
 
         <div class="time">
             <div class="number">
-                ${String(hours).padStart(2,"0")}
+                ${String(hours).padStart(2, "0")}
             </div>
             <div class="label">GODZ</div>
         </div>
 
         <div class="time">
             <div class="number">
-                ${String(minutes).padStart(2,"0")}
+                ${String(minutes).padStart(2, "0")}
             </div>
             <div class="label">MIN</div>
         </div>
 
         <div class="time">
             <div class="number">
-                ${String(seconds).padStart(2,"0")}
+                ${String(seconds).padStart(2, "0")}
             </div>
             <div class="label">SEK</div>
         </div>
@@ -646,114 +338,26 @@ function countdown(target, element, status, name) {
 }
 
 
-/* POSTĘP DO HALLOWEEN */
-
-function updateProgress() {
-
-    const start =
-        new Date("2026-09-22T00:00:00").getTime();
-
-    const end =
-        new Date("2026-10-30T00:00:00").getTime();
-
-    const now = Date.now();
-
-    let percent =
-        ((now - start) / (end - start)) * 100;
-
-    percent =
-        Math.max(0, Math.min(100, percent));
-
-    document.getElementById("progressFill")
-        .style.width = percent + "%";
-
-    document.getElementById("progressPercent")
-        .textContent = Math.floor(percent) + "%";
-}
-
-
-/* GHOST SIGNAL */
-
-const signals = [
-    "Skanowanie sygnału...",
-    "SIGNAL DETECTED...",
-    "👻 Nieznane źródło...",
-    "15.10.2026",
-    "Połączenie przerwane.",
-    "Ponowne skanowanie..."
-];
-
-let signalIndex = 0;
-
-function ghostSignal() {
-
-    const text =
-        document.getElementById("signalText");
-
-    const box =
-        document.getElementById("signal");
-
-    text.textContent =
-        signals[signalIndex];
-
-    box.classList.add("active");
-
-    setTimeout(() => {
-        box.classList.remove("active");
-    }, 1200);
-
-    signalIndex =
-        (signalIndex + 1) % signals.length;
-}
-
-
-/* TAJEMNICA */
-
-function revealSecret() {
-
-    const message =
-        document.getElementById("secretMessage");
-
-    if (message.style.display === "block") {
-
-        message.style.display = "none";
-
-    } else {
-
-        message.style.display = "block";
-
-    }
-}
-
-
-/* AKTUALIZACJA */
-
 function update() {
 
-    countdown(
-        ghostHubStart,
-        document.getElementById("ghostCountdown"),
-        document.getElementById("ghostStatus"),
-        "GHOSTHUB"
+    updateCountdown(
+        ghostDate,
+        "ghostCountdown",
+        "ghostStatus",
+        "GhostHUB"
     );
 
-    countdown(
-        halloweenStart,
-        document.getElementById("halloweenCountdown"),
-        document.getElementById("halloweenStatus"),
+    updateCountdown(
+        halloweenDate,
+        "halloweenCountdown",
+        "halloweenStatus",
         "HALLOWEEN 2026"
     );
-
-    updateProgress();
 }
 
 update();
 
-setInterval(update,1000);
-
-ghostSignal();
-
-setInterval(ghostSignal,5000);
+setInterval(update, 1000);
 
 </script>
 
