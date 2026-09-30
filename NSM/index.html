@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NSM — Najlepsze Słowo Miesiąca</title>
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card-bg: rgba(18, 22, 35, 0.85);
+      --accent: #00f0ff;
+      --accent-glow: rgba(0, 240, 255, 0.25);
+      --pink: #ff007f;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 30px 20px;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(255, 0, 127, 0.06) 0%, transparent 45%);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .logo span {
+      color: var(--accent);
+      text-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 6px;
+    }
+
+    /* Główna karta aktywnego miesiąca */
+    .hero-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--pink));
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .reveal-box {
+      text-align: center;
+      padding: 30px 0;
+    }
+
+    .mystery-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 12px;
+      filter: blur(8px);
+      user-select: none;
+      transition: filter 0.5s ease;
+    }
+
+    .mystery-title.revealed {
+      filter: blur(0);
+      color: var(--accent);
+      text-shadow: 0 0 30px var(--accent-glow);
+    }
+
+    .countdown-grid {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .time-block {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      border-radius: 12px;
+      min-width: 70px;
+      text-align: center;
+    }
+
+    .time-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .time-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* Sekcja głosowania i propozycji */
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .grid-layout { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    /* Formularz dodawania */
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), #00a8ff);
+      color: #000;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    /* Lista propozycji do głosowania */
+    .proposals-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .proposal-item {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.2s;
+    }
+
+    .proposal-item:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .proposal-info h4 {
+      font-size: 1.05rem;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .proposal-info p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .vote-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .vote-count {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--accent);
+      min-width: 25px;
+      text-align: center;
+    }
+
+    .vote-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .vote-btn.voted {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="logo">NSM <span>// Październik</span></div>
+      <div class="subtitle">Platforma Wyboru Najlepszego Słowa Miesiąca</div>
+    </header>
+
+    <!-- Karta Główna / Odliczanie do ujawnienia słowa -->
+    <div class="hero-card">
+      <div class="badge">✦ AKTUALNA EDYCJA: PAŹDZIERNIK 2026 ✦</div>
+      <div class="reveal-box">
+        <div id="mysteryWord" class="mystery-title">[TAJEMNICA]</div>
+        <p id="statusText" style="color: var(--text-muted); margin-bottom: 16px;">Słowo zostanie oficjalnie ujawnione końcem października!</p>
+        
+        <div class="countdown-grid" id="countdownContainer">
+          <div class="time-block">
+            <div class="time-value" id="days">--</div>
+            <div class="time-label">Dni</div>
+          </div>
+          <div class="time-block">
+            <div class="time-value" id="hours">--</div>
+            <div class="time-label">Godz</div>
+          </div>
+          <div class="time-block">
+            <div class="time-value" id="minutes">--</div>
+            <div class="time-label">Min</div>
+          </div>
+          <div class="time-block">
+            <div class="time-value" id="seconds">--</div>
+            <div class="time-label">Sek</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Interaktywny: Dodawanie i Głosowanie -->
+    <div class="grid-layout">
+      <!-- Panel Głosowania -->
+      <div class="panel">
+        <div class="section-title">
+          <span>Głosuj na kandydatów</span>
+        </div>
+        <div class="proposals-list" id="proposalsList">
+          <!-- Dynamicznie generowane słowa -->
+        </div>
+      </div>
+
+      <!-- Panel Dodawania Słowa -->
+      <div class="panel">
+        <div class="section-title">
+          <span>Zaproponuj słowo</span>
+        </div>
+        <form id="addWordForm" onsubmit="addNewWord(event)">
+          <div class="form-group">
+            <input type="text" id="wordInput" placeholder="Wpisz proponowane słowo..." required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <textarea id="descInput" placeholder="Krótkie uzasadnienie lub definicja..." rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn">Dodaj do listy 🚀</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Początkowa lista propozycji
+    let proposals = [
+      { id: 1, word: "Apatia", desc: "Stan całkowitego braku motywacji, idealny na jesienne deszcze.", votes: 14, voted: false },
+      { id: 2, word: "Optymalizacja", desc: "Ciągłe ulepszanie kodu i życia podwójnie.", votes: 21, voted: false },
+      { id: 3, word: "Refleksja", desc: "Zatrzymanie się na chwilę w natłoku projektów.", votes: 9, voted: false }
+    ];
+
+    function renderProposals() {
+      const listEl = document.getElementById('proposalsList');
+      listEl.innerHTML = '';
+
+      // Sortowanie po głosach malejąco
+      proposals.sort((a, b) => b.votes - a.votes);
+
+      proposals.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'proposal-item';
+        div.innerHTML = `
+          <div class="proposal-info">
+            <h4>${item.word}</h4>
+            <p>${item.desc}</p>
+          </div>
+          <div class="vote-box">
+            <span class="vote-count">${item.votes}</span>
+            <button class="vote-btn ${item.voted ? 'voted' : ''}" onclick="toggleVote(${item.id})">
+              ${item.voted ? 'Oddany ✓' : 'Głosuj'}
+            </button>
+          </div>
+        `;
+        listEl.appendChild(div);
+      });
+    }
+
+    function toggleVote(id) {
+      const item = proposals.find(p => p.id === id);
+      if (item) {
+        if (item.voted) {
+          item.votes--;
+          item.voted = false;
+        } else {
+          item.votes++;
+          item.voted = true;
+        }
+        renderProposals();
+      }
+    }
+
+    function addNewWord(e) {
+      e.preventDefault();
+      const wordInput = document.getElementById('wordInput');
+      const descInput = document.getElementById('descInput');
+
+      const newWord = {
+        id: Date.now(),
+        word: wordInput.value.trim(),
+        desc: descInput.value.trim(),
+        votes: 1,
+        voted: true
+      };
+
+      proposals.push(newWord);
+      wordInput.value = '';
+      descInput.value = '';
+      renderProposals();
+    }
+
+    // Odliczanie do 31 października 2026 r. (koniec miesiąca)
+    const targetDate = new Date("October 31, 2026 23:59:59").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        document.getElementById("countdownContainer").style.display = "none";
+        const mystery = document.getElementById("mysteryWord");
+        mystery.innerText = "SERENDIPNOŚĆ"; // Finałowe słowo miesiąca
+        mystery.classList.add("revealed");
+        document.getElementById("statusText").innerText = "Oficjalne Słowo Października zostało ujawnione!";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60 * 60 / 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").innerText = String(days).padStart(2, '0');
+      document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+      document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+      document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+    renderProposals();
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NSM — Najlepsze Słowo Miesiąca</title>
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card-bg: rgba(18, 22, 35, 0.85);
+      --accent: #00f0ff;
+      --accent-glow: rgba(0, 240, 255, 0.25);
+      --pink: #ff007f;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 30px 20px;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.06) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(255, 0, 127, 0.06) 0%, transparent 45%);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    .logo span {
+      color: var(--accent);
+      text-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 6px;
+    }
+
+    /* Główna karta aktywnego miesiąca */
+    .hero-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--pink));
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .reveal-box {
+      text-align: center;
+      padding: 30px 0;
+    }
+
+    .mystery-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 12px;
+      filter: blur(8px);
+      user-select: none;
+      transition: filter 0.5s ease;
+    }
+
+    .mystery-title.revealed {
+      filter: blur(0);
+      color: var(--accent);
+      text-shadow: 0 0 30px var(--accent-glow);
+    }
+
+    .countdown-grid {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .time-block {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      border-radius: 12px;
+      min-width: 70px;
+      text-align: center;
+    }
+
+    .time-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .time-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* Sekcja głosowania i propozycji */
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .grid-layout { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    /* Formularz dodawania */
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), #00a8ff);
+      color: #000;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    /* Lista propozycji do głosowania */
+    .proposals-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .proposal-item {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.2s;
+    }
+
+    .proposal-item:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .proposal-info h4 {
+      font-size: 1.05rem;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .proposal-info p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .vote-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .vote-count {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--accent);
+      min-width: 25px;
+      text-align: center;
+    }
+
+    .vote-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .vote-btn.voted {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="logo">NSM <span>// Październik</span></div>
+      <div class="subtitle">Platforma Wyboru Najlepszego Słowa Miesiąca</div>
+    </header>
+
+    <!-- Karta Główna / Odliczanie do ujawnienia słowa -->
+    <div class="hero-card">
+      <div class="badge">✦ AKTUALNA EDYCJA: PAŹDZIERNIK 2026 ✦</div>
+      <div class="reveal-box">
+        <div id="mysteryWord" class="mystery-title">[TAJEMNICA]</div>
+        <p id="statusText" style="color: var(--text-muted); margin-bottom: 16px;">Słowo zostanie oficjalnie ujawnione końcem października!</p>
+        
+        <div class="countdown-grid" id="countdownContainer">
+          <div class="time-block">
+            <div class="time-value" id="days">--</div>
+            <div class="time-label">Dni</div>
+          </div>
+          <div class="time-block">
+            <div class="time-value" id="hours">--</div>
+            <div class="time-label">Godz</div>
+          </div>
+          <div class="time-block">
+            <div class="time-value" id="minutes">--</div>
+            <div class="time-label">Min</div>
+          </div>
+          <div class="time-block">
+            <div class="time-value" id="seconds">--</div>
+            <div class="time-label">Sek</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Interaktywny: Dodawanie i Głosowanie -->
+    <div class="grid-layout">
+      <!-- Panel Głosowania -->
+      <div class="panel">
+        <div class="section-title">
+          <span>Głosuj na kandydatów</span>
+        </div>
+        <div class="proposals-list" id="proposalsList">
+          <!-- Dynamicznie generowane słowa -->
+        </div>
+      </div>
+
+      <!-- Panel Dodawania Słowa -->
+      <div class="panel">
+        <div class="section-title">
+          <span>Zaproponuj słowo</span>
+        </div>
+        <form id="addWordForm" onsubmit="addNewWord(event)">
+          <div class="form-group">
+            <input type="text" id="wordInput" placeholder="Wpisz proponowane słowo..." required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <textarea id="descInput" placeholder="Krótkie uzasadnienie lub definicja..." rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn">Dodaj do listy 🚀</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Początkowa lista propozycji
+    let proposals = [
+      { id: 1, word: "Apatia", desc: "Stan całkowitego braku motywacji, idealny na jesienne deszcze.", votes: 14, voted: false },
+      { id: 2, word: "Optymalizacja", desc: "Ciągłe ulepszanie kodu i życia podwójnie.", votes: 21, voted: false },
+      { id: 3, word: "Refleksja", desc: "Zatrzymanie się na chwilę w natłoku projektów.", votes: 9, voted: false }
+    ];
+
+    function renderProposals() {
+      const listEl = document.getElementById('proposalsList');
+      listEl.innerHTML = '';
+
+      // Sortowanie po głosach malejąco
+      proposals.sort((a, b) => b.votes - a.votes);
+
+      proposals.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'proposal-item';
+        div.innerHTML = `
+          <div class="proposal-info">
+            <h4>${item.word}</h4>
+            <p>${item.desc}</p>
+          </div>
+          <div class="vote-box">
+            <span class="vote-count">${item.votes}</span>
+            <button class="vote-btn ${item.voted ? 'voted' : ''}" onclick="toggleVote(${item.id})">
+              ${item.voted ? 'Oddany ✓' : 'Głosuj'}
+            </button>
+          </div>
+        `;
+        listEl.appendChild(div);
+      });
+    }
+
+    function toggleVote(id) {
+      const item = proposals.find(p => p.id === id);
+      if (item) {
+        if (item.voted) {
+          item.votes--;
+          item.voted = false;
+        } else {
+          item.votes++;
+          item.voted = true;
+        }
+        renderProposals();
+      }
+    }
+
+    function addNewWord(e) {
+      e.preventDefault();
+      const wordInput = document.getElementById('wordInput');
+      const descInput = document.getElementById('descInput');
+
+      const newWord = {
+        id: Date.now(),
+        word: wordInput.value.trim(),
+        desc: descInput.value.trim(),
+        votes: 1,
+        voted: true
+      };
+
+      proposals.push(newWord);
+      wordInput.value = '';
+      descInput.value = '';
+      renderProposals();
+    }
+
+    // Odliczanie do 31 października 2026 r. (koniec miesiąca)
+    const targetDate = new Date("October 31, 2026 23:59:59").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        document.getElementById("countdownContainer").style.display = "none";
+        const mystery = document.getElementById("mysteryWord");
+        mystery.innerText = "SERENDIPNOŚĆ"; // Finałowe słowo miesiąca
+        mystery.classList.add("revealed");
+        document.getElementById("statusText").innerText = "Oficjalne Słowo Października zostało ujawnione!";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60 * 60 / 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").innerText = String(days).padStart(2, '0');
+      document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+      document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+      document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+    renderProposals();
+  </script>
+</body>
+</html>
