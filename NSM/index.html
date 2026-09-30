@@ -3,76 +3,170 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NSM — Najlepsze Słowo Miesiąca</title>
+  <title>NSM — Najlepsze Słowo Miesiąca | Edycja Październik 2026</title>
+  
+  <!-- Fonty Google oraz Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
   <style>
     :root {
-      --bg: #090a0f;
-      --card-bg: rgba(18, 22, 35, 0.85);
-      --accent: #00f0ff;
-      --accent-glow: rgba(0, 240, 255, 0.25);
-      --pink: #ff007f;
+      --bg: #07050d;
+      --bg-alt: #0e091a;
+      --card-bg: rgba(20, 13, 35, 0.75);
+      --card-border: rgba(168, 85, 247, 0.2);
+      
+      --purple-primary: #9333ea;
+      --purple-light: #c084fc;
+      --purple-glow: rgba(147, 51, 234, 0.45);
+      
+      --pink-primary: #ec4899;
+      --pink-light: #f472b6;
+      --pink-glow: rgba(236, 72, 153, 0.4);
+      
+      --cyan-accent: #22d3ee;
+      
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --border: rgba(255, 255, 255, 0.08);
+      --text-dim: #64748b;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     }
 
     body {
       background-color: var(--bg);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 30px 20px;
+      line-height: 1.6;
+      overflow-x: hidden;
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.06) 0%, transparent 45%),
-        radial-gradient(circle at 85% 85%, rgba(255, 0, 127, 0.06) 0%, transparent 45%);
+        radial-gradient(circle at 15% 15%, rgba(147, 51, 234, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(236, 72, 153, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.05) 0%, transparent 60%);
+      background-attachment: fixed;
+    }
+
+    /* Tło siatki cybernetycznej */
+    .grid-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      pointer-events: none;
+      z-index: -1;
     }
 
     .container {
-      max-width: 900px;
+      max-width: 1040px;
       margin: 0 auto;
+      padding: 40px 20px 80px 20px;
     }
 
     header {
-      text-align: center;
-      margin-bottom: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 50px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(168, 85, 247, 0.15);
+      flex-wrap: wrap;
+      gap: 20px;
     }
 
-    .logo {
+    .logo-box {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--purple-primary), var(--pink-primary));
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 25px var(--purple-glow);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .logo-text {
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 2.2rem;
-      font-weight: 900;
+      font-weight: 700;
       letter-spacing: -1px;
       color: #fff;
       text-transform: uppercase;
+      line-height: 1;
     }
 
-    .logo span {
-      color: var(--accent);
-      text-shadow: 0 0 20px var(--accent-glow);
+    .logo-text span {
+      background: linear-gradient(135deg, var(--purple-light), var(--pink-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .subtitle {
+    .logo-tag {
+      font-size: 0.75rem;
       color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-top: 6px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: block;
+      margin-top: 4px;
     }
 
-    /* Główna karta aktywnego miesiąca */
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-secondary {
+      background: rgba(20, 13, 35, 0.8);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--purple-light);
+      box-shadow: 0 0 15px var(--purple-glow);
+      transform: translateY(-2px);
+    }
+
     .hero-card {
       background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 40px;
-      backdrop-filter: blur(16px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 32px;
+      padding: 50px 40px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 40px rgba(147, 51, 234, 0.15);
       position: relative;
       overflow: hidden;
-      margin-bottom: 30px;
+      margin-bottom: 45px;
+      text-align: center;
     }
 
     .hero-card::before {
@@ -82,684 +176,466 @@
       left: 0;
       width: 100%;
       height: 4px;
-      background: linear-gradient(90deg, var(--accent), var(--pink));
+      background: linear-gradient(90deg, var(--purple-primary), var(--pink-primary), var(--cyan-accent));
     }
 
-    .badge {
-      display: inline-block;
-      background: rgba(0, 240, 255, 0.1);
-      color: var(--accent);
-      border: 1px solid rgba(0, 240, 255, 0.2);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-
-    .reveal-box {
-      text-align: center;
-      padding: 30px 0;
-    }
-
-    .mystery-title {
-      font-size: 2.8rem;
-      font-weight: 800;
-      letter-spacing: 2px;
-      color: #fff;
-      margin-bottom: 12px;
-      filter: blur(8px);
-      user-select: none;
-      transition: filter 0.5s ease;
-    }
-
-    .mystery-title.revealed {
-      filter: blur(0);
-      color: var(--accent);
-      text-shadow: 0 0 30px var(--accent-glow);
-    }
-
-    .countdown-grid {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin: 20px 0;
-    }
-
-    .time-block {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--border);
-      padding: 10px 16px;
-      border-radius: 12px;
-      min-width: 70px;
-      text-align: center;
-    }
-
-    .time-value {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .time-label {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-
-    /* Sekcja głosowania i propozycji */
-    .section-title {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
+    .badge-month {
+      display: inline-flex;
       align-items: center;
-    }
-
-    .grid-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-
-    @media (max-width: 768px) {
-      .grid-layout { grid-template-columns: 1fr; }
-    }
-
-    .panel {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
+      gap: 8px;
+      background: rgba(147, 51, 234, 0.15);
+      color: var(--purple-light);
+      border: 1px solid rgba(192, 132, 252, 0.3);
+      padding: 8px 18px;
       border-radius: 20px;
-      padding: 24px;
-      backdrop-filter: blur(12px);
-    }
-
-    /* Formularz dodawania */
-    .form-group {
-      margin-bottom: 14px;
-    }
-
-    .form-group input, .form-group textarea {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid var(--border);
-      padding: 12px 16px;
-      border-radius: 12px;
-      color: #fff;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .form-group input:focus, .form-group textarea:focus {
-      border-color: var(--accent);
-    }
-
-    .btn {
-      width: 100%;
-      background: linear-gradient(135deg, var(--accent), #00a8ff);
-      color: #000;
-      border: none;
-      padding: 12px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px var(--accent-glow);
-    }
-
-    /* Lista propozycji do głosowania */
-    .proposals-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-height: 320px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-
-    .proposal-item {
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid var(--border);
-      padding: 14px 16px;
-      border-radius: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: border-color 0.2s;
-    }
-
-    .proposal-item:hover {
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .proposal-info h4 {
-      font-size: 1.05rem;
-      color: #fff;
-      margin-bottom: 2px;
-    }
-
-    .proposal-info p {
       font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    .vote-box {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .vote-count {
       font-weight: 700;
-      font-size: 1rem;
-      color: var(--accent);
-      min-width: 25px;
-      text-align: center;
-    }
-
-    .vote-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border);
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-
-    .vote-btn.voted {
-      background: var(--accent);
-      color: #000;
-      border-color: var(--accent);
-    }
-
-    /* Scrollbar styling */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
-  </style>
-</head>
-<body>
-
-  <div class="container">
-    <header>
-      <div class="logo">NSM <span>// Październik</span></div>
-      <div class="subtitle">Platforma Wyboru Najlepszego Słowa Miesiąca</div>
-    </header>
-
-    <!-- Karta Główna / Odliczanie do ujawnienia słowa -->
-    <div class="hero-card">
-      <div class="badge">✦ AKTUALNA EDYCJA: PAŹDZIERNIK 2026 ✦</div>
-      <div class="reveal-box">
-        <div id="mysteryWord" class="mystery-title">[TAJEMNICA]</div>
-        <p id="statusText" style="color: var(--text-muted); margin-bottom: 16px;">Słowo zostanie oficjalnie ujawnione końcem października!</p>
-        
-        <div class="countdown-grid" id="countdownContainer">
-          <div class="time-block">
-            <div class="time-value" id="days">--</div>
-            <div class="time-label">Dni</div>
-          </div>
-          <div class="time-block">
-            <div class="time-value" id="hours">--</div>
-            <div class="time-label">Godz</div>
-          </div>
-          <div class="time-block">
-            <div class="time-value" id="minutes">--</div>
-            <div class="time-label">Min</div>
-          </div>
-          <div class="time-block">
-            <div class="time-value" id="seconds">--</div>
-            <div class="time-label">Sek</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Panel Interaktywny: Dodawanie i Głosowanie -->
-    <div class="grid-layout">
-      <!-- Panel Głosowania -->
-      <div class="panel">
-        <div class="section-title">
-          <span>Głosuj na kandydatów</span>
-        </div>
-        <div class="proposals-list" id="proposalsList">
-          <!-- Dynamicznie generowane słowa -->
-        </div>
-      </div>
-
-      <!-- Panel Dodawania Słowa -->
-      <div class="panel">
-        <div class="section-title">
-          <span>Zaproponuj słowo</span>
-        </div>
-        <form id="addWordForm" onsubmit="addNewWord(event)">
-          <div class="form-group">
-            <input type="text" id="wordInput" placeholder="Wpisz proponowane słowo..." required autocomplete="off">
-          </div>
-          <div class="form-group">
-            <textarea id="descInput" placeholder="Krótkie uzasadnienie lub definicja..." rows="3" required></textarea>
-          </div>
-          <button type="submit" class="btn">Dodaj do listy 🚀</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Początkowa lista propozycji
-    let proposals = [
-      { id: 1, word: "Apatia", desc: "Stan całkowitego braku motywacji, idealny na jesienne deszcze.", votes: 14, voted: false },
-      { id: 2, word: "Optymalizacja", desc: "Ciągłe ulepszanie kodu i życia podwójnie.", votes: 21, voted: false },
-      { id: 3, word: "Refleksja", desc: "Zatrzymanie się na chwilę w natłoku projektów.", votes: 9, voted: false }
-    ];
-
-    function renderProposals() {
-      const listEl = document.getElementById('proposalsList');
-      listEl.innerHTML = '';
-
-      // Sortowanie po głosach malejąco
-      proposals.sort((a, b) => b.votes - a.votes);
-
-      proposals.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'proposal-item';
-        div.innerHTML = `
-          <div class="proposal-info">
-            <h4>${item.word}</h4>
-            <p>${item.desc}</p>
-          </div>
-          <div class="vote-box">
-            <span class="vote-count">${item.votes}</span>
-            <button class="vote-btn ${item.voted ? 'voted' : ''}" onclick="toggleVote(${item.id})">
-              ${item.voted ? 'Oddany ✓' : 'Głosuj'}
-            </button>
-          </div>
-        `;
-        listEl.appendChild(div);
-      });
-    }
-
-    function toggleVote(id) {
-      const item = proposals.find(p => p.id === id);
-      if (item) {
-        if (item.voted) {
-          item.votes--;
-          item.voted = false;
-        } else {
-          item.votes++;
-          item.voted = true;
-        }
-        renderProposals();
-      }
-    }
-
-    function addNewWord(e) {
-      e.preventDefault();
-      const wordInput = document.getElementById('wordInput');
-      const descInput = document.getElementById('descInput');
-
-      const newWord = {
-        id: Date.now(),
-        word: wordInput.value.trim(),
-        desc: descInput.value.trim(),
-        votes: 1,
-        voted: true
-      };
-
-      proposals.push(newWord);
-      wordInput.value = '';
-      descInput.value = '';
-      renderProposals();
-    }
-
-    // Odliczanie do 31 października 2026 r. (koniec miesiąca)
-    const targetDate = new Date("October 31, 2026 23:59:59").getTime();
-
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-
-      if (distance < 0) {
-        document.getElementById("countdownContainer").style.display = "none";
-        const mystery = document.getElementById("mysteryWord");
-        mystery.innerText = "SERENDIPNOŚĆ"; // Finałowe słowo miesiąca
-        mystery.classList.add("revealed");
-        document.getElementById("statusText").innerText = "Oficjalne Słowo Października zostało ujawnione!";
-        return;
-      }
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60 * 60 / 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      document.getElementById("days").innerText = String(days).padStart(2, '0');
-      document.getElementById("hours").innerText = String(hours).padStart(2, '0');
-      document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
-      document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
-    }
-
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-    renderProposals();
-  </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="pl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NSM — Najlepsze Słowo Miesiąca</title>
-  <style>
-    :root {
-      --bg: #090a0f;
-      --card-bg: rgba(18, 22, 35, 0.85);
-      --accent: #00f0ff;
-      --accent-glow: rgba(0, 240, 255, 0.25);
-      --pink: #ff007f;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --border: rgba(255, 255, 255, 0.08);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    }
-
-    body {
-      background-color: var(--bg);
-      color: var(--text-main);
-      min-height: 100vh;
-      padding: 30px 20px;
-      background-image: 
-        radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.06) 0%, transparent 45%),
-        radial-gradient(circle at 85% 85%, rgba(255, 0, 127, 0.06) 0%, transparent 45%);
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .logo {
-      font-size: 2.2rem;
-      font-weight: 900;
-      letter-spacing: -1px;
-      color: #fff;
+      letter-spacing: 2px;
       text-transform: uppercase;
+      margin-bottom: 28px;
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.2);
     }
 
-    .logo span {
-      color: var(--accent);
-      text-shadow: 0 0 20px var(--accent-glow);
+    .badge-pulse {
+      width: 8px;
+      height: 8px;
+      background-color: var(--pink-primary);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--pink-primary);
+      animation: pulse 1.8s infinite;
     }
 
-    .subtitle {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-top: 6px;
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(236, 72, 153, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); }
     }
 
-    /* Główna karta aktywnego miesiąca */
-    .hero-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 40px;
-      backdrop-filter: blur(16px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    .mystery-box {
+      margin: 20px 0 30px 0;
       position: relative;
-      overflow: hidden;
-      margin-bottom: 30px;
-    }
-
-    .hero-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, var(--accent), var(--pink));
-    }
-
-    .badge {
-      display: inline-block;
-      background: rgba(0, 240, 255, 0.1);
-      color: var(--accent);
-      border: 1px solid rgba(0, 240, 255, 0.2);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-
-    .reveal-box {
-      text-align: center;
-      padding: 30px 0;
     }
 
     .mystery-title {
-      font-size: 2.8rem;
-      font-weight: 800;
-      letter-spacing: 2px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3.8rem;
+      font-weight: 700;
+      letter-spacing: 4px;
       color: #fff;
-      margin-bottom: 12px;
-      filter: blur(8px);
+      filter: blur(12px);
       user-select: none;
-      transition: filter 0.5s ease;
+      transition: filter 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-block;
     }
 
     .mystery-title.revealed {
       filter: blur(0);
-      color: var(--accent);
-      text-shadow: 0 0 30px var(--accent-glow);
+      background: linear-gradient(135deg, #fff, var(--purple-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px var(--purple-glow);
     }
 
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 650px;
+      margin: 0 auto 35px auto;
+      line-height: 1.7;
+    }
+
+    /* Licznik czasu */
     .countdown-grid {
       display: flex;
       justify-content: center;
       gap: 16px;
-      margin: 20px 0;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
     }
 
     .time-block {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--border);
-      padding: 10px 16px;
-      border-radius: 12px;
-      min-width: 70px;
-      text-align: center;
+      background: rgba(10, 6, 20, 0.7);
+      border: 1px solid var(--card-border);
+      padding: 16px;
+      border-radius: 18px;
+      min-width: 90px;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
     }
 
     .time-value {
-      font-size: 1.5rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.2rem;
       font-weight: 700;
       color: #fff;
+      line-height: 1;
+      margin-bottom: 4px;
     }
 
     .time-label {
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
       text-transform: uppercase;
+      letter-spacing: 1.5px;
     }
 
-    /* Sekcja głosowania i propozycji */
-    .section-title {
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
+    /* Przycisk Teleportacji */
+    .teleport-btn-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .teleport-btn {
+      display: inline-flex;
       align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, var(--purple-primary), var(--pink-primary));
+      color: #fff;
+      text-decoration: none;
+      padding: 18px 42px;
+      border-radius: 20px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      box-shadow: 0 10px 30px var(--purple-glow), 0 0 20px var(--pink-glow);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(255, 255, 255, 0.25);
     }
 
-    .grid-layout {
+    .teleport-btn:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 15px 45px var(--purple-glow), 0 0 35px var(--pink-glow);
+    }
+
+    .grid-two-col {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 30px;
+      margin-bottom: 45px;
     }
 
-    @media (max-width: 768px) {
-      .grid-layout { grid-template-columns: 1fr; }
+    @media (max-width: 850px) {
+      .grid-two-col { grid-template-columns: 1fr; }
+      .hero-card { padding: 35px 20px; }
+      .mystery-title { font-size: 2.5rem; }
     }
 
     .panel {
       background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 24px;
-      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
     }
 
-    /* Formularz dodawania */
-    .form-group {
-      margin-bottom: 14px;
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
     }
 
-    .form-group input, .form-group textarea {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid var(--border);
-      padding: 12px 16px;
+    .panel-header-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(147, 51, 234, 0.15);
+      border: 1px solid rgba(192, 132, 252, 0.3);
       border-radius: 12px;
-      color: #fff;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--purple-light);
     }
 
-    .form-group input:focus, .form-group textarea:focus {
-      border-color: var(--accent);
-    }
-
-    .btn {
-      width: 100%;
-      background: linear-gradient(135deg, var(--accent), #00a8ff);
-      color: #000;
-      border: none;
-      padding: 12px;
-      border-radius: 12px;
+    .panel-title {
+      font-size: 1.25rem;
       font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      color: #fff;
     }
 
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px var(--accent-glow);
-    }
-
-    /* Lista propozycji do głosowania */
+    /* Lista propozycji */
     .proposals-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      max-height: 320px;
+      gap: 14px;
+      max-height: 380px;
       overflow-y: auto;
-      padding-right: 4px;
+      padding-right: 6px;
     }
 
-    .proposal-item {
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid var(--border);
-      padding: 14px 16px;
-      border-radius: 14px;
+    .proposal-card {
+      background: rgba(10, 6, 20, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 16px 20px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      gap: 15px;
       transition: border-color 0.2s;
     }
 
-    .proposal-item:hover {
-      border-color: rgba(255, 255, 255, 0.2);
+    .proposal-card:hover {
+      border-color: rgba(192, 132, 252, 0.3);
     }
 
-    .proposal-info h4 {
-      font-size: 1.05rem;
-      color: #fff;
-      margin-bottom: 2px;
+    .proposal-content h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--purple-light);
+      margin-bottom: 4px;
     }
 
-    .proposal-info p {
-      font-size: 0.8rem;
+    .proposal-content p {
+      font-size: 0.88rem;
       color: var(--text-muted);
+      line-height: 1.5;
     }
 
-    .vote-box {
+    .proposal-author {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 8px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 4px;
     }
 
-    .vote-count {
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--accent);
-      min-width: 25px;
-      text-align: center;
+    /* Formularz nadsyłania propozycji */
+    .form-group {
+      margin-bottom: 18px;
     }
 
-    .vote-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border);
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 10px;
-      cursor: pointer;
+    .form-group label {
+      display: block;
       font-size: 0.85rem;
       font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .form-control {
+      width: 100%;
+      background: rgba(10, 6, 20, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px 18px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
       transition: all 0.2s;
     }
 
-    .vote-btn.voted {
-      background: var(--accent);
-      color: #000;
-      border-color: var(--accent);
+    .form-control:focus {
+      border-color: var(--purple-light);
+      box-shadow: 0 0 15px var(--purple-glow);
     }
 
-    /* Scrollbar styling */
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--purple-primary), #7e22ce);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 20px var(--purple-glow);
+    }
+
+    .btn-submit:hover {
+      background: linear-gradient(135deg, #a855f7, var(--purple-primary));
+      transform: translateY(-2px);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 45px;
+    }
+
+    @media (max-width: 768px) {
+      .steps-grid { grid-template-columns: 1fr; }
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+    }
+
+    .step-number {
+      width: 44px;
+      height: 44px;
+      background: rgba(236, 72, 153, 0.15);
+      border: 1px solid rgba(244, 114, 182, 0.3);
+      color: var(--pink-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      margin: 0 auto 16px auto;
+    }
+
+    .step-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .step-card p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    /* Sekcja Archiwum */
+    .archive-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      padding: 35px;
+      backdrop-filter: blur(16px);
+      margin-bottom: 50px;
+    }
+
+    .archive-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .archive-item {
+      background: rgba(10, 6, 20, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 16px;
+      border-radius: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .archive-item-info span {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .archive-item-info strong {
+      font-size: 1rem;
+      color: var(--text-main);
+    }
+
+    .status-pill {
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .status-pill.active {
+      background: rgba(147, 51, 234, 0.2);
+      color: var(--purple-light);
+      border: 1px solid rgba(192, 132, 252, 0.3);
+    }
+
+    .status-pill.upcoming {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+    }
+
+    /* Powiadomienia Toast */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: rgba(20, 13, 35, 0.95);
+      border: 1px solid var(--purple-light);
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--purple-glow);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 100;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Custom Scrollbar */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: rgba(147, 51, 234, 0.3); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(147, 51, 234, 0.6); }
   </style>
 </head>
 <body>
 
+  <div class="grid-bg"></div>
+
   <div class="container">
     <header>
-      <div class="logo">NSM <span>// Październik</span></div>
-      <div class="subtitle">Platforma Wyboru Najlepszego Słowa Miesiąca</div>
+      <a href="#" class="logo-box">
+        <div class="logo-icon">
+          <i data-lucide="sparkles" style="color: #fff; width: 26px; height: 26px;"></i>
+        </div>
+        <div>
+          <div class="logo-text">NSM <span>HUB</span></div>
+          <span class="logo-tag">Najlepsze Słowo Miesiąca</span>
+        </div>
+      </a>
+      <div class="header-actions">
+        <button class="btn-secondary" onclick="sharePlatform()">
+          <i data-lucide="share-2" style="width: 18px; height: 18px;"></i>
+          Udostępnij
+        </button>
+      </div>
     </header>
 
-    <!-- Karta Główna / Odliczanie do ujawnienia słowa -->
-    <div class="hero-card">
-      <div class="badge">✦ AKTUALNA EDYCJA: PAŹDZIERNIK 2026 ✦</div>
-      <div class="reveal-box">
-        <div id="mysteryWord" class="mystery-title">[TAJEMNICA]</div>
-        <p id="statusText" style="color: var(--text-muted); margin-bottom: 16px;">Słowo zostanie oficjalnie ujawnione końcem października!</p>
-        
+    <main>
+      <section class="hero-card">
+        <div class="badge-month">
+          <span class="badge-pulse"></span>
+          GŁÓWNA EDYCJA — PAŹDZIERNIK 2026
+        </div>
+
+        <div class="mystery-box">
+          <div id="mysteryWord" class="mystery-title">[TAJEMNICA]</div>
+        </div>
+
+        <p id="statusText" class="hero-desc">
+          Słowo miesiąca jest zablokowane i zabezpieczone. Trwa otwarte głosowanie społeczności! Poniższy zegar odlicza czas do oficjalnego odsłonięcia zwycięzcy pod koniec października.
+        </p>
+
+        <!-- Zegar odliczający -->
         <div class="countdown-grid" id="countdownContainer">
           <div class="time-block">
             <div class="time-value" id="days">--</div>
@@ -767,136 +643,279 @@
           </div>
           <div class="time-block">
             <div class="time-value" id="hours">--</div>
-            <div class="time-label">Godz</div>
+            <div class="time-label">Godzin</div>
           </div>
           <div class="time-block">
             <div class="time-value" id="minutes">--</div>
-            <div class="time-label">Min</div>
+            <div class="time-label">Minut</div>
           </div>
           <div class="time-block">
             <div class="time-value" id="seconds">--</div>
-            <div class="time-label">Sek</div>
+            <div class="time-label">Sekund</div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Panel Interaktywny: Dodawanie i Głosowanie -->
-    <div class="grid-layout">
-      <!-- Panel Głosowania -->
-      <div class="panel">
-        <div class="section-title">
-          <span>Głosuj na kandydatów</span>
+        <!-- Przycisk Teleportujący -->
+        <div class="teleport-btn-container">
+          <!-- Zmień atrybut href na swój własny link do StrawPoll / Google Forms / Discord itp. -->
+          <a href="https://strawpoll.com" target="_blank" class="teleport-btn" id="teleportBtn">
+            <span>ODDAJ GŁOS W ANKIECIE</span>
+            <i data-lucide="external-link" style="width: 22px; height: 22px;"></i>
+          </a>
         </div>
-        <div class="proposals-list" id="proposalsList">
-          <!-- Dynamicznie generowane słowa -->
-        </div>
-      </div>
+      </section>
 
-      <!-- Panel Dodawania Słowa -->
-      <div class="panel">
-        <div class="section-title">
-          <span>Zaproponuj słowo</span>
+      <section class="grid-two-col">
+        <!-- Lista Kandydatur -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-header-icon">
+              <i data-lucide="flame" style="width: 22px; height: 22px;"></i>
+            </div>
+            <div>
+              <h2 class="panel-title">Zgłoszone Słowa</h2>
+              <span style="font-size: 0.8rem; color: var(--text-dim);">Propozycje zgłoszone przez społeczność</span>
+            </div>
+          </div>
+
+          <div class="proposals-list" id="proposalsList">
+            <!-- Wypełniane dynamicznie przez JS -->
+          </div>
         </div>
-        <form id="addWordForm" onsubmit="addNewWord(event)">
-          <div class="form-group">
-            <input type="text" id="wordInput" placeholder="Wpisz proponowane słowo..." required autocomplete="off">
+
+        <!-- Formularz Zgłoszeniowy -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-header-icon">
+              <i data-lucide="plus-circle" style="width: 22px; height: 22px;"></i>
+            </div>
+            <div>
+              <h2 class="panel-title">Zaproponuj Słowo</h2>
+              <span style="font-size: 0.8rem; color: var(--text-dim);">Masz swój typ? Dodaj go do listy!</span>
+            </div>
           </div>
-          <div class="form-group">
-            <textarea id="descInput" placeholder="Krótkie uzasadnienie lub definicja..." rows="3" required></textarea>
+
+          <form id="addProposalForm" onsubmit="handleFormSubmit(event)">
+            <div class="form-group">
+              <label for="wordInput">Proponowane Słowo</label>
+              <input type="text" id="wordInput" class="form-control" placeholder="np. Serendipność" required autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="descInput">Krótkie Uzasadnienie / Definicja</label>
+              <textarea id="descInput" class="form-control" rows="3" placeholder="Dlaczego właśnie to słowo powinno wygrać?" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="authorInput">Twój Nick / Imię</label>
+              <input type="text" id="authorInput" class="form-control" placeholder="np. Anonim" required>
+            </div>
+            <button type="submit" class="btn-submit">
+              <span>Dodaj do Propozycji</span>
+              <i data-lucide="send" style="width: 18px; height: 18px;"></i>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Jak To Działa -->
+      <section style="margin-bottom: 45px;">
+        <h2 style="text-align: center; font-size: 1.5rem; margin-bottom: 25px; color: #fff;">Jak Działa NSM?</h2>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h3>Zgłaszanie Słów</h3>
+            <p>Społeczność proponuje unikalne, zapomniane lub neologiczne słowa na dany miesiąc.</p>
           </div>
-          <button type="submit" class="btn">Dodaj do listy 🚀</button>
-        </form>
-      </div>
-    </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h3>Głosowanie w Ankiecie</h3>
+            <p>Kliknij w przycisk teleportacji i oddaj głos w zewnętrznej ankiecie na swojego faworyta.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h3>Wielkie Odsłonięcie</h3>
+            <p>W ostatni dzień miesiąca zegar się zatrzymuje, a zwycięskie słowo staje się widoczne!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sekcja Archiwum -->
+      <section class="archive-section">
+        <div class="panel-header" style="margin-bottom: 15px;">
+          <div class="panel-header-icon">
+            <i data-lucide="calendar" style="width: 22px; height: 22px;"></i>
+          </div>
+          <div>
+            <h2 class="panel-title">Harmonogram & Archiwum Edycji</h2>
+            <span style="font-size: 0.8rem; color: var(--text-dim);">Przegląd obecnych i przyszłych miesięcy</span>
+          </div>
+        </div>
+
+        <div class="archive-grid">
+          <div class="archive-item">
+            <div class="archive-item-info">
+              <span>Październik 2026</span>
+              <strong>Edycja #01</strong>
+            </div>
+            <span class="status-pill active">W trakcie 🔥</span>
+          </div>
+          <div class="archive-item">
+            <div class="archive-item-info">
+              <span>Listopad 2026</span>
+              <strong>Edycja #02</strong>
+            </div>
+            <span class="status-pill upcoming">Wskórze</span>
+          </div>
+          <div class="archive-item">
+            <div class="archive-item-info">
+              <span>Grudzień 2026</span>
+              <strong>Edycja #03</strong>
+            </div>
+            <span class="status-pill upcoming">Zapowiedź</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2026 NSM Hub — Najlepsze Słowo Miesiąca. Wszystkie prawa zastrzeżone.</p>
+    </footer>
+  </div>
+
+  <!-- Toast Notification Box -->
+  <div id="toast" class="toast">
+    <i data-lucide="check-circle" style="color: var(--purple-light); width: 20px; height: 20px;"></i>
+    <span id="toastMessage">Pomyślnie wykonano akcję!</span>
   </div>
 
   <script>
-    // Początkowa lista propozycji
+    // Początkowa lista zgłoszonych słów
     let proposals = [
-      { id: 1, word: "Apatia", desc: "Stan całkowitego braku motywacji, idealny na jesienne deszcze.", votes: 14, voted: false },
-      { id: 2, word: "Optymalizacja", desc: "Ciągłe ulepszanie kodu i życia podwójnie.", votes: 21, voted: false },
-      { id: 3, word: "Refleksja", desc: "Zatrzymanie się na chwilę w natłoku projektów.", votes: 9, voted: false }
+      {
+        word: "Serendipność",
+        desc: "Dar przypadkowego dokonywania wartościowych i szczęśliwych odkryć.",
+        author: "Kuba",
+        date: "Dzisiaj"
+      },
+      {
+        word: "Resentyment",
+        desc: "Zjawisko przeżywania na nowo tłumionych emocji i żalu.",
+        author: "Marta",
+        date: "Wczoraj"
+      },
+      {
+        word: "Prokrastynacja",
+        desc: "Sztuka odkładania wszystkiego na jutro z klasą.",
+        author: "Piotr",
+        date: "2 dni temu"
+      }
     ];
 
     function renderProposals() {
-      const listEl = document.getElementById('proposalsList');
-      listEl.innerHTML = '';
-
-      // Sortowanie po głosach malejąco
-      proposals.sort((a, b) => b.votes - a.votes);
+      const container = document.getElementById('proposalsList');
+      container.innerHTML = '';
 
       proposals.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'proposal-item';
-        div.innerHTML = `
-          <div class="proposal-info">
-            <h4>${item.word}</h4>
-            <p>${item.desc}</p>
-          </div>
-          <div class="vote-box">
-            <span class="vote-count">${item.votes}</span>
-            <button class="vote-btn ${item.voted ? 'voted' : ''}" onclick="toggleVote(${item.id})">
-              ${item.voted ? 'Oddany ✓' : 'Głosuj'}
-            </button>
+        const card = document.createElement('div');
+        card.className = 'proposal-card';
+        card.innerHTML = `
+          <div class="proposal-content">
+            <h4>${escapeHtml(item.word)}</h4>
+            <p>${escapeHtml(item.desc)}</p>
+            <div class="proposal-author">
+              <i data-lucide="user" style="width: 12px; height: 12px;"></i>
+              <span>zgłoszono przez: <strong>${escapeHtml(item.author)}</strong> (${item.date})</span>
+            </div>
           </div>
         `;
-        listEl.appendChild(div);
+        container.appendChild(card);
       });
+
+      // Ponowne zainicjowanie ikonek Lucide dla dynamicznie stworzonych elementów
+      lucide.createIcons();
     }
 
-    function toggleVote(id) {
-      const item = proposals.find(p => p.id === id);
-      if (item) {
-        if (item.voted) {
-          item.votes--;
-          item.voted = false;
-        } else {
-          item.votes++;
-          item.voted = true;
-        }
-        renderProposals();
-      }
-    }
-
-    function addNewWord(e) {
+    function handleFormSubmit(e) {
       e.preventDefault();
       const wordInput = document.getElementById('wordInput');
       const descInput = document.getElementById('descInput');
+      const authorInput = document.getElementById('authorInput');
 
-      const newWord = {
-        id: Date.now(),
+      const newProposal = {
         word: wordInput.value.trim(),
         desc: descInput.value.trim(),
-        votes: 1,
-        voted: true
+        author: authorInput.value.trim(),
+        date: "Przed chwilą"
       };
 
-      proposals.push(newWord);
+      proposals.unshift(newProposal);
+      renderProposals();
+
       wordInput.value = '';
       descInput.value = '';
-      renderProposals();
+      authorInput.value = '';
+
+      showToast("Twoja propozycja została pomyślnie dodana!");
     }
 
-    // Odliczanie do 31 października 2026 r. (koniec miesiąca)
+    function sharePlatform() {
+      const shareData = {
+        title: 'NSM - Najlepsze Słowo Miesiąca',
+        text: 'Dołącz do głosowania na Najlepsze Słowo Miesiąca Październik 2026!',
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        navigator.share(shareData).catch(() => {});
+      } else {
+        // Fallback: kopiowanie do schowka
+        document.execCommand('copy');
+        showToast("Link do strony został skopiowany do schowka!");
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastText = document.getElementById('toastMessage');
+      toastText.innerText = message;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    function escapeHtml(string) {
+      return String(string).replace(/[&<>"']/g, function (s) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        }[s];
+      });
+    }
+
+    // Cel: Koniec października 2026 (31 Październik 2026, 23:59:59)
     const targetDate = new Date("October 31, 2026 23:59:59").getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();
       const distance = targetDate - now;
 
-      if (distance < 0) {
+      if (distance <= 0) {
         document.getElementById("countdownContainer").style.display = "none";
         const mystery = document.getElementById("mysteryWord");
-        mystery.innerText = "SERENDIPNOŚĆ"; // Finałowe słowo miesiąca
+        mystery.innerText = "SERENDIPNOŚĆ"; // Finałowe wygrane słowo
         mystery.classList.add("revealed");
-        document.getElementById("statusText").innerText = "Oficjalne Słowo Października zostało ujawnione!";
+        document.getElementById("statusText").innerText = "Głosowanie zakończone! Październikowe Słowo Miesiąca zostało odkodowane i oficjalnie ujawnione!";
+        document.getElementById("teleportBtn").style.display = "none";
         return;
       }
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60 * 60 / 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
       document.getElementById("days").innerText = String(days).padStart(2, '0');
@@ -905,9 +924,13 @@
       document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
     }
 
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
-    renderProposals();
+    // Inicjalizacja aplikacji po załadowaniu
+    window.onload = function() {
+      lucide.createIcons();
+      renderProposals();
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    };
   </script>
 </body>
 </html>
