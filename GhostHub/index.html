@@ -1,336 +1,393 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GhostHUB — Tajemnica 2026</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GhostHub - Imperium Dyń</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+        body {
+            background-color: #0d0d13;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-body {
-    font-family: Arial, sans-serif;
-    background:
-        radial-gradient(circle at 50% 0%, #35105f 0%, #12091d 35%, #050208 75%);
-    color: #f7f2ff;
-    min-height: 100vh;
-    overflow-x: hidden;
-}
+        /* Nagłówek GhostHub */
+        header {
+            background: linear-gradient(135deg, #1f102e, #0d0d13);
+            border-bottom: 2px solid #ff6600;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 102, 0, 0.2);
+        }
 
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background-image:
-        radial-gradient(circle, rgba(168,85,247,.15) 1px, transparent 1px);
-    background-size: 35px 35px;
-    opacity: .35;
-}
+        header h1 {
+            font-size: 3rem;
+            color: #ff6600;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+        }
 
-header {
-    text-align: center;
-    padding: 55px 20px 30px;
-}
+        header p {
+            color: #a0a0b0;
+            font-size: 1.1rem;
+            margin-top: 5px;
+        }
 
-.logo {
-    font-size: clamp(42px, 10vw, 80px);
-    font-weight: 900;
-    letter-spacing: 5px;
-    color: #c084fc;
-    text-shadow:
-        0 0 10px #a855f7,
-        0 0 30px #7e22ce,
-        0 0 60px #6b21a8;
-}
+        /* Główny układ gry */
+        .game-layout {
+            display: flex;
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 20px auto;
+            gap: 20px;
+            padding: 0 20px;
+        }
 
-.subtitle {
-    margin-top: 10px;
-    color: #c4b5fd;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-}
+        /* Lewa kolumna: Zbieranie Dyń */
+        .clicker-section {
+            flex: 1;
+            background: #161622;
+            border-radius: 12px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #2a2a3d;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
 
-.status {
-    display: inline-block;
-    margin-top: 25px;
-    padding: 8px 16px;
-    border: 1px solid #a855f7;
-    border-radius: 999px;
-    color: #d8b4fe;
-    background: rgba(168,85,247,.08);
-    box-shadow: 0 0 20px rgba(168,85,247,.25);
-}
+        .pumpkin-counter {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-main {
-    width: min(950px, 92%);
-    margin: auto;
-}
+        .pumpkin-counter h2 {
+            font-size: 2.8rem;
+            color: #ff9900;
+        }
 
-.panel {
-    background: rgba(20, 10, 32, .82);
-    border: 1px solid rgba(168,85,247,.35);
-    border-radius: 22px;
-    padding: 28px;
-    margin: 20px 0;
-    box-shadow: 0 0 35px rgba(126,34,206,.12);
-    backdrop-filter: blur(8px);
-}
+        .pumpkin-counter .per-second {
+            color: #8888a0;
+            font-size: 1.2rem;
+            margin-top: 5px;
+        }
 
-.panel h2 {
-    color: #c084fc;
-    margin-bottom: 12px;
-}
+        .click-btn {
+            background: radial-gradient(circle, #ff7700 0%, #aa3300 100%);
+            border: none;
+            border-radius: 50%;
+            width: 180px;
+            height: 180px;
+            font-size: 80px;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(255, 102, 0, 0.4);
+            transition: transform 0.1s, box-shadow 0.1s;
+            outline: none;
+            user-select: none;
+        }
 
-.countdown {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-top: 20px;
-}
+        .click-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 45px rgba(255, 102, 0, 0.7);
+        }
 
-.time {
-    background: #100819;
-    border: 1px solid #6b21a8;
-    border-radius: 15px;
-    padding: 18px 8px;
-    text-align: center;
-}
+        .click-btn:active {
+            transform: scale(0.95);
+        }
 
-.time strong {
-    display: block;
-    font-size: 30px;
-    color: #d8b4fe;
-}
+        /* Prawa kolumna: Sklep i Prace */
+        .shop-section {
+            flex: 1.5;
+            background: #161622;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #2a2a3d;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-.time span {
-    color: #8f849d;
-    font-size: 12px;
-}
+        .shop-section h2 {
+            color: #ff6600;
+            border-bottom: 2px solid #2a2a3d;
+            padding-bottom: 10px;
+            font-size: 1.6rem;
+        }
 
-.case {
-    position: relative;
-    overflow: hidden;
-}
+        .item-card {
+            background: #1e1e2f;
+            border: 1px solid #33334d;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            justify-content: border-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
 
-.case::after {
-    content: "CLASSIFIED";
-    position: absolute;
-    right: -35px;
-    top: 25px;
-    transform: rotate(25deg);
-    color: rgba(192,132,252,.08);
-    font-size: 35px;
-    font-weight: 900;
-}
+        .item-card:hover {
+            background: #25253b;
+        }
 
-.case-code {
-    color: #a855f7;
-    font-family: monospace;
-    margin-bottom: 12px;
-}
+        .item-info {
+            flex: 1;
+        }
 
-.message {
-    line-height: 1.7;
-    color: #ddd3e8;
-}
+        .item-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
 
-.clue {
-    margin-top: 20px;
-    padding: 18px;
-    border-left: 3px solid #a855f7;
-    background: rgba(168,85,247,.07);
-    border-radius: 8px;
-}
+        .item-desc {
+            font-size: 0.9rem;
+            color: #9999bb;
+            margin-top: 3px;
+        }
 
-input {
-    width: 100%;
-    padding: 14px;
-    margin-top: 15px;
-    background: #09040e;
-    border: 1px solid #6b21a8;
-    border-radius: 10px;
-    color: white;
-    outline: none;
-}
+        .item-count {
+            font-size: 0.85rem;
+            color: #ff9900;
+            margin-top: 4px;
+        }
 
-input:focus {
-    border-color: #c084fc;
-    box-shadow: 0 0 15px rgba(168,85,247,.25);
-}
+        .buy-btn {
+            background: #ff6600;
+            color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s;
+        }
 
-button {
-    width: 100%;
-    padding: 14px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(90deg, #7e22ce, #a855f7);
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 0 20px rgba(168,85,247,.25);
-}
+        .buy-btn:hover:not(:disabled) {
+            background: #ff8533;
+        }
 
-button:hover {
-    filter: brightness(1.15);
-}
+        .buy-btn:disabled {
+            background: #444455;
+            color: #777788;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
 
-#result {
-    margin-top: 15px;
-    min-height: 25px;
-}
+        .reset-container {
+            margin-top: auto;
+            padding-top: 15px;
+            text-align: right;
+        }
 
-.locked {
-    opacity: .65;
-}
+        .reset-btn {
+            background: transparent;
+            border: 1px solid #ff3333;
+            color: #ff3333;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
 
-footer {
-    text-align: center;
-    padding: 35px 20px;
-    color: #75697f;
-    font-size: 13px;
-}
-
-@media(max-width: 600px) {
-    .countdown {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .panel {
-        padding: 20px;
-    }
-}
-</style>
+        .reset-btn:hover {
+            background: #ff3333;
+            color: #fff;
+        }
+    </style>
 </head>
-
 <body>
 
-<header>
-    <div class="logo">GHOSTHUB</div>
-    <div class="subtitle">Tajemnica • Październik 2026</div>
-    <div class="status">● SYSTEM ONLINE</div>
-</header>
+    <header>
+        <h1>👻 GhostHub 🎃</h1>
+        <p>Pracuj, zbieraj dynie i rozwijaj swoje mroczne imperium!</p>
+    </header>
 
-<main>
+    <main class="game-layout">
+        <!-- SEKCJA ZBIERANIA DYŃ -->
+        <section class="clicker-section">
+            <div class="pumpkin-counter">
+                <h2 id="pumpkins-display">0 🎃</h2>
+                <div class="per-second" id="pps-display">0.0 dyń / sek.</div>
+            </div>
 
-<section class="panel">
-    <h2>👻 Do rozpoczęcia GhostHUB</h2>
-    <p class="message">
-        1 października rozpocznie się sprawa, której rozwiązanie
-        poznasz dopiero 31 października.
-    </p>
+            <button class="click-btn" id="click-btn" onclick="clickPumpkin()">🎃</button>
+        </section>
 
-    <div class="countdown">
-        <div class="time">
-            <strong id="days">--</strong>
-            <span>DNI</span>
-        </div>
-        <div class="time">
-            <strong id="hours">--</strong>
-            <span>GODZIN</span>
-        </div>
-        <div class="time">
-            <strong id="minutes">--</strong>
-            <span>MINUT</span>
-        </div>
-        <div class="time">
-            <strong id="seconds">--</strong>
-            <span>SEKUND</span>
-        </div>
-    </div>
-</section>
+        <!-- SEKCJA SKLEPU Z PRACAMI -->
+        <section class="shop-section">
+            <h2>🛒 Rynek Prac i Ulepszeń</h2>
 
-<section class="panel case">
-    <div class="case-code">CASE #001 // CLASSIFIED</div>
+            <!-- Ulepszenie Kliknięcia -->
+            <div class="item-card">
+                <div class="item-info">
+                    <div class="item-title">⚡ Lepsza Łopata (Ulepszenie Kliknięcia)</div>
+                    <div class="item-desc">Zwiększa liczbę dyń zdobywanych za 1 kliknięcie o +1.</div>
+                    <div class="item-count">Poziom: <span id="click-level">1</span></div>
+                </div>
+                <button class="buy-btn" id="buy-click-btn" onclick="buyClickUpgrade()">
+                    Kup (<span id="click-cost">15</span> 🎃)
+                </button>
+            </div>
 
-    <h2>🔐 Pierwszy ślad</h2>
+            <!-- Praca 1 -->
+            <div class="item-card">
+                <div class="item-info">
+                    <div class="item-title">🧹 Straszenie Sąsiadów</div>
+                    <div class="item-desc">Mała praca podwórkowa. Generuje +0.5 🎃/s.</div>
+                    <div class="item-count">Posiadasz: <span id="job1-count">0</span></div>
+                </div>
+                <button class="buy-btn" id="buy-job1-btn" onclick="buyJob('job1')">
+                    Kup (<span id="job1-cost">20</span> 🎃)
+                </button>
+            </div>
 
-    <p class="message">
-        W systemie GhostHUB znaleziono tajemniczą wiadomość.
-        Nikt nie wie, kto ją zostawił.
-    </p>
+            <!-- Praca 2 -->
+            <div class="item-card">
+                <div class="item-info">
+                    <div class="item-title">🕯️ Opiekun Nawiedzonego Domu</div>
+                    <div class="item-desc">Praca na pełen etat w starym dworze. Generuje +4 🎃/s.</div>
+                    <div class="item-count">Posiadasz: <span id="job2-count">0</span></div>
+                </div>
+                <button class="buy-btn" id="buy-job2-btn" onclick="buyJob('job2')">
+                    Kup (<span id="job2-cost">100</span> 🎃)
+                </button>
+            </div>
 
-    <div class="clue">
-        <b>WIADOMOŚĆ:</b><br><br>
-        „Nie szukaj mnie tam, gdzie jest światło.
-        Pierwszy ślad znajduje się tam,
-        gdzie wszystko zaczyna się od zera.”
-    </div>
+            <!-- Praca 3 -->
+            <div class="item-card">
+                <div class="item-info">
+                    <div class="item-title">🔮 Dowódca Armii Duchów</div>
+                    <div class="item-desc">Zarządzanie dużą organizacją duchów. Generuje +30 🎃/s.</div>
+                    <div class="item-count">Posiadasz: <span id="job3-count">0</span></div>
+                </div>
+                <button class="buy-btn" id="buy-job3-btn" onclick="buyJob('job3')">
+                    Kup (<span id="job3-cost">1000</span> 🎃)
+                </button>
+            </div>
 
-    <input id="answer" placeholder="Wpisz rozwiązanie pierwszej zagadki...">
-    <button onclick="checkAnswer()">ODPOWIEDŹ</button>
+            <div class="reset-container">
+                <button class="reset-btn" onclick="resetGame()">Resetuj Postęp</button>
+            </div>
+        </section>
+    </main>
 
-    <div id="result"></div>
-</section>
+    <script>
+        // Stan Gry
+        let gameState = {
+            pumpkins: 0,
+            pumpkinsPerClick: 1,
+            clickUpgradeCost: 15,
+            clickUpgradeLevel: 1,
+            jobs: {
+                job1: { count: 0, cost: 20, pps: 0.5 },
+                job2: { count: 0, cost: 100, pps: 4 },
+                job3: { count: 0, cost: 1000, pps: 30 }
+            }
+        };
 
-<section class="panel locked">
-    <h2>📁 Tajne akta</h2>
-    <p class="message">
-        Kolejne akta zostaną odblokowane w trakcie wydarzenia.
-    </p>
-</section>
+        // Ręczne Klikanie w Dynię
+        function clickPumpkin() {
+            gameState.pumpkins += gameState.pumpkinsPerClick;
+            updateUI();
+            saveGame();
+        }
 
-</main>
+        // Zakup ulepszenia kliknięcia
+        function buyClickUpgrade() {
+            if (gameState.pumpkins >= gameState.clickUpgradeCost) {
+                gameState.pumpkins -= gameState.clickUpgradeCost;
+                gameState.pumpkinsPerClick += 1;
+                gameState.clickUpgradeLevel += 1;
+                gameState.clickUpgradeCost = Math.floor(gameState.clickUpgradeCost * 1.5);
+                updateUI();
+                saveGame();
+            }
+        }
 
-<footer>
-    GHOSTHUB © 2026 • CASE #2026
-</footer>
+        // Zakup Pracy
+        function buyJob(jobKey) {
+            const job = gameState.jobs[jobKey];
+            if (gameState.pumpkins >= job.cost) {
+                gameState.pumpkins -= job.cost;
+                job.count += 1;
+                job.cost = Math.floor(job.cost * 1.25); // Każda kolejna praca jest droższa o 25%
+                updateUI();
+                saveGame();
+            }
+        }
 
-<script>
-const start = new Date("2026-10-01T00:00:00");
-const end = new Date("2026-10-31T23:59:59");
+        // Obliczanie Łącznego Dochodu na Sekundę
+        function getPumpkinsPerSecond() {
+            let totalPPS = 0;
+            for (let key in gameState.jobs) {
+                totalPPS += gameState.jobs[key].count * gameState.jobs[key].pps;
+            }
+            return totalPPS;
+        }
 
-function updateCountdown() {
-    const now = new Date();
-    let target;
+        // Aktualizacja Interfejsu (UI)
+        function updateUI() {
+            document.getElementById('pumpkins-display').textContent = Math.floor(gameState.pumpkins) + ' 🎃';
+            document.getElementById('pps-display').textContent = getPumpkinsPerSecond().toFixed(1) + ' dyń / sek.';
 
-    if (now < start) {
-        target = start;
-    } else if (now <= end) {
-        target = end;
-    } else {
-        document.querySelector(".countdown").innerHTML =
-            "<div style='grid-column:1/-1;text-align:center;font-size:22px;color:#c084fc;'>👻 GHOSTHUB ZAKOŃCZONY</div>";
-        return;
-    }
+            // Ulepszenie kliknięcia
+            document.getElementById('click-level').textContent = gameState.clickUpgradeLevel;
+            document.getElementById('click-cost').textContent = gameState.clickUpgradeCost;
+            document.getElementById('buy-click-btn').disabled = gameState.pumpkins < gameState.clickUpgradeCost;
 
-    const diff = target - now;
+            // Prace
+            for (let key in gameState.jobs) {
+                const job = gameState.jobs[key];
+                document.getElementById(`${key}-count`).textContent = job.count;
+                document.getElementById(`${key}-cost`).textContent = job.cost;
+                document.getElementById(`buy-${key}-btn`).disabled = gameState.pumpkins < job.cost;
+            }
+        }
 
-    const days = Math.floor(diff / 86400000);
-    const hours = Math.floor(diff / 3600000) % 24;
-    const minutes = Math.floor(diff / 60000) % 60;
-    const seconds = Math.floor(diff / 1000) % 60;
+        // Pętla Pasywnego Dochodu (wykonywana co 100ms dla płynności)
+        setInterval(() => {
+            const pps = getPumpkinsPerSecond();
+            gameState.pumpkins += pps / 10;
+            updateUI();
+        }, 100);
 
-    document.getElementById("days").textContent = days;
-    document.getElementById("hours").textContent = hours;
-    document.getElementById("minutes").textContent = minutes;
-    document.getElementById("seconds").textContent = seconds;
-}
+        // Automatyczny zapis co 5 sekund
+        setInterval(saveGame, 5000);
 
-function checkAnswer() {
-    const answer = document.getElementById("answer").value
-        .trim()
-        .toLowerCase();
+        // Zapisywanie i Wczytywanie z LocalStorage
+        function saveGame() {
+            localStorage.setItem('ghosthub_save', JSON.stringify(gameState));
+        }
 
-    const result = document.getElementById("result");
+        function loadGame() {
+            const savedData = localStorage.getItem('ghosthub_save');
+            if (savedData) {
+                const parsed = JSON.parse(savedData);
+                gameState = { ...gameState, ...parsed };
+            }
+            updateUI();
+        }
 
-    if (answer === "zero" || answer === "0") {
-        result.innerHTML =
-            "🔓 <span style='color:#c084fc'>ŚLAD ODNALEZIONY.</span><br>System zapisał Twoją odpowiedź.";
-    } else {
-        result.innerHTML =
-            "❌ <span style='color:#f0abfc'>Nieprawidłowa odpowiedź.</span>";
-    }
-}
+        function resetGame() {
+            if (confirm("Czy na pewno chcesz zresetować cały swój postęp?")) {
+                localStorage.removeItem('ghosthub_save');
+                location.reload();
+            }
+        }
 
-updateCountdown();
-setInterval(updateCountdown, 1000);
-</script>
-
+        // Start Gry
+        loadGame();
+    </script>
 </body>
-                               </html>
+</html>
