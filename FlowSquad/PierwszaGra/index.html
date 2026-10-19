@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Neon Defender - Kosmiczna Strzelanka</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap');
+
+        * {
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #05050d;
+            color: #fff;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Glassmorphism Styling */
+        .glass-panel {
+            background: rgba(13, 17, 38, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 243, 255, 0.05);
+        }
+
+        .neon-border {
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4), inset 0 0 15px rgba(0, 243, 255, 0.2);
+            border: 1px solid #00f3ff;
+        }
+
+        .neon-btn {
+            position: relative;
+            transition: all 0.2s ease;
+            text-shadow: 0 0 8px currentColor;
+        }
+
+        .neon-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .neon-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Custom Scrollbar for Upgrade Panel */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(5, 5, 13, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 243, 255, 0.3);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 243, 255, 0.6);
+        }
+
+        /* Canvas Fullscreen */
+        #gameCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* UI Overlays */
+        .ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .interactive {
+            pointer-events: auto;
+        }
+
+        /* CRT Screen Effect overlay */
+        .crt::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: 20;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="crt flex items-center justify-center select-none">
+
+    <!-- Canvas Główny Gry -->
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- UI Overlay Layer -->
+    <div class="ui-layer flex flex-col justify-between p-4 md:p-6">
+        
+        <!-- Górny Pasek HUD (Widoczny w grze) -->
+        <div id="hud" class="hidden flex justify-between items-start w-full max-w-7xl mx-auto">
+            <!-- Statystyki Gracza -->
+            <div class="glass-panel p-3 md:p-4 rounded-xl flex flex-col gap-2 min-w-[200px] md:min-w-[260px]">
+                <div class="flex justify-between items-center text-xs font-orbitron text-cyan-400">
+                    <span><i class="fa-solid fa-shield-halved mr-1"></i> STRUKTURA KADŁUBA</span>
+                    <span id="hpText">100%</span>
+                </div>
+                <!-- Pasek Zdrowia -->
+                <div class="w-full bg-gray-900/80 h-3 rounded-full overflow-hidden border border-cyan-500/30">
+                    <div id="hpBar" class="bg-gradient-to-r from-red-500 via-yellow-500 to-cyan-400 h-full w-full transition-all duration-200"></div>
+                </div>
+
+                <div class="flex justify-between items-center text-xs font-orbitron text-purple-400 mt-1">
+                    <span><i class="fa-solid fa-bolt mr-1"></i> ENERGIA TARCZY</span>
+                    <span id="shieldText">0%</span>
+                </div>
+                <!-- Pasek Tarczy -->
+                <div class="w-full bg-gray-900/80 h-2 rounded-full overflow-hidden border border-purple-500/30">
+                    <div id="shieldBar" class="bg-gradient-to-r from-purple-600 to-pink-500 h-full w-0 transition-all duration-200"></div>
+                </div>
+            </div>
+
+            <!-- Wynik i Fala -->
+            <div class="glass-panel px-6 py-3 rounded-xl text-center flex flex-col items-center">
+                <div class="text-xs font-orbitron text-gray-400 tracking-wider">FALA EKSPLORACJI</div>
+                <div id="waveDisplay" class="text-2xl md:text-3xl font-black font-orbitron text-cyan-400 drop-shadow-[0_0_8px_rgba(0,243,255,0.6)]">1</div>
+                <div class="text-xs text-amber-400 font-orbitron mt-1"><i class="fa-solid fa-coins mr-1"></i><span id="scoreDisplay">0</span> PTS</div>
+            </div>
+
+            <!-- Przycisk Pauzy / Wyciszenia -->
+            <div class="flex gap-2 interactive">
+                <button id="soundToggleBtn" class="glass-panel p-3 rounded-xl text-cyan-400 hover:text-white transition">
+                    <i class="fa-solid fa-volume-high text-xl"></i>
+                </button>
+                <button id="pauseBtn" class="glass-panel p-3 rounded-xl text-cyan-400 hover:text-white transition">
+                    <i class="fa-solid fa-pause text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- MENU GŁÓWNE -->
+        <div id="mainMenu" class="interactive absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-md z-30">
+            <div class="glass-panel p-8 md:p-10 rounded-2xl max-w-lg w-full mx-4 text-center border border-cyan-500/40 relative overflow-hidden">
+                <div class="absolute -top-10 -left-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+
+                <h1 class="text-4xl md:text-6xl font-black font-orbitron bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-teal-300 to-purple-500 tracking-wider mb-2 drop-shadow-[0_0_15px_rgba(0,243,255,0.4)]">
+                    NEON DEFENDER
+                </h1>
+                <p class="text-gray-400 font-medium mb-8 tracking-widest uppercase text-xs">Retro-Futurystyczna Arcadowa Strzelanka Kosmiczna</p>
+
+                <!-- Poziom Trudności -->
+                <div class="mb-6">
+                    <label class="block text-xs font-orbitron text-cyan-400 mb-2 uppercase tracking-wider">Wybierz Poziom Trudności</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button data-diff="easy" class="diff-btn glass-panel py-2 rounded-lg text-sm font-bold border-gray-700 text-gray-400 hover:border-cyan-400 transition">ŁATWY</button>
+                        <button data-diff="normal" class="diff-btn glass-panel py-2 rounded-lg text-sm font-bold border-cyan-500 text-cyan-400 neon-border transition">NORMALNY</button>
+                        <button data-diff="hard" class="diff-btn glass-panel py-2 rounded-lg text-sm font-bold border-gray-700 text-gray-400 hover:border-red-500 transition">TRUDNY</button>
+                    </div>
+                </div>
+
+                <!-- Przyciski Menu -->
+                <div class="flex flex-col gap-4">
+                    <button id="startBtn" class="neon-btn py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-orbitron font-bold text-lg tracking-wider text-black hover:from-cyan-400 hover:to-blue-500 shadow-[0_0_20px_rgba(0,243,255,0.4)]">
+                        <i class="fa-solid fa-play mr-2"></i>ROZPOCZNIJ GRĘ
+                    </button>
+
+                    <button id="upgradesBtn" class="glass-panel py-3 rounded-xl font-orbitron font-semibold text-cyan-300 hover:bg-cyan-950/40 border border-cyan-500/30 transition">
+                        <i class="fa-solid fa-microchip mr-2"></i>ULEPSZENIA STATEK
+                    </button>
+                </div>
+
+                <!-- Sterowanie Info -->
+                <div class="mt-8 pt-4 border-t border-gray-800 text-xs text-gray-400 flex justify-around">
+                    <span><i class="fa-solid fa-keyboard text-cyan-400 mr-1"></i> WSAD / Strzałki</span>
+                    <span><i class="fa-solid fa-crosshair text-cyan-400 mr-1"></i> Spacja / Mysza (Strzał)</span>
+                    <span><i class="fa-solid fa-mobile-screen text-cyan-400 mr-1"></i> Dotyk</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANEL ULEPSZEŃ -->
+        <div id="upgradesMenu" class="interactive hidden absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-md z-40">
+            <div class="glass-panel p-6 md:p-8 rounded-2xl max-w-2xl w-full mx-4 border border-purple-500/40 max-h-[90vh] flex flex-col">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold font-orbitron text-purple-400"><i class="fa-solid fa-wrench mr-2"></i>STACJA MODERNIZACJI</h2>
+                        <p class="text-xs text-gray-400">Wydawaj zdobyte punkty na ulepszenie technologii statku</p>
+                    </div>
+                    <div class="glass-panel px-4 py-2 rounded-xl text-amber-400 font-orbitron font-bold">
+                        <i class="fa-solid fa-coins mr-1"></i><span id="creditsDisplay">0</span>
+                    </div>
+                </div>
+
+                <!-- Lista Ulepszeń -->
+                <div class="space-y-4 overflow-y-auto pr-2 flex-grow">
+                    <!-- Ulepszenie 1: Obrażenia -->
+                    <div class="glass-panel p-4 rounded-xl flex items-center justify-between border-gray-800">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-lg bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-400 text-xl">
+                                <i class="fa-solid fa-gun"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white font-orbitron">Moc Dział laserowych</h3>
+                                <p class="text-xs text-gray-400">Zwiększa obrażenia zadawane przez pociski</p>
+                                <div class="text-xs text-cyan-400 mt-1">Poziom: <span id="dmgLvl">1</span>/5</div>
+                            </div>
+                        </div>
+                        <button id="buyDmgBtn" class="glass-panel px-4 py-2 rounded-lg text-amber-400 border-amber-500/40 hover:bg-amber-500/20 font-orbitron text-sm transition">
+                            <span id="dmgCost">100</span> PTS
+                        </button>
+                    </div>
+
+                    <!-- Ulepszenie 2: Szybkostrzelność -->
+                    <div class="glass-panel p-4 rounded-xl flex items-center justify-between border-gray-800">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-xl">
+                                <i class="fa-solid fa-gauge-high"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white font-orbitron">Szybkostrzelność</h3>
+                                <p class="text-xs text-gray-400">Zmniejsza odstęp czasowy między strzałami</p>
+                                <div class="text-xs text-cyan-400 mt-1">Poziom: <span id="rateLvl">1</span>/5</div>
+                            </div>
+                        </div>
+                        <button id="buyRateBtn" class="glass-panel px-4 py-2 rounded-lg text-amber-400 border-amber-500/40 hover:bg-amber-500/20 font-orbitron text-sm transition">
+                            <span id="rateCost">150</span> PTS
+                        </button>
+                    </div>
+
+                    <!-- Ulepszenie 3: Pancerz Kadłuba -->
+                    <div class="glass-panel p-4 rounded-xl flex items-center justify-between border-gray-800">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-lg bg-green-500/20 border border-green-500/40 flex items-center justify-center text-green-400 text-xl">
+                                <i class="fa-solid fa-shield-cat"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white font-orbitron">Wzmocnienie Kadłuba</h3>
+                                <p class="text-xs text-gray-400">Zwiększa maksymalną wytrzymałość statku</p>
+                                <div class="text-xs text-cyan-400 mt-1">Poziom: <span id="hpLvl">1</span>/5</div>
+                            </div>
+                        </div>
+                        <button id="buyHpBtn" class="glass-panel px-4 py-2 rounded-lg text-amber-400 border-amber-500/40 hover:bg-amber-500/20 font-orbitron text-sm transition">
+                            <span id="hpCost">120</span> PTS
+                        </button>
+                    </div>
+
+                    <!-- Ulepszenie 4: Prędkość Statku -->
+                    <div class="glass-panel p-4 rounded-xl flex items-center justify-between border-gray-800">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-400 text-xl">
+                                <i class="fa-solid fa-rocket"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white font-orbitron">Silniki Manewrowe</h3>
+                                <p class="text-xs text-gray-400">Zwiększa prędkość poruszania się statku</p>
+                                <div class="text-xs text-cyan-400 mt-1">Poziom: <span id="spdLvl">1</span>/5</div>
+                            </div>
+                        </div>
+                        <button id="buySpdBtn" class="glass-panel px-4 py-2 rounded-lg text-amber-400 border-amber-500/40 hover:bg-amber-500/20 font-orbitron text-sm transition">
+                            <span id="spdCost">80</span> PTS
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-gray-800 flex justify-end">
+                    <button id="closeUpgradesBtn" class="glass-panel px-6 py-2 rounded-xl font-orbitron text-cyan-400 hover:bg-cyan-500/20 transition">
+                        POWRÓT DO MENU
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- EKRAN KONCA GRY -->
+        <div id="gameOverMenu" class="interactive hidden absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-md z-40">
+            <div class="glass-panel p-8 rounded-2xl max-w-md w-full mx-4 text-center border border-red-500/40">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-red-500/20 border border-red-500 flex items-center justify-center text-red-500 text-3xl animate-pulse">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h2 class="text-3xl font-black font-orbitron text-red-500 tracking-wider mb-1">STATEK ZNISZCZONY</h2>
+                <p class="text-xs text-gray-400 mb-6 uppercase tracking-widest">Misja kosmiczna zakończona niepowodzeniem</p>
+
+                <div class="glass-panel p-4 rounded-xl mb-6 space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-400">Osiągnięta Fala:</span>
+                        <span id="finalWave" class="font-orbitron text-cyan-400 font-bold">0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-400">Zdobyte Punkty:</span>
+                        <span id="finalScore" class="font-orbitron text-amber-400 font-bold">0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-400">Zniszczeni Wrogowie:</span>
+                        <span id="finalKills" class="font-orbitron text-purple-400 font-bold">0</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    <button id="restartBtn" class="neon-btn py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-orbitron font-bold text-black tracking-wider shadow-[0_0_15px_rgba(0,243,255,0.4)]">
+                        <i class="fa-solid fa-rotate-right mr-2"></i>SPRÓBUJ PONOWNIE
+                    </button>
+                    <button id="menuFromGOBtn" class="glass-panel py-3 rounded-xl font-orbitron text-gray-300 hover:text-white transition">
+                        MENU GŁÓWNE
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- EKRAN PAUZY -->
+        <div id="pauseMenu" class="interactive hidden absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-30">
+            <div class="glass-panel p-8 rounded-2xl max-w-xs w-full text-center border border-cyan-500/30">
+                <h2 class="text-2xl font-bold font-orbitron text-cyan-400 mb-6">PAUZA</h2>
+                <div class="flex flex-col gap-3">
+                    <button id="resumeBtn" class="neon-btn py-3 bg-cyan-500 text-black font-orbitron font-bold rounded-xl">WZNÓW GRĘ</button>
+                    <button id="quitBtn" class="glass-panel py-3 text-red-400 font-orbitron rounded-xl hover:bg-red-950/30">OPUŚĆ MISJĘ</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SKRYPT LOGIKI GRY -->
+    <script>
+        // --- WEB AUDIO API (SYNTEZATOR DŹWIĘKÓW) ---
+        class SoundSystem {
+            constructor() {
+                this.ctx = null;
+                this.muted = false;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
+                }
+            }
+
+            playShoot() {
+                if (this.muted || !this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, this.ctx.currentTime + 0.15);
+                
+                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.15);
+            }
+
+            playExplosion(type = 'small') {
+                if (this.muted || !this.ctx) return;
+                const dur = type === 'boss' ? 0.8 : (type === 'medium' ? 0.4 : 0.2);
+                
+                // Szum do eksplozji
+                const bufferSize = this.ctx.sampleRate * dur;
+                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+
+                const noise = this.ctx.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = this.ctx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(type === 'boss' ? 300 : 800, this.ctx.currentTime);
+                filter.frequency.linearRampToValueAtTime(50, this.ctx.currentTime + dur);
+
+                const gain = this.ctx.createGain();
+                gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + dur);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                noise.start();
+                noise.stop(this.ctx.currentTime + dur);
+            }
+
+            playCoin() {
+                if (this.muted || !this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(987.77, this.ctx.currentTime); // B5
+                osc.frequency.setValueAtTime(1318.51, this.ctx.currentTime + 0.08); // E6
+
+                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.25);
+            }
+
+            playPowerup() {
+                if (this.muted || !this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, this.ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(800, this.ctx.currentTime + 0.3);
+
+                gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.3);
+            }
+        }
+
+        const sounds = new SoundSystem();
+
+        // --- SILNIK GRY I ZMIENNE ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Dopasowanie rozmiaru płótna
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Stany Gry
+        const STATES = { MENU: 0, PLAYING: 1, PAUSED: 2, GAMEOVER: 3 };
+        let gameState = STATES.MENU;
+
+        // Statystyki / Postęp Gracza
+        let credits = parseInt(localStorage.getItem('nd_credits') || '0');
+        let upgrades = JSON.parse(localStorage.getItem('nd_upgrades') || JSON.stringify({
+            dmg: 1, rate: 1, hp: 1, spd: 1
+        }));
+
+        let difficulty = 'normal'; // easy, normal, hard
+        let diffMultipliers = { easy: 0.7, normal: 1.0, hard: 1.5 };
+
+        // Obiekty gry
+        let player;
+        let bullets = [];
+        let enemyBullets = [];
+        let enemies = [];
+        let particles = [];
+        let powerups = [];
+        let stars = [];
+        let floatingTexts = [];
+
+        // Zmienne rozgrywki
+        let score = 0;
+        let kills = 0;
+        let wave = 1;
+        let waveTimer = 0;
+        let enemySpawnTimer = 0;
+        let keys = {};
+        let touchPos = null;
+        let isShootingTouch = false;
+
+        // Tworzenie tła (Gwizdy / Paralaksa)
+        function initStars() {
+            stars = [];
+            const count = Math.floor((canvas.width * canvas.height) / 3000);
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 0.5,
+                    speed: Math.random() * 3 + 0.5,
+                    color: ['#ffffff', '#00f3ff', '#a855f7', '#ff007f'][Math.floor(Math.random() * 4)]
+                });
+            }
+        }
+
+        // Klasa Gracza
+        class Player {
+            constructor() {
+                this.width = 44;
+                this.height = 48;
+                this.x = canvas.width / 2 - this.width / 2;
+                this.y = canvas.height - 120;
+                
+                // Statystyki bazowe ulepszane
+                this.maxHp = 100 + (upgrades.hp - 1) * 25;
+                this.hp = this.maxHp;
+                this.maxShield = 50;
+                this.shield = 0;
+                this.speed = 6 + (upgrades.spd - 1) * 1.2;
+                this.fireRate = Math.max(100, 260 - (upgrades.rate - 1) * 30); // ms
+                this.damage = 15 + (upgrades.dmg - 1) * 8;
+
+                this.lastShot = 0;
+                this.tripleShotTimer = 0;
+                this.speedBoostTimer = 0;
+                this.magnetTimer = 0;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+
+                // Poświata osłony
+                if (this.shield > 0) {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 32, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(168, 85, 247, 0.2)';
+                    ctx.strokeStyle = '#a855f7';
+                    ctx.lineWidth = 2;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#a855f7';
+                    ctx.fill();
+                    ctx.stroke();
+                }
+
+                // Ogień z silnika
+                ctx.beginPath();
+                ctx.moveTo(-10, 20);
+                ctx.lineTo(0, 20 + Math.random() * 15 + 5);
+                ctx.lineTo(10, 20);
+                ctx.fillStyle = '#00f3ff';
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = '#00f3ff';
+                ctx.fill();
+
+                // Kadłub Statku (Futurystyczny myśliwiec)
+                ctx.beginPath();
+                ctx.moveTo(0, -24); // Dziob
+                ctx.lineTo(22, 16);
+                ctx.lineTo(10, 20);
+                ctx.lineTo(0, 14);
+                ctx.lineTo(-10, 20);
+                ctx.lineTo(-22, 16);
+                ctx.closePath();
+
+                ctx.fillStyle = '#0d1126';
+                ctx.fill();
+                ctx.strokeStyle = '#00f3ff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Kabina
+                ctx.beginPath();
+                ctx.ellipse(0, -4, 5, 10, 0, 0, Math.PI * 2);
+                ctx.fillStyle = '#00f3ff';
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = '#00f3ff';
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            update() {
+                // Ruch Klawiaturą
+                let currentSpeed = this.speed * (this.speedBoostTimer > 0 ? 1.4 : 1.0);
+
+                if ((keys['ArrowLeft'] || keys['a'] || keys['A']) && this.x > 0) {
+                    this.x -= currentSpeed;
+                }
+                if ((keys['ArrowRight'] || keys['d'] || keys['D']) && this.x < canvas.width - this.width) {
+                    this.x += currentSpeed;
+                }
+                if ((keys['ArrowUp'] || keys['w'] || keys['W']) && this.y > 0) {
+                    this.y -= currentSpeed;
+                }
+                if ((keys['ArrowDown'] || keys['s'] || keys['S']) && this.y < canvas.height - this.height) {
+                    this.y += currentSpeed;
+                }
+
+                // Ruch Dotykowy/Myszka (Płynne podążanie)
+                if (touchPos) {
+                    const targetX = touchPos.x - this.width / 2;
+                    const targetY = touchPos.y - this.height / 2;
+                    this.x += (targetX - this.x) * 0.15;
+                    this.y += (targetY - this.y) * 0.15;
+
+                    // Ograniczenia ekranu
+                    this.x = Math.max(0, Math.min(canvas.width - this.width, this.x));
+                    this.y = Math.max(0, Math.min(canvas.height - this.height, this.y));
+                }
+
+                // Strzelanie
+                const now = Date.now();
+                if ((keys[' '] || isShootingTouch || touchPos) && now - this.lastShot >= this.fireRate) {
+                    this.shoot();
+                    this.lastShot = now;
+                }
+
+                // Timery Buffów
+                if (this.tripleShotTimer > 0) this.tripleShotTimer--;
+                if (this.speedBoostTimer > 0) this.speedBoostTimer--;
+                if (this.magnetTimer > 0) this.magnetTimer--;
+            }
+
+            shoot() {
+                sounds.playShoot();
+                if (this.tripleShotTimer > 0) {
+                    bullets.push(new Bullet(this.x + this.width / 2, this.y, 0, -12, this.damage));
+                    bullets.push(new Bullet(this.x + this.width / 2, this.y, -3, -11, this.damage));
+                    bullets.push(new Bullet(this.x + this.width / 2, this.y, 3, -11, this.damage));
+                } else {
+                    bullets.push(new Bullet(this.x + this.width / 2 - 8, this.y + 10, 0, -12, this.damage));
+                    bullets.push(new Bullet(this.x + this.width / 2 + 8, this.y + 10, 0, -12, this.damage));
+                }
+            }
+
+            takeDamage(amount) {
+                if (this.shield > 0) {
+                    this.shield -= amount;
+                    if (this.shield < 0) {
+                        this.hp += this.shield; // Nadmiar uszkodzeń przechodzi na HP
+                        this.shield = 0;
+                    }
+                } else {
+                    this.hp -= amount;
+                }
+
+                createExplosion(this.x + this.width/2, this.y + this.height/2, '#ff0055', 10);
+
+                if (this.hp <= 0) {
+                    this.hp = 0;
+                    gameOver();
+                }
+                updateHUD();
+            }
+        }
+
+        // Klasa Pocisku Gracza
+        class Bullet {
+            constructor(x, y, vx, vy, damage) {
+                this.x = x;
+                this.y = y;
+                this.vx = vx;
+                this.vy = vy;
+                this.damage = damage;
+                this.radius = 3;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#00f3ff';
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = '#00f3ff';
+                ctx.fill();
+                ctx.restore();
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+            }
+        }
+
+        // Klasa Pocisku Wroga
+        class EnemyBullet {
+            constructor(x, y, vx, vy) {
+                this.x = x;
+                this.y = y;
+                this.vx = vx;
+                this.vy = vy;
+                this.radius = 4;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#ff0055';
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = '#ff0055';
+                ctx.fill();
+                ctx.restore();
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+            }
+        }
+
+        // Klasa Wroga
+        class Enemy {
+            constructor(type = 'scout') {
+                this.type = type; // scout, interceptor, tank, boss
+                this.x = Math.random() * (canvas.width - 60) + 30;
+                this.y = -50;
+                
+                const mult = diffMultipliers[difficulty];
+
+                if (type === 'scout') {
+                    this.width = 32;
+                    this.height = 32;
+                    this.hp = 20 * mult;
+                    this.maxHp = this.hp;
+                    this.speedY = Math.random() * 1.5 + 2;
+                    this.speedX = Math.sin(Math.random() * Math.PI) * 2;
+                    this.color = '#ff0055';
+                    this.scoreValue = 15;
+                } else if (type === 'interceptor') {
+                    this.width = 40;
+                    this.height = 40;
+                    this.hp = 45 * mult;
+                    this.maxHp = this.hp;
+                    this.speedY = 1.8;
+                    this.speedX = 0;
+                    this.color = '#a855f7';
+                    this.scoreValue = 35;
+                    this.lastShot = Date.now();
+                } else if (type === 'tank') {
+                    this.width = 60;
+                    this.height = 55;
+                    this.hp = 120 * mult;
+                    this.maxHp = this.hp;
+                    this.speedY = 0.8;
+                    this.speedX = 0;
+                    this.color = '#eab308';
+                    this.scoreValue = 80;
+                    this.lastShot = Date.now();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+
+                ctx.beginPath();
+                if (this.type === 'scout') {
+                    ctx.moveTo(0, 16);
+                    ctx.lineTo(-16, -16);
+                    ctx.lineTo(16, -16);
+                } else if (this.type === 'interceptor') {
+                    ctx.moveTo(0, 20);
+                    ctx.lineTo(-20, -10);
+                    ctx.lineTo(-8, -20);
+                    ctx.lineTo(8, -20);
+                    ctx.lineTo(20, -10);
+                } else if (this.type === 'tank') {
+                    ctx.rect(-30, -25, 60, 50);
+                }
+                ctx.closePath();
+
+                ctx.fillStyle = '#111827';
+                ctx.fill();
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = this.color;
+                ctx.stroke();
+
+                // Pasek zdrowia wroga (jeśli uszkodzony)
+                if (this.hp < this.maxHp) {
+                    const barW = this.width;
+                    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                    ctx.fillRect(-barW/2, -this.height/2 - 10, barW, 4);
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(-barW/2, -this.height/2 - 10, barW * (this.hp / this.maxHp), 4);
+                }
+
+                ctx.restore();
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+
+                // Odbijanie od krawędzi dla zwiadowców
+                if (this.type === 'scout' && (this.x < 20 || this.x > canvas.width - 20)) {
+                    this.speedX *= -1;
+                }
+
+                // Strzelanie wrogów
+                const now = Date.now();
+                if (this.type === 'interceptor' && now - this.lastShot > 1800) {
+                    enemyBullets.push(new EnemyBullet(this.x, this.y + 20, 0, 5));
+                    this.lastShot = now;
+                } else if (this.type === 'tank' && now - this.lastShot > 2200) {
+                    enemyBullets.push(new EnemyBullet(this.x - 15, this.y + 25, -1.5, 4.5));
+                    enemyBullets.push(new EnemyBullet(this.x + 15, this.y + 25, 1.5, 4.5));
+                    this.lastShot = now;
+                }
+            }
+        }
+
+        // Cząsteczki (Eksplozje i efekty)
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.radius = Math.random() * 3 + 1;
+                this.vx = (Math.random() - 0.5) * 8;
+                this.vy = (Math.random() - 0.5) * 8;
+                this.alpha = 1;
+                this.decay = Math.random() * 0.03 + 0.015;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 6;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= this.decay;
+            }
+        }
+
+        // Power-upy & Monety
+        class Powerup {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.type = type; // 'coin', 'shield', 'triple', 'heal'
+                this.radius = 12;
+                this.vy = 1.5;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.beginPath();
+                ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+
+                let icon = '';
+                if (this.type === 'coin') {
+                    ctx.fillStyle = '#eab308';
+                    ctx.shadowColor = '#eab308';
+                } else if (this.type === 'shield') {
+                    ctx.fillStyle = '#a855f7';
+                    ctx.shadowColor = '#a855f7';
+                } else if (this.type === 'triple') {
+                    ctx.fillStyle = '#00f3ff';
+                    ctx.shadowColor = '#00f3ff';
+                } else if (this.type === 'heal') {
+                    ctx.fillStyle = '#22c55e';
+                    ctx.shadowColor = '#22c55e';
+                }
+
+                ctx.shadowBlur = 10;
+                ctx.fill();
+
+                // Symbol w środku
+                ctx.fillStyle = '#000';
+                ctx.font = 'bold 10px Orbitron';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                const label = this.type === 'coin' ? '$' : (this.type === 'shield' ? 'S' : (this.type === 'triple' ? '3X' : '+'));
+                ctx.fillText(label, 0, 1);
+
+                ctx.restore();
+            }
+
+            update() {
+                this.y += this.vy;
+
+                // Magnes na monety
+                if (player && player.magnetTimer > 0 || (this.type === 'coin' && Math.hypot(player.x - this.x, player.y - this.y) < 150)) {
+                    const angle = Math.atan2(player.y + player.height/2 - this.y, player.x + player.width/2 - this.x);
+                    this.x += Math.cos(angle) * 5;
+                    this.y += Math.sin(angle) * 5;
+                }
+            }
+        }
+
+        // Floating Text (Napisy punktów itp.)
+        class FloatingText {
+            constructor(text, x, y, color = '#00f3ff') {
+                this.text = text;
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.alpha = 1;
+                this.vy = -1;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.font = 'bold 14px Orbitron';
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 5;
+                ctx.shadowColor = this.color;
+                ctx.fillText(this.text, this.x, this.y);
+                ctx.restore();
+            }
+
+            update() {
+                this.y += this.vy;
+                this.alpha -= 0.02;
+            }
+        }
+
+        // --- FUNKCJE POMOCNICZE ---
+
+        function createExplosion(x, y, color = '#ff0055', count = 15) {
+            for (let i = 0; i < count; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        function spawnEnemies() {
+            enemySpawnTimer++;
+            // Częstotliwość spawnu rośnie z falami
+            const spawnRate = Math.max(20, 90 - wave * 5);
+
+            if (enemySpawnTimer > spawnRate) {
+                enemySpawnTimer = 0;
+                const rand = Math.random();
+                if (rand < 0.6) {
+                    enemies.push(new Enemy('scout'));
+                } else if (rand < 0.85) {
+                    enemies.push(new Enemy('interceptor'));
+                } else {
+                    enemies.push(new Enemy('tank'));
+                }
+            }
+        }
+
+        function updateHUD() {
+            document.getElementById('hpText').innerText = `${Math.ceil((player.hp / player.maxHp) * 100)}%`;
+            document.getElementById('hpBar').style.width = `${Math.max(0, (player.hp / player.maxHp) * 100)}%`;
+
+            document.getElementById('shieldText').innerText = `${Math.ceil((player.shield / player.maxShield) * 100)}%`;
+            document.getElementById('shieldBar').style.width = `${Math.max(0, (player.shield / player.maxShield) * 100)}%`;
+
+            document.getElementById('scoreDisplay').innerText = score;
+            document.getElementById('waveDisplay').innerText = wave;
+            document.getElementById('creditsDisplay').innerText = credits;
+        }
+
+        // --- GŁÓWNA PĘTLA GRY ---
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 1. Tło gwiazd
+            for (let star of stars) {
+                star.y += star.speed;
+                if (star.y > canvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * canvas.width;
+                }
+                ctx.fillStyle = star.color;
+                ctx.fillRect(star.x, star.y, star.size, star.size);
+            }
+
+            if (gameState === STATES.PLAYING) {
+                // Logika Postępu Fali
+                waveTimer++;
+                if (waveTimer > 1200) { // Nowa fala co ok. 20 sek.
+                    wave++;
+                    waveTimer = 0;
+                    floatingTexts.push(new FloatingText(`FALA ${wave}!`, canvas.width / 2 - 40, canvas.height / 2, '#00f3ff'));
+                    sounds.playPowerup();
+                }
+
+                spawnEnemies();
+
+                // Aktualizacja i Rysowanie Gracza
+                player.update();
+                player.draw();
+
+                // Pociski Gracza
+                for (let i = bullets.length - 1; i >= 0; i--) {
+                    let b = bullets[i];
+                    b.update();
+                    b.draw();
+
+                    if (b.y < -10) {
+                        bullets.splice(i, 1);
+                        continue;
+                    }
+
+                    // Kolizje pocisków z wrogami
+                    for (let j = enemies.length - 1; j >= 0; j--) {
+                        let e = enemies[j];
+                        if (Math.abs(b.x - e.x) < e.width / 2 && Math.abs(b.y - e.y) < e.height / 2) {
+                            e.hp -= b.damage;
+                            createExplosion(b.x, b.y, '#00f3ff', 4);
+                            bullets.splice(i, 1);
+
+                            if (e.hp <= 0) {
+                                createExplosion(e.x, e.y, e.color, 20);
+                                sounds.playExplosion(e.type === 'tank' ? 'medium' : 'small');
+                                score += e.scoreValue;
+                                credits += Math.floor(e.scoreValue / 2);
+                                kills++;
+
+                                // Szansa na drop itemu
+                                if (Math.random() < 0.35) {
+                                    const pTypes = ['coin', 'coin', 'shield', 'triple', 'heal'];
+                                    const pType = pTypes[Math.floor(Math.random() * pTypes.length)];
+                                    powerups.push(new Powerup(e.x, e.y, pType));
+                                }
+
+                                floatingTexts.push(new FloatingText(`+${e.scoreValue}`, e.x, e.y, '#eab308'));
+                                enemies.splice(j, 1);
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                // Pociski Wrogów
+                for (let i = enemyBullets.length - 1; i >= 0; i--) {
+                    let eb = enemyBullets[i];
+                    eb.update();
+                    eb.draw();
+
+                    // Kolizja z graczem
+                    if (Math.hypot(eb.x - (player.x + player.width/2), eb.y - (player.y + player.height/2)) < player.width/2) {
+                        player.takeDamage(15);
+                        enemyBullets.splice(i, 1);
+                        continue;
+                    }
+
+                    if (eb.y > canvas.height + 10) {
+                        enemyBullets.splice(i, 1);
+                    }
+                }
+
+                // Wrogowie
+                for (let i = enemies.length - 1; i >= 0; i--) {
+                    let e = enemies[i];
+                    e.update();
+                    e.draw();
+
+                    // Kolizja wroga z graczem
+                    if (Math.abs(e.x - (player.x + player.width/2)) < (e.width + player.width)/2.5 &&
+                        Math.abs(e.y - (player.y + player.height/2)) < (e.height + player.height)/2.5) {
+                        player.takeDamage(30);
+                        createExplosion(e.x, e.y, e.color, 15);
+                        enemies.splice(i, 1);
+                        continue;
+                    }
+
+                    // Ucieczka wroga za ekran
+                    if (e.y > canvas.height + 50) {
+                        enemies.splice(i, 1);
+                    }
+                }
+
+                // Power-upy
+                for (let i = powerups.length - 1; i >= 0; i--) {
+                    let p = powerups[i];
+                    p.update();
+                    p.draw();
+
+                    // Zbór przez gracza
+                    if (Math.hypot(p.x - (player.x + player.width/2), p.y - (player.y + player.height/2)) < player.width/2 + p.radius) {
+                        if (p.type === 'coin') {
+                            credits += 25;
+                            sounds.playCoin();
+                            floatingTexts.push(new FloatingText('+25 PTS', p.x, p.y, '#eab308'));
+                        } else if (p.type === 'shield') {
+                            player.shield = player.maxShield;
+                            sounds.playPowerup();
+                            floatingTexts.push(new FloatingText('TARCZA OK!', p.x, p.y, '#a855f7'));
+                        } else if (p.type === 'triple') {
+                            player.tripleShotTimer = 300; // ~5 sekund
+                            sounds.playPowerup();
+                            floatingTexts.push(new FloatingText('POTRÓJNY STRZAŁ!', p.x, p.y, '#00f3ff'));
+                        } else if (p.type === 'heal') {
+                            player.hp = Math.min(player.maxHp, player.hp + 30);
+                            sounds.playPowerup();
+                            floatingTexts.push(new FloatingText('NAPRAWA +30', p.x, p.y, '#22c55e'));
+                        }
+                        updateHUD();
+                        powerups.splice(i, 1);
+                        continue;
+                    }
+
+                    if (p.y > canvas.height + 20) {
+                        powerups.splice(i, 1);
+                    }
+                }
+
+                // Cząsteczki
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    let pt = particles[i];
+                    pt.update();
+                    pt.draw();
+                    if (pt.alpha <= 0) particles.splice(i, 1);
+                }
+
+                // Floating Texts
+                for (let i = floatingTexts.length - 1; i >= 0; i--) {
+                    let ft = floatingTexts[i];
+                    ft.update();
+                    ft.draw();
+                    if (ft.alpha <= 0) floatingTexts.splice(i, 1);
+                }
+
+                updateHUD();
+            }
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // --- CONTROL & ZARZĄDZANIE STANEM GRY ---
+
+        function startGame() {
+            sounds.init();
+            score = 0;
+            kills = 0;
+            wave = 1;
+            waveTimer = 0;
+            enemySpawnTimer = 0;
+            bullets = [];
+            enemyBullets = [];
+            enemies = [];
+            particles = [];
+            powerups = [];
+            floatingTexts = [];
+
+            player = new Player();
+            
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('gameOverMenu').classList.add('hidden');
+            document.getElementById('pauseMenu').classList.add('hidden');
+            document.getElementById('hud').classList.remove('hidden');
+
+            gameState = STATES.PLAYING;
+            updateHUD();
+        }
+
+        function gameOver() {
+            gameState = STATES.GAMEOVER;
+            sounds.playExplosion('boss');
+
+            // Zapis punktów w localStorage
+            localStorage.setItem('nd_credits', credits);
+
+            document.getElementById('finalWave').innerText = wave;
+            document.getElementById('finalScore').innerText = score;
+            document.getElementById('finalKills').innerText = kills;
+
+            document.getElementById('hud').classList.add('hidden');
+            document.getElementById('gameOverMenu').classList.remove('hidden');
+        }
+
+        // --- OBSŁUGA ZDARZEŃ (EVENTS) ---
+
+        // Klawiatura
+        window.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+            if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
+                if (gameState === STATES.PLAYING) {
+                    gameState = STATES.PAUSED;
+                    document.getElementById('pauseMenu').classList.remove('hidden');
+                } else if (gameState === STATES.PAUSED) {
+                    gameState = STATES.PLAYING;
+                    document.getElementById('pauseMenu').classList.add('hidden');
+                }
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+
+        // Mysz i Dotyk
+        canvas.addEventListener('mousemove', (e) => {
+            if (gameState === STATES.PLAYING && touchPos) {
+                touchPos = { x: e.clientX, y: e.clientY };
+            }
+        });
+
+        canvas.addEventListener('mousedown', (e) => {
+            if (gameState === STATES.PLAYING) {
+                touchPos = { x: e.clientX, y: e.clientY };
+                isShootingTouch = true;
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            touchPos = null;
+            isShootingTouch = false;
+        });
+
+        canvas.addEventListener('touchstart', (e) => {
+            if (gameState === STATES.PLAYING) {
+                const touch = e.touches[0];
+                touchPos = { x: touch.clientX, y: touch.clientY };
+                isShootingTouch = true;
+            }
+        }, { passive: true });
+
+        canvas.addEventListener('touchmove', (e) => {
+            if (gameState === STATES.PLAYING && e.touches.length > 0) {
+                const touch = e.touches[0];
+                touchPos = { x: touch.clientX, y: touch.clientY };
+            }
+        }, { passive: true });
+
+        canvas.addEventListener('touchend', () => {
+            touchPos = null;
+            isShootingTouch = false;
+        });
+
+        // UI Buttons Events
+        document.getElementById('startBtn').addEventListener('click', startGame);
+        document.getElementById('restartBtn').addEventListener('click', startGame);
+
+        document.getElementById('menuFromGOBtn').addEventListener('click', () => {
+            document.getElementById('gameOverMenu').classList.add('hidden');
+            document.getElementById('mainMenu').classList.remove('hidden');
+            gameState = STATES.MENU;
+        });
+
+        document.getElementById('pauseBtn').addEventListener('click', () => {
+            if (gameState === STATES.PLAYING) {
+                gameState = STATES.PAUSED;
+                document.getElementById('pauseMenu').classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('resumeBtn').addEventListener('click', () => {
+            gameState = STATES.PLAYING;
+            document.getElementById('pauseMenu').classList.add('hidden');
+        });
+
+        document.getElementById('quitBtn').addEventListener('click', () => {
+            document.getElementById('pauseMenu').classList.add('hidden');
+            document.getElementById('hud').classList.add('hidden');
+            document.getElementById('mainMenu').classList.remove('hidden');
+            gameState = STATES.MENU;
+        });
+
+        document.getElementById('soundToggleBtn').addEventListener('click', () => {
+            sounds.muted = !sounds.muted;
+            const icon = document.getElementById('soundToggleBtn').querySelector('i');
+            icon.className = sounds.muted ? 'fa-solid fa-volume-xmark text-red-400' : 'fa-solid fa-volume-high text-cyan-400';
+        });
+
+        // Wybór Trudności
+        document.querySelectorAll('.diff-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.diff-btn').forEach(b => {
+                    b.classList.remove('neon-border', 'border-cyan-500', 'text-cyan-400', 'border-red-500');
+                    b.classList.add('border-gray-700', 'text-gray-400');
+                });
+
+                difficulty = e.target.getAttribute('data-diff');
+                e.target.classList.remove('border-gray-700', 'text-gray-400');
+                
+                if (difficulty === 'hard') {
+                    e.target.classList.add('border-red-500', 'text-red-400', 'neon-border');
+                } else {
+                    e.target.classList.add('border-cyan-500', 'text-cyan-400', 'neon-border');
+                }
+            });
+        });
+
+        // Panel Ulepszeń Logic
+        const upgradesMenu = document.getElementById('upgradesMenu');
+        document.getElementById('upgradesBtn').addEventListener('click', () => {
+            updateUpgradeUI();
+            upgradesMenu.classList.remove('hidden');
+        });
+
+        document.getElementById('closeUpgradesBtn').addEventListener('click', () => {
+            upgradesMenu.classList.add('hidden');
+        });
+
+        function updateUpgradeUI() {
+            document.getElementById('creditsDisplay').innerText = credits;
+            
+            // Dmg
+            document.getElementById('dmgLvl').innerText = upgrades.dmg;
+            document.getElementById('dmgCost').innerText = upgrades.dmg * 100;
+            
+            // Rate
+            document.getElementById('rateLvl').innerText = upgrades.rate;
+            document.getElementById('rateCost').innerText = upgrades.rate * 150;
+
+            // HP
+            document.getElementById('hpLvl').innerText = upgrades.hp;
+            document.getElementById('hpCost').innerText = upgrades.hp * 120;
+
+            // Speed
+            document.getElementById('spdLvl').innerText = upgrades.spd;
+            document.getElementById('spdCost').innerText = upgrades.spd * 80;
+        }
+
+        function buyUpgrade(type, baseCost) {
+            const cost = upgrades[type] * baseCost;
+            if (credits >= cost && upgrades[type] < 5) {
+                credits -= cost;
+                upgrades[type]++;
+                localStorage.setItem('nd_credits', credits);
+                localStorage.setItem('nd_upgrades', JSON.stringify(upgrades));
+                sounds.playPowerup();
+                updateUpgradeUI();
+            }
+        }
+
+        document.getElementById('buyDmgBtn').addEventListener('click', () => buyUpgrade('dmg', 100));
+        document.getElementById('buyRateBtn').addEventListener('click', () => buyUpgrade('rate', 150));
+        document.getElementById('buyHpBtn').addEventListener('click', () => buyUpgrade('hp', 120));
+        document.getElementById('buySpdBtn').addEventListener('click', () => buyUpgrade('spd', 80));
+
+        // Start gry po załadowaniu
+        window.onload = () => {
+            initStars();
+            gameLoop();
+        };
+    </script>
+</body>
+</html>
